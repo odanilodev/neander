@@ -108,7 +108,7 @@
 
             <div class="mb-3">
               <div class="mb-3 col-md-12">
-                <input type="text" value="<?=number_format(($equipamentosEnvase[0]['valor_base'] ?? '0'), 2, ',', '.' )?>" class="form-control mascara-dinheiro" id="inputCustoHoraEnvase" placeholder="Insira o valor base">
+                <input type="text" value="<?= number_format(($equipamentosEnvase[0]['valor_base'] ?? '0'), 2, ',', '.') ?>" class="form-control mascara-dinheiro" id="inputCustoHoraEnvase" placeholder="Insira o valor base">
               </div>
             </div>
 
@@ -127,7 +127,7 @@
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoEnvase['nome'] ?></td>
                     <td class="no-padding"><?= $equipamentoEnvase['nivel'] ?></td>
                     <td class="editable no-padding">
-                      <input value="<?= $equipamentoEnvase['pcs_hora'] == 0 ? '' : $equipamentoEnvase['pcs_hora'] ?>" data-mo-envase="<?= $equipamentoEnvase['mo'] ?>" data-id-equipamento-envase="<?= $equipamentoEnvase['id'] ?>" class="input-custo-producao input-equipamento-envase" type="number" placeholder="00">
+                      <input value="<?= $equipamentoEnvase['pcs_hora'] == 0 ? '' : $equipamentoEnvase['pcs_hora'] ?>" data-mo-envase="<?= $equipamentoEnvase['mo'] ?>" data-id-equipamento-envase="<?= $equipamentoEnvase['id'] ?>" class="input-custo-producao input-equipamento-envase" type="text" placeholder="00">
                     </td>
                     <td class="no-padding valores-totais-envase valor-total-envase-<?= $equipamentoEnvase['id'] ?>">R$ <?= number_format($equipamentoEnvase['valor_mo'] ?? 0.00, 2, ',', '.') ?>
                   </tr>
@@ -139,13 +139,9 @@
           <div class="tab-pane" role="tabpanel" aria-labelledby="tab-rotulagem" id="tab-rotulagem">
             <div class="mb-3">
               <div class="text-end">
-                <!-- Botão para abrir o modal -->
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalNiveisProdutos">
-                  Verificar Níveis
-                </button>
               </div>
               <label for="inputCustoHoraRotulagem" class="form-label">Custo Hora (R$):</label>
-              <input type="text" class="form-control mascara-dinheiro" id="inputCustoHoraRotulagem" placeholder="Insira o valor base">
+              <input type="text" value="<?= number_format(($equipamentosRotulagem[0]['valor_base'] ?? 0), 2, ',', '.') ?>" class="form-control mascara-dinheiro" id="inputCustoHoraRotulagem" placeholder="Insira o valor base">
             </div>
             <table class="table table-bordered">
               <thead>
@@ -162,9 +158,9 @@
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoRotulagem['nome'] ?></td>
                     <td class="no-padding"><?= $equipamentoRotulagem['nivel'] ?></td>
                     <td class="editable no-padding">
-                      <input value="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="number" placeholder="00">
+                      <input value="<?= $equipamentoRotulagem['pcs_hora'] == 0 ? '' : $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="text" placeholder="00">
                     </td>
-                    <td class="no-padding valores-totais-rotulagem valor-total-rotulagem-<?= $equipamentoRotulagem['id'] ?>"><?= $equipamentoRotulagem['valor_mo'] ?? 'R$ 0,00' ?></td>
+                    <td class="no-padding valores-totais-rotulagem valor-total-rotulagem-<?= $equipamentoRotulagem['id'] ?>">R$ <?= number_format($equipamentoRotulagem['valor_mo'] ?? 0.00, 2, ',', '.') ?></td>
                   </tr>
                 <?php endforeach ?>
               </tbody>
