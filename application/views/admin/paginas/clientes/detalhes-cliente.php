@@ -33,7 +33,7 @@
                     <?php if (permissaoComponentes('select-status-clientes')) { ?>
                       <div class="form-check form-switch">
                         <input class="form-check-input switch-status <?= $cliente['status'] == 1 ? 'bg-success' : 'bg-secondary' ?>" type="checkbox" id="statusSwitch" data-id="<?= $cliente['id'] ?>" <?= $cliente['status'] == 1 ? 'checked' : ''; ?>>
-                        <label class="form-check-label" for="statusSwitch">
+                        <label class="form-check-label text-primary" for="statusSwitch">
                           <?= $cliente['status'] == 1 ? 'Ativo' : 'Inativo'; ?>
                         </label>
                       </div>
@@ -224,7 +224,7 @@
 
           <?php foreach ($projetos as $projeto) { ?>
 
-            <div class="border-bottom py-4">
+            <div class="py-2">
 
               <div class="d-flex">
                 <?php
@@ -239,7 +239,6 @@
                 <div class="flex-1">
 
                   <div class="d-flex justify-content-between flex-column flex-xl-row mb-2">
-
                     <div>
                       <h5 class="text-1000">
                         <h5><?= $projeto['nome_produto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
@@ -247,55 +246,53 @@
                       </h5>
                     </div>
 
-                    <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
-                      <span class="fa-solid fa-ellipsis"></span>
-                    </button>
+                    <div class="d-flex align-items-center">
+                      <button class="btn btn-phoenix-warning btn-sm me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto(<?= $projeto['id'] ?>)">
+                        <span class="far fa-id-card"></span>
+                      </button>
 
-                    <ul class="dropdown-menu dropdown-menu-end" style="z-index: 9999;">
+                      <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                        <span class="fa-solid fa-ellipsis"></span>
+                      </button>
 
-                      <li>
-                        <a class="dropdown-item cursor-pointer" onclick="detalhesProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
-                          <span class="text-900 fas fa-eye"></span>
-                          <span class="text-900"> Detalhes</span>
-                        </a>
-                      </li>
-
-                      <li>
-                        <a class="dropdown-item cursor-pointer" onclick="reformularProjeto(<?= $projeto['id'] ?>)" title="Reformular Projeto">
-                          <span class="text-900 fas fa-pen-square"></span>
-                          <span class="text-900"> Reformular</span>
-                        </a>
-                      </li>
-
-                      <?php
-                      $statusAction = $projeto['status'] == 1 ?
-                        ['onclick' => "inativaProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Inativar Projeto', 'icon' => 'fa-trash-alt', 'text' => 'Inativar Projeto'] :
-                        ['onclick' => "ativarProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Ativar Projeto', 'icon' => 'fas fa-check-circle', 'text' => 'Ativar Projeto'];
-                      ?>
-                      <li>
-                        <a class="dropdown-item cursor-pointer" onclick="<?= $statusAction['onclick'] ?>" title="<?= $statusAction['title'] ?>">
-                          <span class="text-900 fas <?= $statusAction['icon'] ?>"></span>
-                          <span class="text-900"> <?= $statusAction['text'] ?></span>
-                        </a>
-                      </li>
-
-
+                      <ul class="dropdown-menu dropdown-menu-end" style="z-index: 9999;">
+                        <li>
+                          <a class="dropdown-item cursor-pointer" onclick="detalhesProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
+                            <span class="text-900 fas fa-eye"></span>
+                            <span class="text-900"> Detalhes</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item cursor-pointer" onclick="reformularProjeto(<?= $projeto['id'] ?>)" title="Reformular Projeto">
+                            <span class="text-900 fas fa-pen-square"></span>
+                            <span class="text-900"> Reformular</span>
+                          </a>
+                        </li>
+                        <?php
+                        $statusAction = $projeto['status'] == 1 ?
+                          ['onclick' => "inativaProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Inativar Projeto', 'icon' => 'fa-trash-alt', 'text' => 'Inativar Projeto'] :
+                          ['onclick' => "ativarProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Ativar Projeto', 'icon' => 'fas fa-check-circle', 'text' => 'Ativar Projeto'];
+                        ?>
+                        <li>
+                          <a class="dropdown-item cursor-pointer" onclick="<?= $statusAction['onclick'] ?>" title="<?= $statusAction['title'] ?>">
+                            <span class="text-900 fas <?= $statusAction['icon'] ?>"></span>
+                            <span class="text-900"> <?= $statusAction['text'] ?></span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
 
                 </div>
 
               </div>
+              <hr>
+            <?php } ?>
 
             </div>
 
-          <?php } ?>
 
         </div>
-
-
       </div>
+
     </div>
-
-  </div>
-
- 
