@@ -63,6 +63,20 @@ class Projetos_model extends CI_Model
         return $query->result_array();
     }
 
+    public function recebeProjetoClienteCodigo($codigo_projeto)
+    {
+        $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA');
+        $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
+        $this->db->where('P.codigo_projeto', $codigo_projeto);
+        if ($this->session->userdata('id_empresa') > 1) {
+            $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
+        }
+
+        $query = $this->db->get('ci_projetos P');
+
+        return $query->row_array();
+    }
+
     public function insereProjeto($dados)
     {
         $dados['criado_em'] = date('Y-m-d H:i:s');

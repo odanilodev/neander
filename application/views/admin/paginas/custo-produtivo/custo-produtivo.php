@@ -125,7 +125,7 @@
                 <?php foreach ($equipamentosEnvase as $equipamentoEnvase) : ?>
                   <tr>
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoEnvase['nome'] ?></td>
-                    <td class="no-padding"><?= $equipamentoEnvase['nivel'] ?></td>
+                    <td class="no-padding"><?= $equipamentoEnvase['nivel']  . '-' . $equipamentoEnvase['tipo'] ?> </td>
                     <td class="editable no-padding">
                       <input value="<?= $equipamentoEnvase['pcs_hora'] == 0 ? '' : $equipamentoEnvase['pcs_hora'] ?>" data-mo-envase="<?= $equipamentoEnvase['mo'] ?>" data-id-equipamento-envase="<?= $equipamentoEnvase['id'] ?>" class="input-custo-producao input-equipamento-envase" type="text" placeholder="00">
                     </td>
@@ -156,7 +156,7 @@
                 <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                   <tr>
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoRotulagem['nome'] ?></td>
-                    <td class="no-padding"><?= $equipamentoRotulagem['nivel'] ?></td>
+                    <td class="no-padding"><?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['tipo']?></td>
                     <td class="editable no-padding">
                       <input value="<?= $equipamentoRotulagem['pcs_hora'] == 0 ? '' : $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="text" placeholder="00">
                     </td>

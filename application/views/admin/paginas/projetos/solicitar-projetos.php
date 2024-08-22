@@ -231,17 +231,17 @@
 
                       <div class="col-md-4">
                         <label class="form-label">Produto</label>
-                        <input class="form-control campo-custos" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
+                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Embalagens</label>
-                        <input class="form-control campo-custos" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
+                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Rótulos</label>
-                        <input class="form-control campo-custos" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
+                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
                       </div>
 
                     </div>
@@ -249,7 +249,7 @@
                     <!-- Observação Custos -->
                     <div class="col-md-12 mb-3">
                       <label class="form-label">Observação Custos</label>
-                      <textarea name="observacao_custo" class="campo-custos form-control input-observacao-custo input-obrigatorio" rows="3" placeholder="Digite aqui a observação"><?= $materiaPrima['observacao_custo'] ?? ''; ?></textarea>
+                      <textarea name="observacao_custo" class="campo-custos form-control input-observacao-custo input-obrigatorio" rows="3" placeholder="Digite aqui a observação"><?= $projeto['observacao_custo'] ?? ''; ?></textarea>
                       <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                     </div>
 
