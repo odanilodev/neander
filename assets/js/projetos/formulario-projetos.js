@@ -40,8 +40,8 @@ $(function () {
                 data: { nivel: nivelSelecionado },
                 success: function (resposta) {
 
-                    let opcoesManipulacao = '<option value="" disabled selected>Selecione o equipamento</option>';
-                    
+                    let opcoesManipulacao = '<option value="" disabled selected>Equipamento Manipulação</option>';
+
                     $(resposta.manipulacao).each(function (index, manipulacao) {
                         opcoesManipulacao += `<option data-tempo-prod-manipulacao="${manipulacao.tempo_prod}" data-valores-unit-total-manipulacao="${manipulacao.valor_mo}" value="${manipulacao.id}">${manipulacao.nivel} - ${manipulacao.nome}</option>`;
                     });
@@ -51,7 +51,7 @@ $(function () {
                     $('.campos-custo-manipulacao').find(':input').val('').trigger('change');
                     $('.input-sub-total-2').val('');
 
-                    let opcoesEnvase = '<option value="" disabled selected>Selecione o equipamento</option>';
+                    let opcoesEnvase = '<option value="" disabled selected>Equipamento Envase</option>';
                     $(resposta.envase).each(function (index, envase) {
                         opcoesEnvase += `<option data-pecas-hora-envase="${envase.pcs_hora}" data-valores-unit-total-envase="${envase.valor_mo}" value="${envase.id}">${envase.nivel} - ${envase.nome}</option>`;
                     });

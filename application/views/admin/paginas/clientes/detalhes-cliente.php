@@ -483,7 +483,7 @@
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
                         <select required id="select-equipamentos-manipulacao" class="form-control modal-desenvolver-input-nivel-produto select2">
-                          <option value="" disabled selected>Selecione o nível</option>
+                          <option value="" disabled selected>Equipamento Manipulação</option>
                           <!-- js -->
                         </select>
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
@@ -538,7 +538,7 @@
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
                         <select required id="select-equipamentos-envase" class="form-control modal-desenvolver-input-nivel-produto select2">
-                          <option value="" disabled selected>Selecione o nível</option>
+                          <option value="" disabled selected>Equipamento Envase</option>
                           <!-- js -->
                         </select>
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
@@ -580,7 +580,7 @@
 
                       <div class="col-md-4 mb-2">
                         <select id="select-equipamentos-rotulagem" class="form-control select2">
-                          <option value="" disabled selected>Selecione o equipamento</option>
+                          <option value="" disabled selected>Equipamento Rotulagem</option>
                           <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                             <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">
                               <?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['nome']; ?>
@@ -972,8 +972,10 @@
 
                       <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
                         <div class="d-flex align-items-center">
-                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Total:</p>
+                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Total Unit.:</p>
                           <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px; margin-right:0.5rem;">
+                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left:3rem;"> Total Geral:</p>
+
                           <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
                         </div>
                       </div>
@@ -992,7 +994,7 @@
                       <!-- Lote -->
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Lote:</label>
-                        <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="Especial 50,000">
                       </div>
 
 
@@ -1039,6 +1041,48 @@
                       <!-- Lote -->
                       <div class="col-md-4 mb-2">
                         <input type="text" disabled class="text-1000 text-center form-control" value="340,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra(R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
                       </div>
 
 
@@ -1165,11 +1209,15 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer flex-end">
+        <div class="modal-footer d-flex justify-content-between">
+          <div>
+            <a href="<?=base_url('custoProdutivo')?>" class="btn btn-phoenix-warning">Editar Custo Produtivo</a>
+          </div>
           <div>
             <button class="btn btn-phoenix-success" type="submit" onclick="vincularValores()">Vincular Valores</button>
           </div>
         </div>
+
       </div>
     </div>
   </div>
