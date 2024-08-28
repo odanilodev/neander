@@ -2,8 +2,8 @@
     <div class="row mb-3">
         <!-- Select Cliente -->
         <div class="col-md-3">
-            <label for="cliente" class="form-label">Cliente</label>
-            <select class="form-select select2" id="cliente" name="cliente">
+            <label for="select_cliente" class="form-label">Cliente</label>
+            <select class="form-select select2" id="select_cliente" name="select_cliente">
                 <option value="" selected disabled>Selecione o cliente</option>
                 <?php foreach ($clientes as $cliente) : ?>
                     <option value="<?= $cliente['id'] ?>"><?= $cliente['nome_fantasia'] ?></option>
@@ -13,10 +13,9 @@
 
         <!-- Select Projeto (inicialmente oculto) -->
         <div class="col-md-3 d-none" id="projeto-container">
-            <label for="projeto" class="form-label">Projeto</label>
-            <select class="form-select" id="projeto" name="projeto">
-                <option value="" selected disabled>Selecione o projeto</option>
-                <!-- Adicione as opções de projetos aqui -->
+            <label for="select_projetos_cliente" class="form-label">Projeto</label>
+            <select class="form-select select2" id="select_projetos_cliente" name="select_projetos_cliente">
+                <!-- Manipulado J.S. -->
             </select>
         </div>
     </div>

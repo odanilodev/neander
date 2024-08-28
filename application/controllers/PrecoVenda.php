@@ -35,11 +35,11 @@ class PrecoVenda extends CI_Controller
     $scriptsPadraoFooter = scriptsPadraoFooter();
 
     // Scripts específicos para Preço de Venda
-    $scriptsCustoPrecoVendaHead =scriptsCustoPrecoVendaHead();
+    $scriptsCustoPrecoVendaHead = scriptsCustoPrecoVendaHead();
     $scriptsPrecoVendaFooter = scriptsPrecoVendaFooter();
 
     $data['clientes'] = $this->Clientes_model->recebeClientes();
-  
+
 
     // Adicionando scripts ao header e footer
     add_scripts('header', array_merge($scriptsPadraoHead, $scriptsCustoPrecoVendaHead));
@@ -49,5 +49,30 @@ class PrecoVenda extends CI_Controller
     $this->load->view('admin/includes/painel/cabecalho');
     $this->load->view('admin/paginas/preco-venda/preco-venda', $data);
     $this->load->view('admin/includes/painel/rodape');
+  }
+
+  public function recebeProjetosCliente()
+  {
+    $this->load->model('Projetos_model');
+
+    $id_cliente = $this->input->post('idCliente');
+
+    $retorno = $this->Projetos_model->recebeProjetoCliente($id_cliente);
+
+    if ($retorno) {
+      $response = array(
+        'success' => true,
+        'projeto' => $retorno,
+        'type' => "success"
+      );
+    } else {
+      $response = array(
+        'success' => false,
+        'title' => "Algo deu errado!",
+        'message' => "Nenhum projeto encontrado para este cliente, tente novamente mais tarde!",
+        'type' => "error"
+      );
+    }
+    return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
 }

@@ -1,7 +1,5 @@
 var baseUrl = $('.base-url').val();
 
-
-
 $(function () {
 
   // Função para manipular o CEP
@@ -29,7 +27,6 @@ $(function () {
     });
   }
 
-  
   $('.input-cep').on('blur', manipularCEP);
 
 });
@@ -138,6 +135,8 @@ $(document).on('click', '.switch-status', function () {
     }
   });
 });
+
+
 
 
 
