@@ -23,4 +23,13 @@ class EquipamentosManipulacao_model extends CI_Model
     return $query->result_array();
   }
 
+  public function recebeEquipamentosManipulacaoPorNivel($nivel)
+  {
+      $this->db->where('nivel', $nivel);
+      $consulta = $this->db->get('ci_equipamento_manipulacao');
+      return $consulta->result_array();
+  }
+
+  
+
 }

@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
 
     // Máscara para CEP (00000-000)
     $('.mascara-cep').mask('00000-000');
@@ -6,6 +6,30 @@ $(document).ready(function () {
     // Máscara para Placa (AAA-AAAA), permitindo letras e números
     $('.mascara-placa').mask('AAA-AAAA', {
         translation: { 'A': { pattern: /[A-Za-z0-9]/ } }
+    });
+
+    $('.mascara-percentual').mask('000,0000');
+
+    $('.mascara-peso').mask('0,000');
+
+    // Valida e formata o valor ao perder o foco
+    $('.mascara-peso').on('focusout', function () {
+        let valor = $(this).val().replace('.', '').replace(',', '.');
+        let valorNumerico = parseFloat(valor);
+
+        if (valor === '' || isNaN(valorNumerico)) {
+            // Se o campo estiver vazio ou o valor não é numérico, deixa o campo vazio
+            $(this).val('');
+        } else if (valorNumerico > 1.000) {
+            // Se o valor exceder o máximo permitido, define como 1,0000
+            $(this).val('1,000');
+        } else {
+            // Formata o valor para quatro casas decimais
+            $(this).val(valorNumerico.toLocaleString('pt-BR', {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            }));
+        }
     });
 
     // Máscara para tempo

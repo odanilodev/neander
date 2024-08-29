@@ -51,12 +51,7 @@ $(function () {
         tempoProd: tempoProd,
         tipo: tipo,
         valorBase: valorBase
-      },
-      beforeSend: function () {
-        $(`.load-form-${idEquipamento}`).removeClass('d-none');
-        $(`.input-equipamento-${tipo}`).attr('disabled', true);
-      },
-      success: function () {
+      }, success: function () {
         $(`.load-form-${idEquipamento}`).addClass('d-none');
         $(`.input-equipamento-${tipo}`).attr('disabled', false);
       }
@@ -65,23 +60,28 @@ $(function () {
 
   // Função para verificar e ajustar minutos no input
   function verificaInput(input) {
-    $(input).each(function () {
-      let valorAtual = $(this).val();
-      let valorOriginal = $(this).data('valor-original') || valorAtual;
 
-      if (valorAtual === valorOriginal) return;
+    if (input == '.input-equipamento-manipulacao') {
+      $(input).each(function () {
+        let valorAtual = $(this).val();
+        let valorOriginal = $(this).data('valor-original') || valorAtual;
 
-      let [horas, minutos] = valorAtual.split(':').map(Number);
-      minutos = minutos > 59 ? 59 : minutos;
-      let horasFormatadas = String(horas || 0).padStart(2, '0');
-      let minutosFormatados = String(minutos || 0).padStart(2, '0');
+        if (valorAtual === valorOriginal) return;
 
-      $(this).val(`${horasFormatadas}:${minutosFormatados}`);
-      $(this).data('valor-original', `${horasFormatadas}:${minutosFormatados}`);
-    });
+        let [horas, minutos] = valorAtual.split(':').map(Number);
+        minutos = minutos > 59 ? 59 : minutos;
+        let horasFormatadas = String(horas || 0).padStart(2, '0');
+        let minutosFormatados = String(minutos || 0).padStart(2, '0');
+
+        $(this).val(`${horasFormatadas}:${minutosFormatados}`);
+        $(this).data('valor-original', `${horasFormatadas}:${minutosFormatados}`);
+      });
+    }
+
   }
 
   function calcularCustoProducao(tipoInput, sweetAlert, inputTempo, inputIndividualId, dataIdNome, custoHoraId, valorClasse, func) {
+
     function atualizarCustos() {
       let valorBase = $(custoHoraId).val().replace(/\./g, '').replace(',', '.');
       valorBase = parseFloat(valorBase) || 0;
@@ -91,6 +91,7 @@ $(function () {
         let idEquipamento = $(inputIndividualId).data(`id-equipamento-${dataIdNome}`);
 
         let valorAtual = $(inputIndividualId).val();
+
         let custoProducao;
 
         if (dataIdNome === 'manipulacao') {
@@ -116,6 +117,7 @@ $(function () {
       } else {
         // Atualiza custos para múltiplos itens
         $(inputTempo).each(function () {
+
           let idEquipamento = $(this).data(`id-equipamento-${dataIdNome}`);
           let valorAtual = $(this).val();
           let custoProducao;
@@ -187,7 +189,7 @@ $(function () {
       'envase',
       '#inputCustoHoraEnvase',
       'valor-total-envase',
-      (valorBase, tempoProducaoDecimal) => valorBase / tempoProducaoDecimal
+      (valorBase, pecasPorHora) => valorBase / pecasPorHora
     );
   }
 
