@@ -74,6 +74,7 @@ class MateriasPrimas extends CI_Controller
 
     // Obtendo a matéria prima específica
     $data['materiaPrima'] = $this->MateriasPrimas_model->recebeMateriaPrima($id);
+    
     $data['fornecedores'] = $this->Fornecedores_model->recebeFornecedores();
 
     // Carregando as views com os dados
@@ -96,7 +97,7 @@ class MateriasPrimas extends CI_Controller
       'nome' => $this->input->post('nome'),
       'id_fornecedor' => $this->input->post('idFornecedor'),
       'composicao_ptbr' => $this->input->post('composicao_ptbr'),
-      'valor' => $this->input->post('valor'),
+      'valor' => str_replace(['.', ','], ['', '.'], $this->input->post('valor')),
       'inci' => $this->input->post('inci'),
       'cas_number' => $this->input->post('cas_number'),
       'descricao' => $this->input->post('descricao'),

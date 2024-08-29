@@ -170,11 +170,12 @@ class Clientes extends CI_Controller
         $this->load->model('EquipamentosManipulacao_model');
         $this->load->model('EquipamentosEnvase_model');
         $this->load->model('EquipamentosRotulagem_model');
+        $this->load->model('MateriasPrimas_model');
 
         // scripts padrão
         $scriptsPadraoHead = scriptsPadraoHead();
         $scriptsPadraoFooter = scriptsPadraoFooter();
-        
+
         // scripts para clientes
         $scriptsClienteHead = scriptsClientesHead();
         $scriptsProjetoHead = scriptsProjetoHead();
@@ -182,12 +183,16 @@ class Clientes extends CI_Controller
         $scriptsProjetoFooter = scriptsProjetoFooter();
 
         add_scripts('header', array_merge($scriptsPadraoHead, $scriptsClienteHead, $scriptsProjetoHead));
-        add_scripts('footer', array_merge($scriptsPadraoFooter, $scriptsClienteFooter,$scriptsProjetoFooter));
+        add_scripts('footer', array_merge($scriptsPadraoFooter, $scriptsClienteFooter, $scriptsProjetoFooter));
 
         $id = $this->uri->segment(3);
 
         $data['cliente'] = $this->Clientes_model->recebeCliente($id);
         $data['projetos'] = $this->Projetos_model->recebeProjetoCliente($id);
+
+        $data['materiasPrimas'] = $this->MateriasPrimas_model->recebeMateriasPrimas();
+
+        $data['equipamentosRotulagem'] = $this->EquipamentosRotulagem_model->recebeEquipamentosRotulagem();
 
         // verifica se existe cliente
         if (empty($data['cliente'])) {
@@ -271,5 +276,27 @@ class Clientes extends CI_Controller
         }
 
         return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+    }
+
+    public function recebeEquipamentosManipulacaoPorNivel()
+    {
+        $nivel = $this->input->post('nivel');
+
+        if ($nivel) {
+            $this->load->model('EquipamentosManipulacao_model');
+            $this->load->model('EquipamentosEnvase_model');
+
+            $manipulacao = $this->EquipamentosManipulacao_model->recebeEquipamentosManipulacaoPorNivel($nivel);
+            $envase = $this->EquipamentosEnvase_model->recebeEquipamentosEnvasePorNivel($nivel);
+
+            $resposta = array(
+                'manipulacao' => $manipulacao,
+                'envase' => $envase
+            );
+
+            $this->output->set_content_type('application/json')->set_output(json_encode($resposta));
+        } else {
+            $this->output->set_content_type('application/json')->set_output(json_encode(array('equipamentos' => array())));
+        }
     }
 }

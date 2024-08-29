@@ -67,14 +67,24 @@ class Projetos extends CI_Controller
 
 	public function cadastraProjeto()
 	{
-		$dadosInformacoes = $this->input->post('dadosInformacoes');
-		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
-		$dadosBriefing = $this->input->post('dadosBriefing');
-		$dadosCustos = $this->input->post('dadosCustos');
 		$id = $this->input->post('id');
 
-		// Coloca os arrays em uma única variável
-		$dados = array_merge($dadosInformacoes, $dadosBriefing, $dadosCustos);
+		$dadosInformacoes = $this->input->post('dadosInformacoes');
+		$dadosBriefing = $this->input->post('dadosBriefing');
+		$dadosCustos = $this->input->post('dadosCustos');
+
+		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
+
+		// Gera o código do projeto com a data e hora atual no formato DDMMAAHHIISS
+		$codigoProjeto = date('dmYHis');
+
+		// Coloca os arrays em uma única variável e adiciona o código do projeto
+		$dados = array_merge(
+			array('codigo_projeto' => $codigoProjeto),
+			$dadosInformacoes,
+			$dadosBriefing,
+			$dadosCustos
+		);
 
 		$dados['id_empresa'] = $this->session->userdata('id_empresa');
 		$dados['id_cliente'] = $this->input->post('idCliente');
@@ -150,6 +160,32 @@ class Projetos extends CI_Controller
 				'success' => false,
 				'title' => "Algo deu errado!",
 				'message' => "Não foi possível reativar o Projeto!",
+				'type' => "error"
+			);
+		}
+
+		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+
+	public function recebeProjetoClienteCodigo()
+	{
+		$codigo_projeto = $this->input->post('codigoProjeto');
+
+		$retorno = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
+
+		if ($retorno) {
+			// Resposta de sucesso
+			$response = array(
+				'success' => true,
+				'data' => $retorno,
+				'type' => "success"
+			);
+		} else {
+			// Resposta de erro
+			$response = array(
+				'success' => false,
+				'title' => "Algo deu errado!",
+				'message' => "Não foi possível encontrar o projeto, tente novamente mais tarde!",
 				'type' => "error"
 			);
 		}

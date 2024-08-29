@@ -18,7 +18,7 @@ class MateriasPrimas_model extends CI_Model
   public function recebeMateriasPrimas(): array
   {
     $this->db->order_by('MP.nome');
-    $this->db->select('MP.*, F.nome_fantasia as NOME_FORNECEDOR, F.id');
+    $this->db->select('MP.*, F.nome_fantasia as NOME_FORNECEDOR, F.id as ID_FORNECEDOR');
     $this->db->join('ci_fornecedores F', 'MP.id_fornecedor = F.id');
     $this->db->where('MP.id_empresa', $this->session->userdata('id_empresa'));
     $query = $this->db->get('ci_materias_primas MP');
