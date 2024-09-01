@@ -16,18 +16,6 @@
               </div>
             </a>
           </li>
-          <button class="btn btn-primary d-none" id="liveToastBtn" type="button">Show live toast</button>
-          <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-            <div class="toast fade d-none" id="liveToast" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header">
-                <strong class="me-auto">Bootstrap</strong>
-                <small class="text-800">Agora</small>
-                <button class="btn ms-2 p-0" type="button" data-bs-dismiss="toast" aria-label="Close"><span class="uil uil-times fs-1"></span></button>
-              </div>
-              <div class="toast-body">Hello, world! This is a toast message.</div>
-            </div>
-          </div>
-
 
           <li class="nav-item">
             <a class="nav-link fw-semi-bold btn-etapas" href="#tab-envase" data-bs-toggle="tab" data-wizard-step="2">
@@ -156,7 +144,7 @@
                 <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                   <tr>
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoRotulagem['nome'] ?></td>
-                    <td class="no-padding"><?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['tipo']?></td>
+                    <td class="no-padding"><?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['tipo'] ?></td>
                     <td class="editable no-padding">
                       <input value="<?= $equipamentoRotulagem['pcs_hora'] == 0 ? '' : $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="text" placeholder="00">
                     </td>

@@ -41119,8 +41119,9 @@ select+.select2-obrigatorio:focus {
   padding: 10px;
 }
 
-.input-custo-producao {
-  WIDTH: 100%;
+.input-custo-producao, 
+.input_preco_venda_investimento {
+  width: 100%;
   height: 100%;
   background: transparent;
   color: white;
@@ -41130,4 +41131,13 @@ select+.select2-obrigatorio:focus {
 .input-custo-producao:focus{
   outline:none;
   box-shadow: none;
+}
+
+.table-titulo-td {
+  padding-left: 5px !important; 
+}
+
+.inactive {
+  opacity: 0.4;
+  pointer-events: none;
 }

@@ -20,6 +20,7 @@ class Projetos_model extends CI_Model
 
         return $query->result_array();
     }
+
     public function recebeTiposEmbalagem()
     {
         $this->db->select('TE.*');
@@ -29,6 +30,7 @@ class Projetos_model extends CI_Model
 
         return $query->result_array();
     }
+
     public function recebeTiposTampa()
     {
         $this->db->select('TT.*');
@@ -53,6 +55,19 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetoCliente($id_cliente)
     {
+        $this->db->where('id_cliente', $id_cliente);
+        if ($this->session->userdata('id_empresa') > 1) {
+            $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
+        }
+
+        $query = $this->db->get('ci_projetos');
+
+        return $query->result_array();
+    }
+
+    public function recebeDadosProjetoCliente($id_cliente)
+    {
+        $this->db->select('id, codigo_projeto, nome_marca');
         $this->db->where('id_cliente', $id_cliente);
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
@@ -88,7 +103,7 @@ class Projetos_model extends CI_Model
         if ($inserted_id) {
             $this->db->where('id', $inserted_id);
             $query = $this->db->get('ci_projetos');
-            return $query->row_array(); 
+            return $query->row_array();
         }
 
         return false;

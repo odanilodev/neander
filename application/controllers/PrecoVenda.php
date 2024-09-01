@@ -75,4 +75,31 @@ class PrecoVenda extends CI_Controller
     }
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
+
+  public function recebeCustoProjeto()
+  {
+    $this->load->model('CustoProducaoProjeto_model');
+
+    $codigo_projeto = $this->input->post('codigoProjeto');
+    $lote_projeto = $this->input->post('loteProjeto');
+
+    $retorno = $this->CustoProducaoProjeto_model->recebeCustoProducaoProjeto($codigo_projeto, $lote_projeto);
+    
+    if ($retorno) {
+      $response = array(
+        'success' => true,
+        'projeto' => $retorno,
+        'type' => "success"
+      );
+    } else {
+      $response = array(
+        'success' => false,
+        'title' => "Algo deu errado!",
+        'message' => "O Custo deste Projeto em questão não foi encontrado, tente novamente mais tarde!",
+        'type' => "error"
+      );
+    }
+    return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+
+  }
 }
