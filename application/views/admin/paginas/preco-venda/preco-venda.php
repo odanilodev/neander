@@ -6,7 +6,7 @@
         <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
             Para liberar os campos, selecione um cliente, seu projeto e lote.
         </div>
-        
+
         <!-- Select Cliente -->
         <div class="div_selects_preco_venda col-md-3">
             <label for="select_cliente" class="form-label">Cliente</label>
@@ -43,18 +43,20 @@
 
     <div class="container-fluid p-4 bg-light shadow rounded container_campos_preco_venda">
         <div class="row mb-4 rows_preco_venda">
+            <input type="text" class="input_hidden_fator" value="1">
+
             <!-- Linha 1 -->
             <div class="col-md-3 div_input_preco_venda">
                 <label for="descricao_produto" class="form-label">Descrição do Produto</label>
-                <textarea class="form-control descricao_produto" name="descricao_produto" placeholder="Digite a descrição" rows="1"></textarea>
+                <textarea class="form-control descricao_produto input_porcentagem_disabled" name="descricao_produto" placeholder="Digite a descrição" rows="1"></textarea>
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="ncm" class="form-label">NCM</label>
-                <input type="text" disabled class="form-control ncm" name="ncm">
+                <label for="input_ncm" class="form-label">NCM</label>
+                <input type="text" disabled class="form-control input_ncm text-1000" name="input_ncm">
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="descricao_ncm" class="form-label">Descrição do NCM</label>
-                <input type="text" disabled class="form-control descricao_ncm" name="descricao_ncm">
+                <label for="input_descricao_ncm" class="form-label">Descrição do NCM</label>
+                <input type="text" disabled class="form-control input_descricao_ncm text-1000" name="input_descricao_ncm">
             </div>
             <div class="col-md-1 div_input_preco_venda">
                 <label for="lote_partida" class="form-label">Lote Partida</label>
@@ -101,65 +103,63 @@
                 <div class="input-group">
                     <input type="text" class="form-control input_margem_porcentagem input_porcentagem_disabled" name="input_margem_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
                     <span class="input-group-text">%</span>
-                    <input type="text" disabled class="form-control text-1000 input_margem_reais">
+                    <input type="text" disabled class="form-control text-1000 input_margem_calculado">
                 </div>
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="sub_total" class="form-label">Sub-Total</label>
-                <input type="text" disabled class="form-control sub_total" name="sub_total">
+                <label for="input_sub_total" class="form-label">Sub-Total</label>
+                <input type="text" disabled class="form-control input_sub_total text-1000" name="input_sub_total">
             </div>
         </div>
 
         <div class="row mb-4 rows_preco_venda">
             <!-- Linha 3 -->
             <div class="col-md-2 div_input_preco_venda">
-                <label for="comissao_percentual" class="form-label">Comissão (%)</label>
+                <label for="input_comissao_porcentagem" class="form-label">Comissão (%)</label>
                 <div class="input-group">
-                    <input type="text" class="form-control comissao_percentual input_porcentagem_disabled" name="comissao_percentual" style="flex: 1 1 auto; max-width: 70px;">
+                    <input type="text" class="form-control input_comissao_porcentagem input_porcentagem_disabled" name="comissao_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
                     <span class="input-group-text">%</span>
-                    <input type="text" disabled class="form-control comissao_calculada" name="comissao_calculada">
+                    <input type="text" disabled class="form-control input_comissao_calculada text-1000" name="input_comissao_calculada">
                 </div>
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="total_sem_imposto" class="form-label">Total Sem Imposto</label>
-                <input type="text" disabled class="form-control total_sem_imposto" name="total_sem_imposto">
+                <label for="input_total_sem_imposto" class="form-label">Total Sem Imposto</label>
+                <input type="text" disabled class="text-1000 form-control input_total_sem_imposto" name="input_total_sem_imposto">
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="imposto_percentual" class="form-label">Imposto (%)</label>
+                <label for="input_imposto_porcentagem" class="form-label">Imposto (%)</label>
                 <div class="input-group">
-                    <input type="text" class="form-control imposto_percentual input_porcentagem_disabled" name="imposto_percentual" style="flex: 1 1 auto; max-width: 70px;">
+                    <input type="text" class="form-control input_imposto_porcentagem input_porcentagem_disabled" name="input_imposto_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
                     <span class="input-group-text">%</span>
-                    <input type="text" disabled class="form-control imposto_calculado" name="imposto_calculado">
+                    <input type="text" disabled class="text-1000 form-control input_imposto_calculado" name="input_imposto_calculado">
                 </div>
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="total_unitario" class="form-label">Total Unit. (R$)</label>
-                <input type="text" disabled class="form-control total_unitario" name="total_unitario">
+                <label for="input_total_unitario" class="form-label">Total Unit. (R$)</label>
+                <input type="text" disabled class="text-1000 form-control input_total_unitario" name="input_total_unitario">
             </div>
             <div class="col-md-2 div_input_preco_venda">
-                <label for="st_estado_percentual" class="form-label">ST do Estado (%)</label>
-                <input type="text" disabled class="form-control st_estado_percentual" name="st_estado_percentual">
+                <label for="input_st_estado_porcentagem" class="form-label">ST do Estado (%)</label>
+                <div class="input-group">
+                    <input type="text" class="input_porcentagem_disabled form-control input_st_estado_porcentagem" name="input_st_estado_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                    <span class="input-group-text">%</span>
+                    <input type="text" disabled class="text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
+                </div>
             </div>
-            <div class="col-md-2 div_input_preco_venda">
-                <label for="total_com_imposto" class="form-label">Total com Imposto (R$)</label>
-                <input type="text" disabled class="form-control total_com_imposto" name="total_com_imposto">
-            </div>
-        </div>
-        <div class="row mb-4 rows_preco_venda">
-            <!-- Linha 4 -->
             <div class="col-md-2 div_input_preco_venda ms-auto">
-                <label for="margem_lucro" class="form-label">Margem de Lucro (%)</label>
-                <input type="text" disabled class="form-control margem_lucro" name="margem_lucro">
+                <label for="input_total_st_estado" class="form-label">Valor total com ST</label>
+                <input type="text" disabled class="text-1000 form-control input_total_st_estado" name="input_total_st_estado">
             </div>
         </div>
     </div>
+
 
     <div class="campos-preco-venda-duplicado row mb-3">
         <!-- Manipulado J.S. -->
     </div>
 
     <!-- Tabela Investimento -->
-    <div class="row mt-4">
+    <!-- <div class="row mt-4">
         <div class="col-md-4">
             <table class="table table-bordered">
 
@@ -204,4 +204,4 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->

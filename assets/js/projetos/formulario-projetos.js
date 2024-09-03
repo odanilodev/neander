@@ -29,6 +29,11 @@ $(function () {
         theme: "bootstrap-5",
         dropdownParent: $('#modalDesenvolverProjeto') // Definido corretamente para o dropdown
     });
+
+    $('.select2').select2({
+        theme: "bootstrap-5"
+    });
+
     // Atualiza o select de equipamentos com base no nível selecionado
     $('#select-nivel').on('change', function () {
         let nivelSelecionado = $(this).val(); // Obtém o nível selecionado
