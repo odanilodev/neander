@@ -1,12 +1,12 @@
 function formatarValorMoeda(valor) {
-    // Converte o valor para um número, se necessário
-    const numero = Number(valor);
+    // Converter o valor para um número
+    const numero = parseFloat(valor);
 
-    // Verifica se o valor convertido é um número válido
+    // Retorna uma string vazia se o número não for válido
     if (isNaN(numero)) {
-        throw new Error('O valor fornecido não é um número válido');
+        return ''; 
     }
 
-    // Retorna o valor formatado como moeda BRL
+    // Formata e retorna o número como moeda
     return numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
