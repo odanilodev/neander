@@ -1040,7 +1040,7 @@
 
                       <!-- Lote -->
                       <div class="col-md-4 mb-2">
-                        <input type="text" disabled class="text-1000 text-center form-control" value="340,000">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
                       </div>
 
 
@@ -1082,7 +1082,7 @@
 
                       <!-- Lote -->
                       <div class="col-md-4 mb-2">
-                        <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="340,000">
                       </div>
 
 

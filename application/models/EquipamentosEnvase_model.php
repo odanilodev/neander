@@ -25,9 +25,9 @@ class EquipamentosEnvase_model extends CI_Model
 
   public function recebeEquipamentosEnvasePorNivel($nivel)
   {
-      $this->db->where('nivel', $nivel);
-      $consulta = $this->db->get('ci_equipamento_envase');
-      return $consulta->result_array();
-  }
+    $this->db->where('nivel', $nivel);
+    $consulta = $this->db->get('ci_equipamento_envase');
 
+    return $consulta->result_array();
+  }
 }

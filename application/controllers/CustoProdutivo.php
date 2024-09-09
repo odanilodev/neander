@@ -52,6 +52,7 @@ class CustoProdutivo extends CI_Controller
     $this->load->view('admin/paginas/custo-produtivo/custo-produtivo');
     $this->load->view('admin/includes/painel/rodape');
   }
+
   public function insereCustoProdutivo()
   {
     $idEquipamento = $this->input->post('idEquipamento');
@@ -76,8 +77,8 @@ class CustoProdutivo extends CI_Controller
 
     // Preparar a resposta
     $response = array(
-      'success' => $retorno,  
-      'type' => $retorno ? 'success' : 'error', 
+      'success' => $retorno,
+      'type' => $retorno ? 'success' : 'error',
       'message' => $retorno ? 'Dados inseridos com sucesso!' : 'Erro ao inserir dados.'
     );
 

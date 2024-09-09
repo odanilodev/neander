@@ -15,40 +15,44 @@ class Clientes_model extends CI_Model
    * 
    * @return array
    */
-  public function recebeClientes($cookie_filtro_clientes, $limit, $page, $count = null)
+  public function recebeClientes($cookie_filtro_clientes = null, $limit = null, $page = null, $count = null)
   {
-      $filtro = json_decode($cookie_filtro_clientes, true);
-
+      // Se filtro for passado, decodifica o JSON
+      $filtro = $cookie_filtro_clientes ? json_decode($cookie_filtro_clientes, true) : [];
+  
       $this->db->select('C.*');
       $this->db->from('ci_clientes C');
-
+  
       $this->db->where('C.id_empresa', $this->session->userdata('id_empresa'));
       $this->db->order_by('C.nome_fantasia', 'ASC');
-
+  
+      // Aplica filtros se existirem
       if (($filtro['cidade'] ?? false) && $filtro['cidade'] != 'all') {
           $this->db->where('C.cidade', $filtro['cidade']);
       }
-
+  
       if ($filtro['nome_fantasia'] ?? false) {
           $nome = $filtro['nome_fantasia'];
           $this->db->where("LOWER(C.nome_fantasia) COLLATE utf8mb4_unicode_ci LIKE LOWER('%$nome%')");
       }
-
-      if (!$count) {
+  
+      // Aplica paginação se $limit e $page forem passados
+      if ($limit && $page) {
           $offset = ($page - 1) * $limit;
           $this->db->limit($limit, $offset);
       }
-
+  
       $this->db->group_by('C.id');
-
+  
       $query = $this->db->get();
-
+  
       if ($count) {
           return $query->num_rows();
       }
-
+  
       return $query->result_array();
   }
+  
 
   /**
    * Retorna um cliente específico pelo ID.

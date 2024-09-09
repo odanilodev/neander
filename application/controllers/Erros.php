@@ -16,5 +16,3 @@ class Erros extends CI_Controller
     $this->load->view('errors/notfound');
   }
 }
-
-debug
