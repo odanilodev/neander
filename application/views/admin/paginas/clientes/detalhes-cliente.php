@@ -1211,7 +1211,7 @@
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <div>
-            <a href="<?=base_url('custoProdutivo')?>" class="btn btn-phoenix-warning">Editar Custo Produtivo</a>
+            <a href="<?= base_url('custoProdutivo') ?>" class="btn btn-phoenix-warning">Editar Custo Produtivo</a>
           </div>
           <div>
             <button class="btn btn-phoenix-success" type="submit" onclick="vincularValores()">Vincular Valores</button>

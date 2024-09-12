@@ -67,7 +67,7 @@ class Projetos_model extends CI_Model
 
     public function recebeDadosProjetoCliente($id_cliente)
     {
-        $this->db->select('id, codigo_projeto, nome_marca');
+        $this->db->select('id, codigo_projeto, nome_produto');
         $this->db->where('id_cliente', $id_cliente);
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
