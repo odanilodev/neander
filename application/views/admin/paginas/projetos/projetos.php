@@ -133,7 +133,6 @@
 
                                     <p class="fs--1 fw-semi-bold text-900 ms-3 text mb-4  w-50">
                                         <!-- Endereço -->
-                                        teste
                                     </p>
 
                                     <div class="d-flex align-items-center" style="position: absolute; top: 5px; right: 10px">

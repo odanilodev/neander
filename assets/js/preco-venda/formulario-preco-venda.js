@@ -49,14 +49,14 @@ function duplicarCamposPrecoVenda() {
 
     // HTML dos campos a serem duplicados
     let camposHtml = $(`
-    <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4">
+    <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4 container_pdf">
         <div class="row mb-4 rows_preco_venda">
             <input type="hidden" class="input_hidden_fator" value="1">
 
             <!-- Linha 1 -->
             <div class="col-md-3 div_input_preco_venda">
-                <label for="descricao_produto" class="form-label">Descrição do Produto</label>
-                <textarea disabled class="form-control descricao_produto input_porcentagem_disabled" name="descricao_produto" placeholder="Digite a descrição" rows="1"></textarea>
+                <label for="input_nome_produto" class="form-label">Descrição do Produto</label>
+                <textarea disabled class="text-1000 form-control input_nome_produto" name="input_nome_produto" rows="1"></textarea>
             </div>
             <div class="col-md-2 div_input_preco_venda">
                 <label for="input_ncm" class="form-label">NCM</label>
@@ -67,8 +67,8 @@ function duplicarCamposPrecoVenda() {
                 <input type="text" disabled class="form-control input_descricao_ncm text-1000" name="input_descricao_ncm">
             </div>
             <div class="col-md-1 div_input_preco_venda">
-                <label for="lote_partida" class="form-label">Lote Partida</label>
-                <input type="text" disabled class="form-control lote_partida" name="lote_partida">
+                <label for="input_lote_partida" class="form-label">Lote Partida</label>
+                <input type="text" disabled class="text-1000 form-control input_lote_partida" name="lote_partida">
             </div>
             <div class="col-md-2 div_input_preco_venda">
                 <label for="input_custo_produto" class="form-label">Custo do Produto</label>
@@ -164,7 +164,7 @@ function duplicarCamposPrecoVenda() {
 
     let btnGerarPdf = $(`
     <div class="col-md-2 ms-auto d-flex justify-content-end">
-        <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
+        <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf" onclick="finalizarPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Finalizar</button>
     </div>
     `);
 
@@ -187,8 +187,49 @@ function duplicarCamposPrecoVenda() {
 
 }
 
+function finalizarPrecoVenda() {
+    
+    let dadosPrecoVenda = [];
+
+    let idCliente = $('#select_cliente').val();
+
+    $('.container_pdf').each(function () {
+        let codigoProjeto = $(this).siblings('.row-selects-preco-venda').find('.select_projetos_cliente').val();
+
+        dadosPrecoVenda.push({
+            idCliente: idCliente,
+            codigoProjeto: codigoProjeto,
+            nomeProduto: $(this).find('.input_nome_produto').val(),
+            totalUnitImposto: converterParaFloat($(this).find('.input_total_unitario').val()),
+            totalUnitSemImposto: converterParaFloat($(this).find('.input_total_sem_imposto').val()),
+            totalUnitSt: converterParaFloat($(this).find('.input_total_st_estado').val())
+        });
+    });
+
+    $.ajax({
+        url: `${baseUrl}precoVenda/gerarPdfPrecoVenda`,
+        method: 'POST',
+        data: { dados: dadosPrecoVenda },
+        xhrFields: {
+            responseType: 'blob' 
+        },
+        success: function (data, status, xhr) {
+    
+            let url = window.URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
+
+
+            window.open(url);
+        },
+        error: function (xhr, status, error) {
+            console.error('Erro ao gerar o PDF:', error);
+        }
+    });
+}
+
+
 
 $(document).on('change', '#select_cliente', function () {
+
     let idCliente = $(this).val();
 
     $.ajax({
@@ -204,7 +245,7 @@ $(document).on('change', '#select_cliente', function () {
                 let projetosCliente = '<option value="" selected disabled>Selecione o Projeto</option>';
 
                 $(response.projeto).each(function (index, projeto) {
-                    projetosCliente += `<option value="${projeto.codigo_projeto}">${projeto.nome_marca}</option>`;
+                    projetosCliente += `<option value="${projeto.codigo_projeto}">${projeto.nome_produto}</option>`;
                 });
 
                 $('.select_projetos_cliente').html(projetosCliente);
@@ -247,11 +288,14 @@ $(document).on('change', '.select_lote_projeto', function () {
         },
         success: function (response) {
             if (response.success) {
+
                 // Preencher inputs com informações do banco de dados
                 const prefixo = `custo_lote_${loteProjeto}_`;
 
+                $divCamposPrecoVenda.find('.input_nome_produto').val(response.projeto.nome_produto);
                 $divCamposPrecoVenda.find('.input_ncm').val(response.projeto.codigo_ncm);
                 $divCamposPrecoVenda.find('.input_descricao_ncm').val(response.projeto.descricao_ncm);
+                $divCamposPrecoVenda.find('.input_lote_partida').val(response.projeto.lote_partida);
                 $divCamposPrecoVenda.find('.input_custo_produto').val(formatarValorMoeda(response.projeto[`${prefixo}produto`]));
                 $divCamposPrecoVenda.find('.input_custo_mao_de_obra').val(formatarValorMoeda(response.projeto[`${prefixo}mao_de_obra`]));
                 $divCamposPrecoVenda.find('.input_embalagem').val(formatarValorMoeda(response.projeto[`${prefixo}embalagem`]));

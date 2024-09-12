@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Mpdf\Mpdf;
+
 class PrecoVenda extends CI_Controller
 {
   public function __construct()
@@ -84,7 +86,7 @@ class PrecoVenda extends CI_Controller
     $lote_projeto = $this->input->post('loteProjeto');
 
     $retorno = $this->CustoProducaoProjeto_model->recebeCustoProducaoProjeto($codigo_projeto, $lote_projeto);
-    
+
     if ($retorno) {
       $response = array(
         'success' => true,
@@ -100,6 +102,19 @@ class PrecoVenda extends CI_Controller
       );
     }
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+  }
 
+  public function gerarPdfPrecoVenda()
+  {
+    $this->load->library('gerarPdf');
+    $dados = $this->input->post('dados');
+
+    // Gera o PDF
+    $pdfOutput = $this->gerarpdf->gerarPdfPrecoVenda($dados);
+
+    // Envia o PDF diretamente para o navegador
+    $this->output
+      ->set_content_type('application/pdf')
+      ->set_output($pdfOutput);
   }
 }

@@ -15,6 +15,8 @@ class CustoProducaoProjeto_model extends CI_Model
     {
 
         $this->db->select([
+            'P.nome_produto',
+            'P.lote_partida',
             'CPP.custo_lote_' . $lote_projeto . '_produto',
             'CPP.custo_lote_' . $lote_projeto . '_mao_de_obra',
             'CPP.custo_lote_' . $lote_projeto . '_embalagem',
@@ -24,6 +26,7 @@ class CustoProducaoProjeto_model extends CI_Model
         ]);
 
         $this->db->join('ci_ncm_projeto NP', 'NP.codigo_projeto = CPP.codigo_projeto', 'left');
+        $this->db->join('ci_projetos P', 'P.codigo_projeto = CPP.codigo_projeto', 'left');
 
         $this->db->where('CPP.codigo_projeto', $codigo_projeto);
         if ($this->session->userdata('id_empresa') > 1) {

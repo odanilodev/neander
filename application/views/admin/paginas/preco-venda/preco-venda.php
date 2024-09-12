@@ -47,14 +47,15 @@
 
         </div>
 
-        <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4 batata">
+        <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4 container_pdf">
             <div class="row mb-4 rows_preco_venda">
+
                 <input type="hidden" class="input_hidden_fator" value="1">
 
                 <!-- Linha 1 -->
                 <div class="col-md-3 div_input_preco_venda">
-                    <label for="descricao_produto" class="form-label">Descrição do Produto</label>
-                    <textarea class="form-control descricao_produto input_porcentagem_disabled" name="descricao_produto" placeholder="Digite a descrição" rows="1"></textarea>
+                    <label for="input_nome_produto" class="form-label">Descrição do Produto</label>
+                    <input type="text" disabled class="text-1000 input_nome_produto form-control" rows="1"></textarea>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_ncm" class="form-label">NCM</label>
@@ -65,8 +66,8 @@
                     <input type="text" disabled class="form-control input_descricao_ncm text-1000" name="input_descricao_ncm">
                 </div>
                 <div class="col-md-1 div_input_preco_venda">
-                    <label for="lote_partida" class="form-label">Lote Partida</label>
-                    <input type="text" disabled class="form-control lote_partida" name="lote_partida">
+                    <label for="input_lote_partida" class="form-label">Lote Partida</label>
+                    <input type="text" disabled class="form-control input_lote_partida text-1000" name="lote_partida">
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_custo_produto" class="form-label">Custo do Produto</label>
@@ -161,10 +162,101 @@
         </div>
 
         <div class="col-md-2 ms-auto d-flex justify-content-end">
-            <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
+            <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
         </div>
 
-        <div class="container_campos_preco_venda_duplicado">
-            <!-- Manipulado J.S. -->
+    </div>
+
+    <div class="container_campos_preco_venda_duplicado">
+        <!-- Manipulado J.S. -->
+    </div>
+
+    <div class="modal fade" id="condicoesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Condições Gerais de Fornecimento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mt-3 mb-5 mx-auto col-md-12">
+                            <!-- Condições Gerais de Fornecimento -->
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h5 class="form-text text-1000">Matéria-Prima</h5>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="check_materia_prima" class="form-check-input" name="check_materia_prima" value="1">
+                                        <label for="check_materia_prima" class="form-check-label">Pago pelo cliente.</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h5 class="form-text text-1000">Embalagem</h5>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="check_embalagem" class="form-check-input" name="check_embalagem" value="1">
+                                        <label for="check_embalagem" class="form-check-label">Pago pelo cliente.</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h5 class="form-text text-1000">Rótulo</h5>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="check_rotulo" class="form-check-input" name="check_rotulo" value="1">
+                                        <label for="check_rotulo" class="form-check-label">Pago pelo cliente.</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h5 class="form-text text-1000">Transporte</h5>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="check_transporte" class="form-check-input" name="check_transporte" value="1">
+                                        <label for="check_transporte" class="form-check-label">Pago pelo cliente.</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Condição de Pagamento -->
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="condicao_pagamento" class="form-label">Condição de Pagamento</label>
+                                        <select id="condicao_pagamento" class="form-select">
+                                            <option value="">Selecione uma condição</option>
+                                            <option value="avista">À Vista</option>
+                                            <option value="parcelado">Parcelado</option>
+                                            <option value="boleto">Boleto</option>
+                                            <option value="cartao">Cartão de Crédito</option>
+                                            <!-- Adicione mais opções conforme necessário -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Impostos -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="impostos" class="form-label">Impostos</label>
+                                        <input type="text" id="impostos" class="form-control" placeholder="Informe os impostos aplicáveis">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Observações Importantes -->
+                            <div class="row mt-4">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="observacoes" class="form-label">Observações Importantes</label>
+                                        <textarea id="observacoes" class="form-control" rows="4" placeholder="Digite suas observações aqui"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-phoenix-danger" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-phoenix-success" onclick="finalizarPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
+                </div>
+            </div>
         </div>
     </div>
