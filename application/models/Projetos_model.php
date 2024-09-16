@@ -80,17 +80,34 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetoClienteCodigo($codigo_projeto)
     {
-        $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA');
-        $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
+        $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA, CPP.*, P.criado_em');
+
+        $this->db->join('ci_clientes C', 'P.id_cliente = C.id', 'left');
+        $this->db->join('ci_custo_producao_projeto CPP', 'CPP.codigo_projeto = P.codigo_projeto', 'left');
+
         $this->db->where('P.codigo_projeto', $codigo_projeto);
+
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
         }
 
         $query = $this->db->get('ci_projetos P');
 
-        return $query->row_array();
+        return $query->result_array();
     }
+
+    public function recebeMateriasPrimasPorCodigoProjeto($codigo_projeto)
+    {
+        $this->db->select('MP.*, MP.nome AS NOME_MATERIA_PRIMA, MPP.valor AS VALOR_MP_PROJETO, MPP.quantidade AS QUANTIDADE_MP_PROJETO, MPP.percentual AS PERCENTUAL_MP_PROJETO, MPP.total AS TOTAL_MP_PROJETO');
+        $this->db->join('ci_materia_prima_projeto MPP', 'MP.id = MPP.id_materia_prima', 'left');
+        $this->db->where('MPP.codigo_projeto', $codigo_projeto);
+
+        $query = $this->db->get('ci_materias_primas MP');
+
+        return $query->result_array();
+    }
+
+
 
     public function insereProjeto($dados)
     {

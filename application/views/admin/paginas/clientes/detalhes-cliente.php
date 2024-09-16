@@ -178,13 +178,21 @@
           </div>
         </div>
 
-
-        <h2 class="mb-6">Histórico de projetos
-          <a href="<?= base_url('projetos/formulario/' . $this->uri->segment(3)) ?>" class="btn btn-phoenix-success px-3 px-sm-5 me-2" style="float: right;">
-            <span class="fa-solid far fa-calendar-plus me-sm-2"></span>
-            <span class="d-none d-sm-inline"> + Novo Projeto</span>
-          </a>
+        <h2 class="mb-6 d-flex justify-content-between align-items-center">
+          <span>Histórico de projetos</span>
+          <div class="d-flex">
+            <a class="btn btn-phoenix-warning btn-sm me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+              <span class="far fa-id-card me-2"></span>
+              Desenvolver Projeto
+            </a>
+            <a href="<?= base_url('projetos/formulario/' . $this->uri->segment(3)) ?>" class="btn btn-phoenix-success px-3 px-sm-5">
+              <span class="fa-solid far fa-calendar-plus me-sm-2"></span>
+              <span class="d-none d-sm-inline">+ Novo Projeto</span>
+            </a>
+          </div>
         </h2>
+
+
 
         <div class="container">
           <!-- <div class="row align-items-center g-3 justify-content-between justify-content-start">
@@ -247,9 +255,6 @@
                     </div>
 
                     <div class="d-flex align-items-center">
-                      <a class="btn btn-phoenix-warning btn-sm me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto(<?= $projeto['codigo_projeto'] ?>)" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
-                        <span class="far fa-id-card"></span>
-                      </a>
 
                       <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
                         <span class="fa-solid fa-ellipsis"></span>
@@ -312,12 +317,14 @@
     </div>
 
   </div>
+
+
   <!-- Modal desenvolver projeto -->
   <div class="modal fade" id="modalDesenvolverProjeto" tabindex="-1" aria-labelledby="modalDesenvolverProjetoTitulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalDesenvolverProjetoTitulo"><?= $projeto['nome_produto'] ?> - Versão: <?= $projeto['versao'] ?></h5>
+          <h5 class="modal-title" id="modalDesenvolverProjetoTitulo"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -328,6 +335,17 @@
                 <div class="col-12">
                   <div class="mb-3">
                     <div class="container">
+                      <div class="col-md-3 mb-3">
+                        <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
+                        <select id="select_projeto_cliente" class="form-select select2">
+                          <option value="">Selecione o Projeto</option>
+                          <?php foreach ($projetos as $projeto) : ?>
+                            <?php if ($projeto['vinculado'] == 0) : ?>
+                              <option value="<?= $projeto['codigo_projeto'] ?>"><?= $projeto['nome_produto'] ?></option>
+                            <?php endif ?>
+                          <?php endforeach ?>
+                        </select>
+                      </div>
                       <div class="mb-2">
                         <h5>Formulação do Produto</h5>
                       </div>
@@ -424,7 +442,7 @@
                         <!-- Total -->
                         <div class="col-md-2 mb-2 div-total-linha">
                           <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                          <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-input-total">
+                          <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-input-total-materia-prima">
                         </div>
 
                         <div class="col-md-1">

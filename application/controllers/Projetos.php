@@ -171,17 +171,19 @@ class Projetos extends CI_Controller
 	{
 		$codigo_projeto = $this->input->post('codigoProjeto');
 
-		$retorno = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
+		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
+		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto);
 
-		if ($retorno) {
-			// Resposta de sucesso
+		$retorno = array_merge($retornoProjetoCliente, $retornoMateriasPrimas);
+
+		if (!empty($retorno)) {
+
 			$response = array(
 				'success' => true,
 				'data' => $retorno,
 				'type' => "success"
 			);
 		} else {
-			// Resposta de erro
 			$response = array(
 				'success' => false,
 				'title' => "Algo deu errado!",
