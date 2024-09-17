@@ -512,17 +512,16 @@ $(document).on('change', '#select_projeto_cliente', function () {
 
                 if (response.success) {
 
-                    console.log(response.data[0].custo_sub_total_1)
-
                     let dataFormatada = response.data[0].criado_em.split(' ');
 
                     if (response.data.length < 2) {
-                        avisoRetorno('Atenção!', 'Nenhuma Matéria Prima Atrelada ao Projeto', 'error', '#')
+                        // avisoRetorno('Atenção!', 'Nenhuma Matéria Prima Atrelada ao Projeto', 'error', '#')
                         $('.modal-desenvolver-select-materia-prima').val('').trigger('change');
                     }
 
                     // Atualiza os campos do modal com as informações do projeto
                     $('.modal-desenvolver-input-data').val(formatarDatas(dataFormatada[0]));
+                    $('.modal-desenvolver-input-producao').val('1,000 g');
                     $('.modal-desenvolver-input-nome-produto').val(response.data[0].nome_produto);
                     $('.modal-desenvolver-input-nome-cliente').val(response.data[0].CLIENTE_NOME_FANTASIA);
                     $('.modal-desenvolver-input-quantidade').val(response.data[0].quantidade_geral_projeto);

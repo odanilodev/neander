@@ -156,7 +156,7 @@ function duplicarCamposPrecoVenda() {
             </div>
             <div class="col-md-2 div_input_preco_venda ms-auto">
                 <label for="input_total_st_estado" class="form-label">Valor total com ST</label>
-                <input type="text" class="text-1000 form-control input_total_st_estado" name="input_total_st_estado">
+                <input type="text" disabled class="text-1000 form-control input_total_st_estado" name="input_total_st_estado">
             </div>
         </div>
     </div>
