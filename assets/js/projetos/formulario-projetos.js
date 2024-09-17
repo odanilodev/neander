@@ -27,7 +27,7 @@ $(function () {
     // Inicialização do select2
     $('.select2').select2({
         theme: "bootstrap-5",
-        dropdownParent: $('#modalDesenvolverProjeto') // Definido corretamente para o dropdown
+        dropdownParent: $('#modalDesenvolverProjeto')
     });
 
     $('.select2').select2({
@@ -36,7 +36,7 @@ $(function () {
 
     // Atualiza o select de equipamentos com base no nível selecionado
     $('#select-nivel').on('change', function () {
-        let nivelSelecionado = $(this).val(); // Obtém o nível selecionado
+        let nivelSelecionado = $(this).val();
 
         if (nivelSelecionado) {
             $.ajax({
@@ -220,7 +220,7 @@ function calculaPorcentagemTotal() {
 function calculaSubTotal1() {
     let valorSubTotal = 0;
 
-    $('.modal-desenvolver-input-total').each(function () {
+    $('.modal-desenvolver-input-total-materia-prima').each(function () {
         // Remove o prefixo 'R$' e substitui a vírgula por ponto para a conversão para número
         let valorTotal = $(this).val().replace('R$', '').replace('.', '').replace(',', '.');
         valorSubTotal += parseFloat(valorTotal) || 0;
@@ -328,7 +328,7 @@ function duplicarLinhas() {
 
     let totalLinha = `
         <div class="col-md-2 div-total-linha">
-            <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-input-total">
+            <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-input-total-materia-prima">
         </div>
     `;
 
@@ -365,6 +365,8 @@ function duplicarLinhas() {
 }
 
 const cadastraProjeto = () => {
+
+    alert('OI')
 
     let id = $('.input-id').val();
 
@@ -490,38 +492,115 @@ const ativarProjetoCliente = (id, idCliente) => {
     });
 }
 
-const desenvolverProjeto = (codigoProjeto) => {
+$(document).on('change', '#select_projeto_cliente', function () {
 
-    // Data atual no input do modal
-    let dataAtual = new Date;
+    $('#modalDesenvolverProjetoTitulo').html($(this).find('option:selected').text());
+
+    let codigoProjeto = $(this).val();
+
+    if ($(this).val() != '') {
+        $.ajax({
+            type: 'post',
+            url: `${baseUrl}projetos/recebeProjetoClienteCodigo`,
+            data: {
+                codigoProjeto: codigoProjeto
+            },
+            success: function (response) {
+
+                $('.campos-duplicados').html('');
+                $('.btn-duplica-linha').show();
+
+                if (response.success) {
+
+                    let dataFormatada = response.data[0].criado_em.split(' ');
+
+                    if (response.data.length < 2) {
+                        // avisoRetorno('Atenção!', 'Nenhuma Matéria Prima Atrelada ao Projeto', 'error', '#')
+                        $('.modal-desenvolver-select-materia-prima').val('').trigger('change');
+                    }
+
+                    // Atualiza os campos do modal com as informações do projeto
+                    $('.modal-desenvolver-input-data').val(formatarDatas(dataFormatada[0]));
+                    $('.modal-desenvolver-input-producao').val('1,000 g');
+                    $('.modal-desenvolver-input-nome-produto').val(response.data[0].nome_produto);
+                    $('.modal-desenvolver-input-nome-cliente').val(response.data[0].CLIENTE_NOME_FANTASIA);
+                    $('.modal-desenvolver-input-quantidade').val(response.data[0].quantidade_geral_projeto);
+                    $('.modal-desenvolver-input-nivel-produto').val(response.data[0].nivel_produto);
+
+                    // Matérias Primas
+                    let numSelects = response.data.length - 1;
+                    let selectsCriados = $('.modal-desenvolver-select-materia-prima').length;
+
+                    if (selectsCriados < numSelects) {
+                        for (let i = selectsCriados; i < numSelects; i++) {
+                            $('.btn-duplica-linha').last().trigger('click');
+                        }
+
+                        setTimeout(() => {
+                            $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
+                                setTimeout(() => {
+                                    $('.modal-desenvolver-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
+                                    $('.modal-desenvolver-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+                                    $('.modal-desenvolver-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
+                                    $('.modal-desenvolver-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
+                                    $('.modal-desenvolver-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+                                }, 100);
+                            });
+                        }, 500);
+                    }
+
+                    $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
+                        $('.modal-desenvolver-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
+                        $('.modal-desenvolver-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+                        $('.modal-desenvolver-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
+                        $('.modal-desenvolver-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
+                        $('.modal-desenvolver-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+
+                    });
+
+                    $('.input-sub-total').val(formatarValorMoeda(response.data[0].custo_sub_total_1));
+
+
+                } else {
+
+                    avisoRetorno(response.title, response.message, response.type, '#');
+                }
+            }
+        });
+    }
+
+});
+
+const desenvolverProjeto = () => {
+
+    let dataAtual = new Date();
     let dataAtualFormatada = dataAtual.toLocaleDateString('pt-BR');
+
     $('.modal-desenvolver-input-data').val(dataAtualFormatada);
 
-    $.ajax({
-        type: 'post',
-        url: `${baseUrl}projetos/recebeProjetoClienteCodigo`,
-        data: {
-            codigoProjeto: codigoProjeto
-        },
-        success: function (response) {
+    $('#modalDesenvolverProjeto').find('input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea').val('');
 
-            if (response.success) {
+    $('#modalDesenvolverProjeto').find('.select2').each(function () {
+        $(this).val(null).trigger('change');
+    });
 
-                $('.modal-desenvolver-input-nome-produto').val(response.data.nome_produto);
-                $('.modal-desenvolver-input-nome-cliente').val(response.data.CLIENTE_NOME_FANTASIA);
-
-            } else {
-
-                avisoRetorno(`${response.title}, ${response.message}, ${response.type}, #`)
-            }
-
-        }
+    $('#modalDesenvolverProjeto').find('form').each(function () {
+        this.reset();
     });
 }
 
+function formatarPercentual(valor) {
+    // Converte o valor para número
+    let numero = parseFloat(valor);
 
-const vincularValores = () => {
-
-
+    // Formata o número para ter uma casa decimal se necessário
+    if (numero % 1 === 0) {
+        // Se não houver parte decimal, retorna como inteiro
+        return numero.toString();
+    } else {
+        // Se houver parte decimal, retorna com uma casa decimal
+        return numero.toFixed(1).replace(/\.0$/, '');
+    }
 }
+
 

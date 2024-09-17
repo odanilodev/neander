@@ -13,7 +13,7 @@ class CondicoesGeraisFornecimento_model extends CI_Model
 
     public function recebeCondicoesFornecimentoProjeto($codigo_projeto)
     {
-        $this->db->select('CGFP.*, CP.nome AS NOME_CONDICAO_PAGAMENTO');
+        $this->db->select('CGFP.*, CP.nome AS NOME_CONDICAO_FORNECIMENTO');
 
 
         $this->db->from('ci_condicoes_gerais_fornecimento_projeto CGFP');

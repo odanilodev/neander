@@ -30,7 +30,7 @@ function duplicarCamposPrecoVenda() {
             </div>
             <div class="div_selects_preco_venda col-md-3 div_select_valor_lote">
                 <label for="select_lote_projeto" class="form-label">Lote</label>
-                <select class="form-select select2 select_lote_projeto" name="select_lote_projeto">
+                <select disabled class="form-select select2 select_lote_projeto" name="select_lote_projeto">
                     <option value="" selected disabled>Selecione o Lote</option>
                     <option value="50">Especial 50</option>
                     <option value="100">100</option>
@@ -163,9 +163,9 @@ function duplicarCamposPrecoVenda() {
     `);
 
     let btnGerarPdf = $(`
-    <div class="col-md-2 ms-auto d-flex justify-content-end">
-        <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf" onclick="finalizarPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Finalizar</button>
-    </div>
+        <div class="col-md-2 ms-auto d-flex justify-content-end">
+            <button disabled class="mt-2 btn btn-phoenix-success btn_gerar_pdf" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
+        </div>
     `);
 
     let novaLinha = $('<div class="container_campos_preco_venda_duplicado mb-4"></div>');
@@ -188,9 +188,8 @@ function duplicarCamposPrecoVenda() {
 }
 
 function finalizarPrecoVenda() {
-    
-    let dadosPrecoVenda = [];
 
+    let dadosPrecoVenda = [];
     let idCliente = $('#select_cliente').val();
 
     $('.container_pdf').each(function () {
@@ -206,18 +205,28 @@ function finalizarPrecoVenda() {
         });
     });
 
+    let dadosCondicoesFornecimento = {
+        checkMateriaPrima: $('#check_materia_prima').is(':checked') ? 1 : 0,
+        checkEmbalagem: $('#check_embalagem').is(':checked') ? 1 : 0,
+        checkRotulo: $('#check_rotulo').is(':checked') ? 1 : 0,
+        checkTransporte: $('#check_transporte').is(':checked') ? 1 : 0,
+        condicaoPagamento: $('#condicao_pagamento').val(),
+        impostos:$('#impostos').val(),
+        observacoes:$('#observacoes').val()
+    };
+
     $.ajax({
         url: `${baseUrl}precoVenda/gerarPdfPrecoVenda`,
         method: 'POST',
-        data: { dados: dadosPrecoVenda },
+        data: {
+            dadosPrecoVenda: dadosPrecoVenda,
+            dadosCondicoesFornecimento: dadosCondicoesFornecimento
+        },
         xhrFields: {
-            responseType: 'blob' 
+            responseType: 'blob'
         },
         success: function (data, status, xhr) {
-    
             let url = window.URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
-
-
             window.open(url);
         },
         error: function (xhr, status, error) {
@@ -225,6 +234,7 @@ function finalizarPrecoVenda() {
         }
     });
 }
+
 
 
 
@@ -262,15 +272,69 @@ $(document).on('change', '#select_cliente', function () {
     });
 });
 
+let arrayProjetos = [];
 
 $(document).on('change', '.select_projetos_cliente', function () {
 
-    $(this).closest('.row-selects-preco-venda').find('.div_select_valor_lote').removeClass('inactive');
 
+    let $this = $(this);
+    let valorSelecionado = $this.val();
+
+    $(this).closest('.row-selects-preco-venda').find('.div_select_valor_lote').removeClass('inactive');
+    $(this).closest('.row-selects-preco-venda').find('.select_lote_projeto').prop('disabled', false);
+
+    // Remove o valor anterior selecionado da lista se estiver em `arrayProjetos`
+    let valorAnterior = $this.data('valorAnterior');
+    if (valorAnterior) {
+        arrayProjetos = arrayProjetos.filter(item => item !== valorAnterior);
+    }
+
+    // Adiciona o valor selecionado ao array, se não for duplicado
+    if (!arrayProjetos.includes(valorSelecionado)) {
+        arrayProjetos.push(valorSelecionado);
+    } else {
+        // Se o valor já existir, mostra um SweetAlert
+        Swal.fire({
+            icon: 'error',
+            title: 'Projeto já selecionado',
+            text: 'O projeto que você escolheu já foi selecionado anteriormente!',
+            confirmButtonText: 'OK'
+        });
+
+        // Reseta o select para o valor anterior
+        $this.val(valorAnterior).trigger('change');
+        return;
+    }
+
+    // Salva o valor atual como o "valor anterior"
+    $this.data('valorAnterior', valorSelecionado);
+
+    // Atualiza os selects para remover os valores já selecionados
+    atualizarSelects();
 });
+
+function atualizarSelects() {
+    // Itera sobre cada select e remove as opções que já foram selecionadas
+    $('.select_projetos_cliente').each(function () {
+        let $select = $(this);
+        let valorSelecionado = $select.val();
+
+        $select.find('option').each(function () {
+            let $option = $(this);
+            if (arrayProjetos.includes($option.val()) && $option.val() !== valorSelecionado) {
+                $option.prop('disabled', true);
+            } else {
+                $option.prop('disabled', false);
+            }
+        });
+    });
+}
+
 
 
 $(document).on('change', '.select_lote_projeto', function () {
+
+    $('.btn_gerar_pdf').prop('disabled', false);
 
     $('#alerta-selecione-campos').fadeOut(1000);
 

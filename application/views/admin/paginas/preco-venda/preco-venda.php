@@ -162,7 +162,7 @@
         </div>
 
         <div class="col-md-2 ms-auto d-flex justify-content-end">
-            <button class="mt-2 btn btn-phoenix-success btn_gerar_pdf" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
+            <button disabled class="mt-2 btn btn-phoenix-success btn_gerar_pdf" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
         </div>
 
     </div>
@@ -171,7 +171,7 @@
         <!-- Manipulado J.S. -->
     </div>
 
-    <div class="modal fade" id="condicoesModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal fade" id="condicoesModal" tabindex="-1" aria-labelledby="modalLabel" aria-label="hidden">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -186,7 +186,7 @@
                                 <div class="col-md-3">
                                     <h5 class="form-text text-1000">Matéria-Prima</h5>
                                     <div class="form-check">
-                                        <input type="checkbox" id="check_materia_prima" class="form-check-input" name="check_materia_prima" value="1">
+                                        <input type="checkbox" id="check_materia_prima" class="form-check-input" name="check_materia_prima">
                                         <label for="check_materia_prima" class="form-check-label">Pago pelo cliente.</label>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                 <div class="col-md-3">
                                     <h5 class="form-text text-1000">Embalagem</h5>
                                     <div class="form-check">
-                                        <input type="checkbox" id="check_embalagem" class="form-check-input" name="check_embalagem" value="1">
+                                        <input type="checkbox" id="check_embalagem" class="form-check-input" name="check_embalagem">
                                         <label for="check_embalagem" class="form-check-label">Pago pelo cliente.</label>
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@
                                 <div class="col-md-3">
                                     <h5 class="form-text text-1000">Rótulo</h5>
                                     <div class="form-check">
-                                        <input type="checkbox" id="check_rotulo" class="form-check-input" name="check_rotulo" value="1">
+                                        <input type="checkbox" id="check_rotulo" class="form-check-input" name="check_rotulo">
                                         <label for="check_rotulo" class="form-check-label">Pago pelo cliente.</label>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@
                                 <div class="col-md-3">
                                     <h5 class="form-text text-1000">Transporte</h5>
                                     <div class="form-check">
-                                        <input type="checkbox" id="check_transporte" class="form-check-input" name="check_transporte" value="1">
+                                        <input type="checkbox" id="check_transporte" class="form-check-input" name="check_transporte">
                                         <label for="check_transporte" class="form-check-label">Pago pelo cliente.</label>
                                     </div>
                                 </div>
@@ -223,11 +223,10 @@
                                         <label for="condicao_pagamento" class="form-label">Condição de Pagamento</label>
                                         <select id="condicao_pagamento" class="form-select">
                                             <option value="">Selecione uma condição</option>
-                                            <option value="avista">À Vista</option>
-                                            <option value="parcelado">Parcelado</option>
-                                            <option value="boleto">Boleto</option>
-                                            <option value="cartao">Cartão de Crédito</option>
-                                            <!-- Adicione mais opções conforme necessário -->
+                                            <?php foreach ($condicoes as $condicao) : ?>
+                                                <option value="<?= $condicao['id'] ?>"><?= $condicao['nome'] ?></option>
+                                                <!-- Adicione mais opções conforme necessário -->
+                                            <?php endforeach ?>
                                         </select>
                                     </div>
                                 </div>
