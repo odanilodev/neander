@@ -163,27 +163,27 @@
             <h4 style="margin-bottom:10px;">CONDIÇÕES GERAIS DE FORNECIMENTO:</h4>
             <table>
                 <tr>
-                    <td><strong>Condição de Pagamento:</strong> <?= $condicaoFornecimento['NOME_CONDICAO_PAGAMENTO'] ?? 'Nenhuma condição de pagamento selecionada.' ?></td>
+                    <td><strong>Condição de Pagamento:</strong> <?= $condicoesFornecimento['NOME_CONDICAO_FORNECIMENTO'] ?? 'Nenhuma condição de pagamento selecionada.' ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Matéria-Prima:</strong> <?= $condicaoFornecimento['materia_prima'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                    <td><strong>Matéria-Prima:</strong> <?= $condicoesFornecimento['checkMateriaPrima'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Embalagem:</strong> <?= $condicaoFornecimento['embalagem'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                    <td><strong>Embalagem:</strong> <?= $condicoesFornecimento['checkEmbalagem'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Rótulo:</strong> <?= $condicaoFornecimento['rotulo'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                    <td><strong>Rótulo:</strong> <?= $condicoesFornecimento['checkRotulo'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Impostos:</strong> <?= $condicaoFornecimento['impostos'] ?? '' ?></td>
+                    <td><strong>Impostos:</strong> <?= $condicoesFornecimento['impostos'] ?? '' ?></td>
                 </tr>
                 <tr>
-                    <td><strong>Transporte:</strong> <?= $condicaoFornecimento['transporte'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                    <td><strong>Transporte:</strong> <?= $condicoesFornecimento['checkTransporte'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
                 </tr>
             </table>
 
             <h4>Observações importantes:</h4>
-            <p><?= $condicaoFornecimento['observacoes'] ?? '' ?></p>
+            <p><?= $condicoesFornecimento['observacoes'] ?? '' ?></p>
 
 
     </div>

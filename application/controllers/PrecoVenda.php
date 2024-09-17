@@ -32,6 +32,7 @@ class PrecoVenda extends CI_Controller
   public function index()
   {
     $this->load->model('Clientes_model');
+    $this->load->model('CondicoesPagamento_model');
     // Scripts padrão
     $scriptsPadraoHead = scriptsPadraoHead();
     $scriptsPadraoFooter = scriptsPadraoFooter();
@@ -42,7 +43,7 @@ class PrecoVenda extends CI_Controller
 
     $data['clientes'] = $this->Clientes_model->recebeClientes();
 
-
+    $data['condicoes'] = $this->CondicoesPagamento_model->recebeCondicoes();
     // Adicionando scripts ao header e footer
     add_scripts('header', array_merge($scriptsPadraoHead, $scriptsCustoPrecoVendaHead));
     add_scripts('footer', array_merge($scriptsPadraoFooter, $scriptsPrecoVendaFooter));
@@ -106,15 +107,20 @@ class PrecoVenda extends CI_Controller
 
   public function gerarPdfPrecoVenda()
   {
-    $this->load->library('gerarPdf');
-    $dados = $this->input->post('dados');
-
-    // Gera o PDF
-    $pdfOutput = $this->gerarpdf->gerarPdfPrecoVenda($dados);
-
-    // Envia o PDF diretamente para o navegador
-    $this->output
-      ->set_content_type('application/pdf')
-      ->set_output($pdfOutput);
+      $this->load->library('gerarPdf');
+      $dados_preco_venda = $this->input->post('dadosPrecoVenda');
+      $dados_condicoes_fornecimento = $this->input->post('dadosCondicoesFornecimento');
+  
+      $dados = [
+          'precoVenda' => $dados_preco_venda,
+          'condicoesFornecimento' => $dados_condicoes_fornecimento
+      ];
+  
+      // Gera o PDF
+      $pdfOutput = $this->gerarpdf->gerarPdfPrecoVenda($dados);
+  
+      // Envia o PDF diretamente para o navegador
+      $this->output->set_content_type('application/pdf')->set_output($pdfOutput);
   }
+  
 }
