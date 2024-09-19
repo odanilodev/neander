@@ -206,6 +206,8 @@ class Clientes extends CI_Controller
 
         $this->load->view('admin/includes/painel/cabecalho', $data);
         $this->load->view('admin/paginas/clientes/detalhes-cliente');
+        $this->load->view('admin/paginas/clientes/modal-desenvolver-projeto');
+        $this->load->view('admin/paginas/clientes/modal-custo-produtivo');
         $this->load->view('admin/includes/painel/rodape');
     }
 
