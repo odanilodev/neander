@@ -35,46 +35,46 @@ $(function () {
     });
 
     // Atualiza o select de equipamentos com base no nível selecionado
-    $('#select-nivel').on('change', function () {
-        let nivelSelecionado = $(this).val();
+    // $('#select-nivel').on('change', function () {
+    //     let nivelSelecionado = $(this).val();
 
-        if (nivelSelecionado) {
-            $.ajax({
-                url: `${baseUrl}clientes/recebeEquipamentosManipulacaoPorNivel`,
-                type: 'POST',
-                data: { nivel: nivelSelecionado },
-                success: function (resposta) {
+    //     if (nivelSelecionado) {
+    //         $.ajax({
+    //             url: `${baseUrl}clientes/recebeEquipamentosManipulacaoPorNivel`,
+    //             type: 'POST',
+    //             data: { nivel: nivelSelecionado },
+    //             success: function (resposta) {
 
-                    let opcoesManipulacao = '<option value="" disabled selected>Equipamento Manipulação</option>';
+    //                 let opcoesManipulacao = '<option value="" disabled selected>Equipamento Manipulação</option>';
 
-                    $(resposta.manipulacao).each(function (index, manipulacao) {
-                        opcoesManipulacao += `<option data-tempo-prod-manipulacao="${manipulacao.tempo_prod}" data-valores-unit-total-manipulacao="${manipulacao.valor_mo}" value="${manipulacao.id}">${manipulacao.nivel} - ${manipulacao.nome}</option>`;
-                    });
+    //                 $(resposta.manipulacao).each(function (index, manipulacao) {
+    //                     opcoesManipulacao += `<option data-tempo-prod-manipulacao="${manipulacao.tempo_prod}" data-valores-unit-total-manipulacao="${manipulacao.valor_mo}" value="${manipulacao.id}">${manipulacao.nivel} - ${manipulacao.nome}</option>`;
+    //                 });
 
-                    $('#select-equipamentos-manipulacao').html(opcoesManipulacao);
+    //                 $('#select-equipamentos-manipulacao').html(opcoesManipulacao);
 
-                    $('.campos-custo-manipulacao').find(':input').val('').trigger('change');
-                    $('.input-sub-total-2').val('');
+    //                 $('.campos-custo-manipulacao').find(':input').val('').trigger('change');
+    //                 $('.input-sub-total-2').val('');
 
-                    let opcoesEnvase = '<option value="" disabled selected>Equipamento Envase</option>';
-                    $(resposta.envase).each(function (index, envase) {
-                        opcoesEnvase += `<option data-pecas-hora-envase="${envase.pcs_hora}" data-valores-unit-total-envase="${envase.valor_mo}" value="${envase.id}">${envase.nivel} - ${envase.nome}</option>`;
-                    });
+    //                 let opcoesEnvase = '<option value="" disabled selected>Equipamento Envase</option>';
+    //                 $(resposta.envase).each(function (index, envase) {
+    //                     opcoesEnvase += `<option data-pecas-hora-envase="${envase.pcs_hora}" data-valores-unit-total-envase="${envase.valor_mo}" value="${envase.id}">${envase.nivel} - ${envase.nome}</option>`;
+    //                 });
 
-                    $('#select-equipamentos-envase').html(opcoesEnvase);
+    //                 $('#select-equipamentos-envase').html(opcoesEnvase);
 
-                    $('.campos-custo-envase-rotulagem').find(':input').val('').trigger('change');
-                    $('.input-sub-total-3').val('');
+    //                 $('.campos-custo-envase-rotulagem').find(':input').val('').trigger('change');
+    //                 $('.input-sub-total-3').val('');
 
-                },
-                error: function (xhr, status, error) {
-                    console.log('Erro ao carregar equipamentos:', error);
-                }
-            });
-        } else {
-            $('#select-equipamentos-manipulacao').html('<option value="" disabled selected>Selecione o equipamento</option>');
-        }
-    });
+    //             },
+    //             error: function (xhr, status, error) {
+    //                 console.log('Erro ao carregar equipamentos:', error);
+    //             }
+    //         });
+    //     } else {
+    //         $('#select-equipamentos-manipulacao').html('<option value="" disabled selected>Selecione o equipamento</option>');
+    //     }
+    // });
 
 
     $('#select-equipamentos-manipulacao').on('change', function () {
@@ -216,7 +216,6 @@ function calculaPorcentagemTotal() {
     $('.input-porcentagem-total').val(valorTotal.toFixed(2).replace('.', ','));
 }
 
-
 function calculaSubTotal1() {
     let valorSubTotal = 0;
 
@@ -280,8 +279,6 @@ function calcularTotalProjeto() {
 
     $('.input-total-projeto').val(formatarValorMoeda(totalFinal));
 }
-
-
 
 $(document).on('click', '.btn-duplica-linha', function () {
     duplicarLinhas();

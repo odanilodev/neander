@@ -12,7 +12,6 @@ $(function () {
 
   // Função para enviar dados ao servidor
   function enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, tipo, valorBase) {
-    console.log(valorInput);
     $.ajax({
       url: `${baseUrl}/custoProdutivo/insereCustoProdutivo`,
       type: 'POST',

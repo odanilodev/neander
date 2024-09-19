@@ -340,6 +340,11 @@
 
                   <div class="container">
 
+                    <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
+                      Para liberar os campos selecione um dos projetos deste cliente.
+                    </div>
+
+
                     <div class="row">
 
                       <div class="col-md-3 mb-3">
@@ -387,7 +392,7 @@
                         <input required type="text" class="mascara-peso form-control modal-desenvolver-input-quantidade">
                       </div>
 
-                      <div class="col-md-4 mb-2">
+                      <!-- <div class="col-md-4 mb-2">
                         <label class="text-body-highlight">Nível do Prod.</label>
                         <?= botao_info("1 - Shampoos, Sabonetes liquido de baixa complexidade.<br>
                                             2 - Shampoos, Sabonetes liquido de alta complexidade.<br>
@@ -409,7 +414,7 @@
                         </select>
 
 
-                      </div>
+                      </div> -->
 
 
 
