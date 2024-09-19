@@ -2,36 +2,6 @@ var baseUrl = $('.base-url').val();
 
 $(function () {
 
-  // Função para limpar os campos
-  // $('.btn-limpar').on('click', function () {
-  //   Swal.fire({
-  //     title: 'Você tem certeza?',
-  //     text: "Esta ação não poderá ser revertida e todos os campos da página atual serão zerados.",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     cancelButtonText: 'Cancelar',
-  //     confirmButtonText: 'Sim, limpar campos'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       if ($('#tab-manipulacao').hasClass('active')) {
-  //         $('.input-equipamento-manipulacao').val('');
-  //         $('#inputCustoHoraManipulacao').val('');
-  //         $('.valores-totais-manipulacao').text('R$ 0,00');
-  //       } else if ($('#tab-envase').hasClass('active')) {
-  //         $('.input-equipamento-envase').val('');
-  //         $('#inputCustoHoraEnvase').val('');
-  //         $('.valores-totais-envase').text('R$ 0,00');
-  //       } else {
-  //         $('.input-equipamento-rotulagem').val('');
-  //         $('#inputCustoHoraRotulagem').val('');
-  //         $('.valores-totais-rotulagem').text('R$ 0,00');
-  //       }
-  //     }
-  //   });
-  // });
-
   // Função para formatar valores monetários
   function formatarValor(valor) {
     return valor
@@ -41,107 +11,55 @@ $(function () {
   }
 
   // Função para enviar dados ao servidor
-  function enviarDadosParaServidor(idEquipamento, custoProducao, tempoProd, tipo, valorBase) {
+  function enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, tipo, valorBase) {
+    console.log(valorInput);
     $.ajax({
       url: `${baseUrl}/custoProdutivo/insereCustoProdutivo`,
       type: 'POST',
       data: {
         idEquipamento: idEquipamento,
         custoProducao: custoProducao.toFixed(2),
-        tempoProd: tempoProd,
+        valorInput: valorInput,
         tipo: tipo,
         valorBase: valorBase
-      }, success: function () {
+      },
+      success: function () {
         $(`.load-form-${idEquipamento}`).addClass('d-none');
         $(`.input-equipamento-${tipo}`).attr('disabled', false);
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro ao enviar dados:', error);
       }
     });
   }
 
-  // Função para verificar e ajustar minutos no input
-  function verificaInput(input) {
-
-    if (input == '.input-equipamento-manipulacao') {
-      $(input).each(function () {
-        let valorAtual = $(this).val();
-        let valorOriginal = $(this).data('valor-original') || valorAtual;
-
-        if (valorAtual === valorOriginal) return;
-
-        let [horas, minutos] = valorAtual.split(':').map(Number);
-        minutos = minutos > 59 ? 59 : minutos;
-        let horasFormatadas = String(horas || 0).padStart(2, '0');
-        let minutosFormatados = String(minutos || 0).padStart(2, '0');
-
-        $(this).val(`${horasFormatadas}:${minutosFormatados}`);
-        $(this).data('valor-original', `${horasFormatadas}:${minutosFormatados}`);
-      });
-    }
-
-  }
-
-  function calcularCustoProducao(tipoInput, sweetAlert, inputTempo, inputIndividualId, dataIdNome, custoHoraId, valorClasse, func) {
+  // Função para calcular custo de produção
+  function calcularCustoProducao(tipoInput, sweetAlert, inputClasse, inputIndividualCompleto, envaseOuRotulagem, custoHora, valorClasse, calculaCustoProducao) {
 
     function atualizarCustos() {
-      let valorBase = $(custoHoraId).val().replace(/\./g, '').replace(',', '.');
-      valorBase = parseFloat(valorBase) || 0;
+      let valorBase = parseFloat($(custoHora).val().replace(/\./g, '').replace(',', '.')) || 0;
 
       if (tipoInput === 'input-individual') {
-        // Atualiza custos para um único item
-        let idEquipamento = $(inputIndividualId).data(`id-equipamento-${dataIdNome}`);
-
-        let valorAtual = $(inputIndividualId).val();
-
-        let custoProducao;
-
-        if (dataIdNome === 'manipulacao') {
-          // Manipulação - trata como tempo
-          let [horas = 0, minutos = 0] = valorAtual.split(':').map(Number);
-          minutos = Math.min(minutos, 59);
-          let tempoProducaoDecimal = horas + (minutos / 60);
-          custoProducao = func(valorBase, tempoProducaoDecimal);
-        } else {
-          // Envase e Rotulagem - trata como peças por hora
-          let pecasPorHora = parseInt(valorAtual.replace(/\D/g, '')) || 0;
-          if (pecasPorHora === 0) {
-            custoProducao = 0;
-          } else {
-            custoProducao = func(valorBase, pecasPorHora);
-          }
-        }
+        // Atualiza custo para um único item
+        let idEquipamento = $(inputIndividualCompleto).data(`id-equipamento-${envaseOuRotulagem}`);
+        let valorInput = parseInt($(inputIndividualCompleto).val().replace(/\D/g, '')) || 0;
+        let custoProducao = valorInput === 0 ? 0 : calculaCustoProducao(valorBase, valorInput);
 
         let custoProducaoFormatado = formatarValor(custoProducao);
         $(`.${valorClasse}-${idEquipamento}`).html('R$ ' + custoProducaoFormatado);
 
-        enviarDadosParaServidor(idEquipamento, custoProducao, valorAtual, dataIdNome, valorBase);
+        enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, envaseOuRotulagem, valorBase);
       } else {
         // Atualiza custos para múltiplos itens
-        $(inputTempo).each(function () {
-
-          let idEquipamento = $(this).data(`id-equipamento-${dataIdNome}`);
-          let valorAtual = $(this).val();
-          let custoProducao;
-
-          if (dataIdNome === 'manipulacao') {
-            // Manipulação - trata como tempo
-            let [horas = 0, minutos = 0] = valorAtual.split(':').map(Number);
-            minutos = Math.min(minutos, 59);
-            let tempoProducaoDecimal = horas + (minutos / 60);
-            custoProducao = func(valorBase, tempoProducaoDecimal);
-          } else {
-            // Envase e Rotulagem - trata como peças por hora
-            let pecasPorHora = parseInt(valorAtual.replace(/\D/g, '')) || 0;
-            if (pecasPorHora === 0) {
-              custoProducao = 0;
-            } else {
-              custoProducao = func(valorBase, pecasPorHora);
-            }
-          }
+        $(inputClasse).each(function () {
+          let idEquipamento = $(this).data(`id-equipamento-${envaseOuRotulagem}`);
+          let valorInput = parseInt($(this).val().replace(/\D/g, '')) || 0;
+          let custoProducao = valorInput === 0 ? 0 : calculaCustoProducao(valorBase, valorInput);
 
           let custoProducaoFormatado = formatarValor(custoProducao);
           $(`.${valorClasse}-${idEquipamento}`).html('R$ ' + custoProducaoFormatado);
 
-          enviarDadosParaServidor(idEquipamento, custoProducao, valorAtual, dataIdNome, valorBase);
+          enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, envaseOuRotulagem, valorBase);
         });
       }
     }
@@ -159,6 +77,13 @@ $(function () {
       }).then((result) => {
         if (result.isConfirmed) {
           atualizarCustos();
+          Swal.fire({
+            title: 'Sucesso!',
+            text: "Dados alterados com sucesso.",
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Fechar'
+          });
         }
       });
     } else {
@@ -166,26 +91,34 @@ $(function () {
     }
   }
 
-  // Funções específicas para cálculos e eventos dos formulários
-  function calcularCustoProducaoManipulacao(sweetAlert, tipoInput, inputIndividualId) {
-    calcularCustoProducao(
-      tipoInput,
-      sweetAlert,
-      '.input-equipamento-manipulacao',
-      inputIndividualId,
-      'manipulacao',
-      '#inputCustoHoraManipulacao',
-      'valor-total-manipulacao',
-      (valorBase, tempoProducaoDecimal) => valorBase * tempoProducaoDecimal
-    );
-  }
+  //===========================================================================================
 
-  function calcularCustoProducaoEnvase(sweetAlert, tipoInput, inputIndividualId) {
+  $('#inputCustoHoraEnvase').on('focus', function () {
+    let $input = $(this);
+    $input.data('valor-antigo', $input.val().replace(/\./g, '').replace(',', '.'));
+  });
+
+  $('#inputCustoHoraEnvase').on('focusout', function () {
+    let $input = $(this);
+    let valorAtual = parseFloat($input.val().replace(/\./g, '').replace(',', '.'));
+    let valorAntigo = parseFloat($input.data('valor-antigo'));
+
+    if (valorAtual !== valorAntigo) {
+      calcularCustoProducaoEnvase(true, 'todos-inputs');
+      $input.data('valor-antigo', valorAtual);
+    }
+  });
+
+  $('.input-equipamento-envase').on('focusout', function () {
+    calcularCustoProducaoEnvase(false, 'input-individual', this);
+  });
+
+  function calcularCustoProducaoEnvase(sweetAlert, tipoInput, inputIndividualCompleto) {
     calcularCustoProducao(
       tipoInput,
       sweetAlert,
       '.input-equipamento-envase',
-      inputIndividualId,
+      inputIndividualCompleto,
       'envase',
       '#inputCustoHoraEnvase',
       'valor-total-envase',
@@ -193,12 +126,34 @@ $(function () {
     );
   }
 
-  function calcularCustoProducaoRotulagem(sweetAlert, tipoInput, inputIndividualId) {
+  //===========================================================================================
+
+  $('#inputCustoHoraRotulagem').on('focus', function () {
+    let $input = $(this);
+    $input.data('valor-antigo', $input.val().replace(/\./g, '').replace(',', '.'));
+  });
+
+  $('#inputCustoHoraRotulagem').on('focusout', function () {
+    let $input = $(this);
+    let valorAtual = parseFloat($input.val().replace(/\./g, '').replace(',', '.'));
+    let valorAntigo = parseFloat($input.data('valor-antigo'));
+
+    if (valorAtual !== valorAntigo) {
+      calcularCustoProducaoRotulagem(true, 'todos-inputs');
+      $input.data('valor-antigo', valorAtual);
+    }
+  });
+
+  $('.input-equipamento-rotulagem').on('focusout', function () {
+    calcularCustoProducaoRotulagem(false, 'input-individual', this);
+  });
+
+  function calcularCustoProducaoRotulagem(sweetAlert, tipoInput, inputIndividualCompleto) {
     calcularCustoProducao(
       tipoInput,
       sweetAlert,
       '.input-equipamento-rotulagem',
-      inputIndividualId,
+      inputIndividualCompleto,
       'rotulagem',
       '#inputCustoHoraRotulagem',
       'valor-total-rotulagem',
@@ -206,41 +161,52 @@ $(function () {
     );
   }
 
-  // Event Handlers
+  //===========================================================================================
+
+  $('#inputCustoHoraManipulacao').on('focus', function () {
+    let $input = $(this);
+    $input.data('valor-antigo', $input.val().replace(/\./g, '').replace(',', '.'));
+  });
+
   $('#inputCustoHoraManipulacao').on('focusout', function () {
-    calcularCustoProducaoManipulacao(true, 'todos-inputs');
+    let $input = $(this);
+    let valorAtual = parseFloat($input.val().replace(/\./g, '').replace(',', '.'));
+    let valorAntigo = parseFloat($input.data('valor-antigo'));
+
+    if (!isNaN(valorAtual) && valorAtual !== valorAntigo) {
+      Swal.fire({
+        title: 'Você tem certeza?',
+        text: "O Valor do custo base de manipulação será alterado para " + formatarValor(valorAtual),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sim, atualizar campos'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          insereCustoProducaoManipulacao(valorAtual);
+          $input.data('valor-antigo', valorAtual);
+        } else {
+          $input.val(formatarValor(valorAntigo));
+        }
+      });
+    }
   });
 
-  $('.input-equipamento-manipulacao').each(function () {
-    $(this).data('valor-original', $(this).val());
-  }).on('focusout', function () {
-    verificaInput('.input-equipamento-manipulacao');
-    calcularCustoProducaoManipulacao(false, 'input-individual', this);
-  });
-
-  $('#inputCustoHoraEnvase').on('focusout', function () {
-    calcularCustoProducaoEnvase(true, 'todos-inputs');
-  });
-
-  $('.input-equipamento-envase').each(function () {
-    $(this).data('valor-original', $(this).val());
-  }).on('focusout', function () {
-    verificaInput('.input-equipamento-envase');
-    calcularCustoProducaoEnvase(false, 'input-individual', this);
-  });
-
-  $('#inputCustoHoraRotulagem').on('focusout', function () {
-    calcularCustoProducaoRotulagem(true, 'todos-inputs');
-  });
-
-  $('.input-equipamento-rotulagem').each(function () {
-    $(this).data('valor-original', $(this).val());
-  }).on('focusout', function () {
-    verificaInput('.input-equipamento-rotulagem');
-    calcularCustoProducaoRotulagem(false, 'input-individual', this);
-  });
+  function insereCustoProducaoManipulacao(valorAtual) {
+    $.ajax({
+      url: `${baseUrl}/custoProdutivo/insereCustoHoraManipulacao`,
+      type: 'POST',
+      data: {
+        valorBase: valorAtual.toFixed(2).replace('.', '.')
+      },
+      success: function (data) {
+        avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, '#');
+      },
+      error: function (xhr, status, error) {
+        console.error('Erro ao enviar dados:', error);
+      }
+    });
+  }
 });
-
-
-
-

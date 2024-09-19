@@ -37,7 +37,7 @@
                     <span class="fas fa-money-check-alt"></span>
                   </span>
                 </span>
-                <span class="d-none d-md-block mt-1 fs--1">Rotulação</span>
+                <span class="d-none d-md-block mt-1 fs--1">Rotulagem</span>
               </div>
             </a>
           </li>
@@ -56,34 +56,31 @@
           </button> -->
         </div>
 
-        <div class="tab-content">
+        <div class="tab-content col-md-6">
           <!-- Manipulação Tab -->
           <div class="tab-pane active" role="tabpanel" aria-labelledby="tab-manipulacao" id="tab-manipulacao">
             <div class="mb-3">
               <label for="inputCustoHoraManipulacao" class="form-label">Custo Hora (R$):</label>
-              <input type="text" value="<?= number_format(($equipamentosManipulacao[0]['valor_base'] ?? 0), 2, ',', '.') ?>
-" class="form-control mascara-dinheiro" id="inputCustoHoraManipulacao" placeholder="Insira o valor base">
+              <input type="text" value="<?= number_format(($equipamentosManipulacao[0]['valor_base'] ?? 0), 2, ',', '.') ?>" class="form-control mascara-dinheiro" id="inputCustoHoraManipulacao" placeholder="Insira o valor base">
             </div>
             <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Equipamento</th>
                   <th>Nível</th>
-                  <th>Tempo Prod.</th>
-                  <th>Valor MO</th>
                 </tr>
               </thead>
               <tbody>
                 <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
                   <tr>
                     <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoManipulacao['nome'] ?></td>
-                    <td class="no-padding"><?= $equipamentoManipulacao['nivel'] . ' - ' . $equipamentoManipulacao['tanque'] ?></td>
-                    <td class="editable no-padding">
+                    <td class="no-padding"><?= $equipamentoManipulacao['nivel'] . ' - ' . $equipamentoManipulacao['tanque'] ?> &nbsp; KG</td>
+                    <!-- <td class="editable no-padding">
                       <input value="<?= $equipamentoManipulacao['tempo_prod'] == '00:00:00' ? '' : $equipamentoManipulacao['tempo_prod'] ?>" data-id-equipamento-manipulacao="<?= $equipamentoManipulacao['id'] ?>" class="mascara-tempo input-custo-producao input-equipamento-manipulacao" type="text" placeholder="00:00">
                       <div class="spinner-border text-primary load-form-<?= $equipamentoManipulacao['id'] ?> d-none" role="status"></div>
-                    </td>
-                    <td class="no-padding valores-totais-manipulacao valor-total-manipulacao-<?= $equipamentoManipulacao['id'] ?>">R$ <?= number_format($equipamentoManipulacao['valor_mo'] ?? 0.00, 2, ',', '.') ?>
-                    </td>
+                    </td> -->
+                    <!-- <td class="no-padding valores-totais-manipulacao valor-total-manipulacao-<?= $equipamentoManipulacao['id'] ?>">R$ <?= number_format($equipamentoManipulacao['valor_mo'] ?? 0.00, 2, ',', '.') ?>
+                    </td> -->
                   </tr>
                 <?php endforeach ?>
               </tbody>
@@ -123,36 +120,36 @@
               </tbody>
             </table>
           </div>
-
-          <div class="tab-pane" role="tabpanel" aria-labelledby="tab-rotulagem" id="tab-rotulagem">
-            <div class="mb-3">
-              <div class="text-end">
+          
+            <div class="tab-pane" role="tabpanel" aria-labelledby="tab-rotulagem" id="tab-rotulagem">
+              <div class="mb-3">
+                <div class="text-end">
+                </div>
+                <label for="inputCustoHoraRotulagem" class="form-label">Custo Hora (R$):</label>
+                <input type="text" value="<?= number_format(($equipamentosRotulagem[0]['valor_base'] ?? 0), 2, ',', '.') ?>" class="form-control mascara-dinheiro" id="inputCustoHoraRotulagem" placeholder="Insira o valor base">
               </div>
-              <label for="inputCustoHoraRotulagem" class="form-label">Custo Hora (R$):</label>
-              <input type="text" value="<?= number_format(($equipamentosRotulagem[0]['valor_base'] ?? 0), 2, ',', '.') ?>" class="form-control mascara-dinheiro" id="inputCustoHoraRotulagem" placeholder="Insira o valor base">
-            </div>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Equipamento</th>
-                  <th>Nível</th>
-                  <th>PÇs/Hora</th>
-                  <th>Valor MO</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
+              <table class="table table-bordered">
+                <thead>
                   <tr>
-                    <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoRotulagem['nome'] ?></td>
-                    <td class="no-padding"><?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['tipo'] ?></td>
-                    <td class="editable no-padding">
-                      <input value="<?= $equipamentoRotulagem['pcs_hora'] == 0 ? '' : $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="text" placeholder="00">
-                    </td>
-                    <td class="no-padding valores-totais-rotulagem valor-total-rotulagem-<?= $equipamentoRotulagem['id'] ?>">R$ <?= number_format($equipamentoRotulagem['valor_mo'] ?? 0.00, 2, ',', '.') ?></td>
+                    <th>Equipamento</th>
+                    <th>Nível</th>
+                    <th>PÇs/Hora</th>
+                    <th>Valor MO</th>
                   </tr>
-                <?php endforeach ?>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
+                    <tr>
+                      <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoRotulagem['nome'] ?></td>
+                      <td class="no-padding"><?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['tipo'] ?></td>
+                      <td class="editable no-padding">
+                        <input value="<?= $equipamentoRotulagem['pcs_hora'] == 0 ? '' : $equipamentoRotulagem['pcs_hora'] ?>" data-id-equipamento-rotulagem="<?= $equipamentoRotulagem['id'] ?>" class="input-custo-producao input-equipamento-rotulagem" type="text" placeholder="00">
+                      </td>
+                      <td class="no-padding valores-totais-rotulagem valor-total-rotulagem-<?= $equipamentoRotulagem['id'] ?>">R$ <?= number_format($equipamentoRotulagem['valor_mo'] ?? 0.00, 2, ',', '.') ?></td>
+                    </tr>
+                  <?php endforeach ?>
+                </tbody>
+              </table>
           </div>
         </div>
       </div>

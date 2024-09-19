@@ -193,6 +193,10 @@ class Clientes extends CI_Controller
         $data['materiasPrimas'] = $this->MateriasPrimas_model->recebeMateriasPrimas();
 
         $data['equipamentosRotulagem'] = $this->EquipamentosRotulagem_model->recebeEquipamentosRotulagem();
+        $data['equipamentosManipulacao'] = $this->EquipamentosManipulacao_model->recebeEquipamentosManipulacao();
+        $data['equipamentosEnvase'] = $this->EquipamentosEnvase_model->recebeEquipamentosEnvase();
+
+        $data['custoHoraManipulacao'] = $this->EquipamentosManipulacao_model->recebeCustoHoraManipulacao();   
 
         // verifica se existe cliente
         if (empty($data['cliente'])) {
