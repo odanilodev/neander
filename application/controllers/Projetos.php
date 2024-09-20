@@ -75,8 +75,8 @@ class Projetos extends CI_Controller
 
 		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
 
-		// Gera o código do projeto com a data e hora atual no formato DDMMAAHHIISS
-		$codigoProjeto = date('dmYHis');
+		// Gera o código do projeto com a data e hora atual no formato HHIISS
+		$codigoProjeto = date('His');
 
 		// Coloca os arrays em uma única variável e adiciona o código do projeto
 		$dados = array_merge(

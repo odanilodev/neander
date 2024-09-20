@@ -181,7 +181,7 @@
         <h2 class="mb-6 d-flex justify-content-between align-items-center">
           <span>Histórico de projetos</span>
           <div class="d-flex">
-            <a class="btn btn-phoenix-warning btn-sm me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+            <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
               <span class="far fa-id-card me-2"></span>
               Desenvolver Projeto
             </a>
@@ -199,10 +199,10 @@
 
 
         <div class="container">
-          <!-- <div class="row align-items-center g-3 justify-content-between justify-content-start">
 
-
-
+          <!-- Filtros
+        
+          <div class="row align-items-center g-3 justify-content-between justify-content-start">
             <div class="col-md-3">
               <input class="form-control datetimepicker data-inicio-coleta" required name="data_coleta_inicio" type="text" placeholder="Data Inicio" data-options='{"disableMobile":true,"allowInput":true}' style="cursor: pointer;" />
 
@@ -230,8 +230,6 @@
 
             </div>
 
-
-
           </div> -->
 
           <?php foreach ($projetos as $projeto) { ?>
@@ -253,7 +251,7 @@
                   <div class="d-flex justify-content-between flex-column flex-xl-row mb-2">
                     <div>
                       <h5 class="text-1000">
-                        <h5><?= $projeto['nome_produto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
+                        <h5><?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
                         <span class="fw-semi-bold"><?= date('d/m/Y', strtotime($projeto['criado_em'])) . ' / VERSÃO ' . $projeto['versao'] ?> </span>
                       </h5>
                     </div>

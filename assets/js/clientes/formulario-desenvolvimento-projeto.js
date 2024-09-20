@@ -1,3 +1,25 @@
+var baseUrl = $('.base-url').val();
+
+const desenvolverProjeto = () => {
+
+    
+    $('#modalDesenvolverProjeto').find('input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea').val('');
+    
+    $('#modalDesenvolverProjeto').find('.select2').each(function () {
+        $(this).val(null).trigger('change');
+    });
+    
+    $('#modalDesenvolverProjeto').find('form').each(function () {
+        this.reset();
+    });
+    
+    let dataAtual = new Date();
+    let dataAtualFormatada = dataAtual.toLocaleDateString('pt-BR');
+
+    $('.modal-desenvolver-input-data').val(dataAtualFormatada);
+}
+
+
 $('#select-equipamentos-manipulacao').on('change', function () {
 
     let tempoProd = $(this).find('option:selected').data('tempo-prod-manipulacao');

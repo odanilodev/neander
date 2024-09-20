@@ -171,8 +171,10 @@
 
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-phoenix-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-phoenix-primary">Salvar alterações</button>
+            <a class="btn btn-phoenix-warning" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+              <span class="far fa-id-card me-2"></span>
+              Desenvolver Projeto
+            </a>
           </div>
         </div>
       </div>

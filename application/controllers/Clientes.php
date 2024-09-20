@@ -179,6 +179,7 @@ class Clientes extends CI_Controller
         // scripts para clientes
         $scriptsClienteHead = scriptsClientesHead();
         $scriptsProjetoHead = scriptsProjetoHead();
+        
         $scriptsClienteFooter = scriptsClientesFooter();
         $scriptsProjetoFooter = scriptsProjetoFooter();
 

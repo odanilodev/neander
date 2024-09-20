@@ -25,7 +25,7 @@
                       <div class="col-md-3 mb-3">
                         <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
                         <select id="select_projeto_cliente" class="form-select select2">
-                          <option value="">Selecione o Projeto</option>
+                          <option value="">Desenvolver Projeto</option>
                           <?php foreach ($projetos as $projeto) : ?>
                             <?php if ($projeto['vinculado'] == 0) : ?>
                               <option value="<?= $projeto['codigo_projeto'] ?>"><?= $projeto['nome_produto'] ?></option>
@@ -918,6 +918,11 @@
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-between">
+
+          <button type="button" class="btn btn-phoenix-primary me-2" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
+            <span class="fa-solid fas fa-dollar-sign me-2"></span>
+            Custo Produtivo
+          </button>
 
           <div class="ms-auto">
             <button class="btn btn-phoenix-success" type="submit" onclick="vincularValores()">Vincular Valores</button>
