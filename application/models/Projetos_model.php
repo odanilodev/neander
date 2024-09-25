@@ -12,9 +12,9 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetos()
     {
-        $this->db->select('ci_projetos.*');
-        $this->db->from('ci_projetos');
-        $this->db->join('ci_empresas', 'ci_empresas.id = ci_projetos.id_empresa', 'INNER');
+        $this->db->select('P.*');
+        $this->db->from('ci_projetos P');
+        $this->db->join('ci_empresas E', 'E.id = P.id_empresa', 'INNER');
 
         $query = $this->db->get();
 
@@ -55,15 +55,19 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetoCliente($id_cliente)
     {
-        $this->db->where('id_cliente', $id_cliente);
+        $this->db->from('ci_projetos P');
+        $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
+        $this->db->where('P.id_cliente', $id_cliente);
+
         if ($this->session->userdata('id_empresa') > 1) {
-            $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
+            $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
         }
 
-        $query = $this->db->get('ci_projetos');
+        $query = $this->db->get();
 
         return $query->result_array();
     }
+
 
     public function recebeDadosProjetoCliente($id_cliente)
     {

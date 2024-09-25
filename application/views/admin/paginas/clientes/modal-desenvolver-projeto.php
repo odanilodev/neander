@@ -6,33 +6,33 @@
           <h5 class="modal-title" id="modalDesenvolverProjetoTitulo"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-body-desenvolver-projeto">
 
           <div class="card">
             <div class="card-body">
               <div class="col-12">
                 <div class="mb-3">
 
-                  <div class="container">
+                  <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
+                    Para liberar os campos selecione um dos projetos deste cliente.
+                  </div>
 
-                    <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
-                      Para liberar os campos selecione um dos projetos deste cliente.
-                    </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
+                    <select id="select_projeto_cliente" class="form-select select2">
+                      <option selected disabled value="">Desenvolver Projeto</option>
+                      <?php foreach ($projetos as $projeto) : ?>
+                        <?php if ($projeto['vinculado'] == 0) : ?>
+                          <option data-nome-produto="<?= $projeto['nome_produto'] ?>" data-nome-fantasia="<?= $projeto['nome_fantasia'] ?>" value="<?= $projeto['codigo_projeto'] ?>"><?= $projeto['nome_produto'] ?></option>
+                        <?php endif ?>
+                      <?php endforeach ?>
+                    </select>
+                  </div>
 
+                  <div class="container container-modal-desenvolver-projeto d-none">
 
                     <div class="row">
 
-                      <div class="col-md-3 mb-3">
-                        <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
-                        <select id="select_projeto_cliente" class="form-select select2">
-                          <option value="">Desenvolver Projeto</option>
-                          <?php foreach ($projetos as $projeto) : ?>
-                            <?php if ($projeto['vinculado'] == 0) : ?>
-                              <option value="<?= $projeto['codigo_projeto'] ?>"><?= $projeto['nome_produto'] ?></option>
-                            <?php endif ?>
-                          <?php endforeach ?>
-                        </select>
-                      </div>
 
                       <hr>
                     </div>
@@ -90,19 +90,28 @@
 
 
                       </div> -->
+                    </div>
 
-                      <hr class="my-3">
-                      <div class="col-md-3 mb-2 div-materia-prima">
+                    <hr class="my-3">
+
+                    <div class="row">
+
+                      <div class="col-md-4 mb-2 div-materia-prima">
                         <label class="form-label" style="padding-left:0;">Matéria-Prima </label>
-                        <select class="form-control campo-briefing select2 modal-desenvolver-select-materia-prima" name="select-materia-prima">
-                          <option value="" disabled selected>Selecione a matéria prima</option>
+                        <select class="form-control campo-briefing select2 modal-desenvolver-select-materia-prima select-principal-materia-prima" name="select-materia-prima">
+                          <option value="" selected disabled>Selecione a matéria prima</option>
                           <?php foreach ($materiasPrimas as $materiaPrima) : ?>
                             <option value="<?= $materiaPrima['id']; ?>" data-valor-materia-prima="<?= $materiaPrima['valor'] ?>">
                               <?= $materiaPrima['nome']; ?>
                             </option>
                           <?php endforeach; ?>
                         </select>
-                        <div class="d-none aviso-obrigatorio">Preencha este campo</div>
+                      </div>
+
+                      <!-- fase -->
+                      <div class="col-md-1 mb-2 div-fase">
+                        <label class="form-label" style="padding-left:0;">Fase</label>
+                        <input type="text" class="form-control modal-desenvolver-input-fase modal-desenvolver-input-fase">
                       </div>
 
                       <!-- Percentual -->
@@ -118,15 +127,9 @@
                       <div class="col-md-2 mb-2 div-quantidade">
                         <label class="form-label" style="padding-left:0;">Quantidade</label>
                         <div class="input-group">
-                          <input type="text" class="mascara-peso form-control modal-desenvolver-input-quantidade-materia-prima">
+                          <input type="text" disabled class="text-1000 mascara-peso form-control modal-desenvolver-input-quantidade-materia-prima">
                           <span class="input-group-text">KG.</span>
                         </div>
-                      </div>
-
-                      <!-- Valor Matéria Prima -->
-                      <div class="col-md-2 mb-2 div-valor-materia-prima">
-                        <label class="form-label" style="padding-left:0;">Valor M.P. (R$)</label>
-                        <input disabled type="text" value="" class="text-1000 form-control modal-desenvolver-input-valor-materia-prima">
                       </div>
 
                       <!-- Total -->
@@ -138,780 +141,787 @@
                       <div class="col-md-1">
                         <button class="mt-4 btn btn-phoenix-success novo-input-materia-prima btn-duplica-linha">+</button>
                       </div>
-                      <div class="campos-duplicados">
-                        <!-- JS -->
-                      </div>
                     </div>
 
+                    <div class="campos-duplicados">
+                      <!-- JS -->
+                    </div>
 
 
                     <hr>
 
                     <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
                       <div class="d-flex align-items-center" style="margin-right: 1rem;">
-                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left:10px;">Porcentagem Total:</p>
-                        <input disabled type="text" class="form-control input-porcentagem-total" style="max-width: 120px;">
+                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left: 10px; font-weight: bold;">Porcentagem Total:</p>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-left: 5px;">
+                          <input disabled type="text" class="form-control input-porcentagem-total text-1000" style="max-width: 120px; border-radius: 4px; padding: 0.5rem;">
+                          <div class="aviso-obrigatorio d-none" style="color: red; margin-top: 5px; font-size: 0.9rem;">Porcentagem excedeu 100%.</div> <!-- Escondido por padrão -->
+                        </div>
                       </div>
-
                       <div class="d-flex align-items-center">
-                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 1:</p>
-                        <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
+                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; font-weight: bold;">Sub-Total 1:</p>
+                        <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px; border-radius: 4px; padding: 0.5rem;">
+                      </div>
+                    </div>
+
+
+
+                    <hr>
+
+
+
+
+                    <label class="form-label">Modo de Fabricação</label>
+
+                    <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label class="form-label">PH Final do Produto:</label>
+                        <input class="form-control" type="text">
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label">Nome da Fragrância:</label>
+                        <input class="form-control" type="text">
                       </div>
                     </div>
 
                     <hr>
 
-                  </div>
+                    <div class="row campos-custo-manipulacao">
+                      <div class="mb-2">
 
+                        <h5>Custo de Manipulação</h5>
 
-                  <label class="form-label">Modo de Fabricação</label>
-
-                  <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <label class="form-label">PH Final do Produto:</label>
-                      <input class="form-control" type="text">
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label">Nome da Fragrância:</label>
-                      <input class="form-control" type="text">
-                    </div>
-                  </div>
-
-                  <hr>
-
-                  <div class="row campos-custo-manipulacao">
-                    <div class="mb-2">
-
-                      <h5>Custo de Manipulação</h5>
-
-                    </div>
-
-                    <div class="col-md-4 mb-2">
-                      <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
-                      <select required id="select-equipamentos-manipulacao" class="form-control modal-desenvolver-input-nivel-produto select2">
-                        <option value="" disabled selected>Equipamento Manipulação</option>
-                        <!-- js -->
-                      </select>
-                      <div class="d-none aviso-obrigatorio">Preencha este campo</div>
-                    </div>
-
-
-                    <!-- Quantd. KG. -->
-                    <div class="col-md-2 mb-2 div-percentual">
-                      <label class="form-label" style="padding-left:0;">Quant. Kg</label>
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">KG.</span>
                       </div>
-                    </div>
 
-                    <!-- Tempo -->
-                    <div class="col-md-2 mb-2 div-quantidade">
-                      <label class="form-label" style="padding-left:0;">Tempo</label>
-                      <input type="text" class="form-control modal-desenvolver-custo-manipulacao-tempo">
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-2 mb-2 div-total-linha">
-                      <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-2">
-                      <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
-                    </div>
-
-                  </div>
-
-                  <hr>
-
-                  <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                    <div class="d-flex align-items-center">
-                      <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 2:</p>
-                      <input disabled type="text" class="text-1000 form-control input-sub-total-2 modal-desenvolver-custo-manipulacao-valor-unit" style="max-width: 120px;">
-                    </div>
-                  </div>
-
-                  <hr>
-
-                  <div class="row campos-custo-envase-rotulagem">
-
-                    <div class="mb-2">
-                      <h5>Custo de Envase + Rotulagem</h5>
-                    </div>
-
-                    <div class="col-md-4 mb-2">
-                      <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
-                      <select required id="select-equipamentos-envase" class="form-control modal-desenvolver-input-nivel-produto select2">
-                        <option value="" disabled selected>Equipamento Envase</option>
-                        <!-- js -->
-                      </select>
-                      <div class="d-none aviso-obrigatorio">Preencha este campo</div>
-                    </div>
-
-
-                    <!-- Quantd. KG. -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Quant. Kg</label>
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">KG.</span>
+                      <div class="col-md-4 mb-2">
+                        <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
+                        <select required id="select-equipamentos-manipulacao" class="form-control modal-desenvolver-input-nivel-produto select2">
+                          <option value="" disabled selected>Equipamento Manipulação</option>
+                          <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
+                            <option data-custo-hora="<?= $equipamentoManipulacao['valor'] ?>" value="<?= $equipamentoManipulacao['id']; ?>">
+                              <?= $equipamentoManipulacao['nome']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
                       </div>
-                    </div>
 
-                    <!-- Tempo -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Peças / Hora</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control modal-desenvolver-custo-envase-pecas-hora">
-                        <span class="input-group-text">PÇ.</span>
+
+                      <!-- Quantd. KG. -->
+                      <div class="col-md-2 mb-2 div-percentual">
+                        <label class="form-label" style="padding-left:0;">Quant. Kg</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control input-quantidade-manipulacao">
+                          <span class="input-group-text">KG.</span>
+                        </div>
                       </div>
-                    </div>
 
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-unit">
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-2">
-                      <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-unit">
-                    </div>
-
-                  </div>
-                  <div class="row">
-
-                    <div class="col-md-4 mb-2">
-                      <select id="select-equipamentos-rotulagem" class="form-control select2">
-                        <option value="" disabled selected>Equipamento Rotulagem</option>
-                        <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
-                          <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">
-                            <?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['nome']; ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                      <div class="d-none aviso-obrigatorio">Preencha este campo</div>
-                    </div>
-
-                    <!-- Quantd. KG. -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">KG.</span>
+                      <!-- Tempo -->
+                      <div class="col-md-2 mb-2 div-quantidade">
+                        <label class="form-label" style="padding-left:0;">Tempo</label>
+                        <input type="text" class="mascara-tempo form-control modal-desenvolver-custo-manipulacao-tempo">
                       </div>
-                    </div>
 
-                    <!-- Peças Hora -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control modal-desenvolver-custo-rotulagem-pecas-hora">
-                        <span class="input-group-text">PÇ.</span>
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-2 mb-2 div-total-linha">
+                        <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
                       </div>
-                    </div>
 
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-2">
-                      <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
-                    </div>
-
-                  </div>
-
-                  <hr>
-
-                  <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                    <div class="d-flex align-items-center">
-                      <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 3:</p>
-                      <input disabled type="text" class="text-1000 form-control input-sub-total-3" style="max-width: 120px;">
-                    </div>
-                  </div>
-
-                  <hr>
-
-                  <div class="row">
-                    <div class="mb-2">
-
-                      <h5>Embalagem</h5>
-
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Tipo</label>
-                      <input type="text" class="modal-desenvolver-custo-rotulo form-control text-1000" value="Rótulo (Frente + Verso)" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Quantidade</label>
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
+                      <!-- Total (R$) -->
+                      <div class="col-md-2">
+                        <label class="form-label" style="padding-left:0;">Total (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
                       </div>
-                    </div>
 
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                      <div class="input-group">
-                        <input type="text" class="mascara-dinheiro form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="modal-desenvolver-custo-frasco form-control text-1000" value="Frasco / Pote / Bisnaga / etc." disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="mascara-dinheiro form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="modal-desenvolver-custo-tampa text-1000 form-control" value="Tampa / Valvula" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="mascara-dinheiro form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="text-1000 form-control modal-desenvolver-custo-display" value="Display / Cartucho" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="mascara-dinheiro form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="modal-desenvolver-custo-caixa-embarque text-1000 form-control" value="Caixa de Embarque" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="mascara-dinheiro form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-
-                    <hr class="my-3">
-
-                    <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                      <div class="d-flex align-items-center">
-                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 4:</p>
-                        <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
-                      </div>
-                    </div>
-                  </div>
-
-                  <hr>
-
-                  <div class="row">
-                    <div class="mb-2">
-
-                      <h5>Custo Final</h5>
-
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Tipo</label>
-                      <input type="text" class="form-control text-1000" value="Produto" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Quantidade</label>
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Manipulação" disabled>
-                    </div>
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Envase" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Rotulagem" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Embalagem" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Outros Custos" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">Un.</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" class="form-control text-1000" value="Percentual de perda" disabled>
-                    </div>
-
-
-                    <!-- Quantidade. -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="number" class="form-control">
-                        <span class="input-group-text">%</span>
-                      </div>
-                    </div>
-
-                    <!-- Valor Unit (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <div class="input-group">
-                        <input type="text" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Total (R$) -->
-                    <div class="col-md-3 mb-2">
-                      <input type="text" value="" disabled class="text-1000 form-control">
                     </div>
 
                     <hr>
 
                     <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
                       <div class="d-flex align-items-center">
-                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Total Unit.:</p>
-                        <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px; margin-right:0.5rem;">
-                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left:3rem;"> Total Geral:</p>
-
-                        <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
+                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 2:</p>
+                        <input disabled type="text" class="text-1000 form-control input-sub-total-2 modal-desenvolver-custo-manipulacao-valor-unit" style="max-width: 120px;">
                       </div>
                     </div>
+
+                    <hr>
+
+                    <div class="row campos-custo-envase-rotulagem">
+
+                      <div class="mb-2">
+                        <h5>Custo de Envase + Rotulagem</h5>
+                      </div>
+
+                      <div class="col-md-4 mb-2">
+                        <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
+                        <select id="select-equipamentos-envase" class="form-control select2">
+                          <option value="" disabled selected>Equipamento Envase</option>
+                          <?php foreach ($equipamentosEnvase as $equipamentoEnvase) : ?>
+                            <option value="<?= $equipamentoEnvase['id']; ?>" data-pecas-hora-envase="<?= $equipamentoEnvase['pcs_hora'] ?>" data-valores-unit-total-envase="<?= $equipamentoEnvase['valor_mo'] ?>">
+                              <?= $equipamentoEnvase['nivel'] . ' - ' . $equipamentoEnvase['nome']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <!-- Quantd. KG. -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Quantidade</label>
+                        <div class="input-group">
+                          <input disabled class="text-1000 form-control input-quantidade-envase">
+                        </div>
+                      </div>
+
+                      <!-- Tempo -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Peças / Hora</label>
+                        <div class="input-group">
+                          <input type="text" disabled class="text-1000 form-control modal-desenvolver-custo-envase-pecas-hora">
+                          <span class="input-group-text">PÇ.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-unit">
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-2">
+                        <label class="form-label" style="padding-left:0;">Total (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-total">
+                      </div>
+
+                    </div>
+                    <div class="row">
+
+                      <div class="col-md-4 mb-2">
+                        <select id="select-equipamentos-rotulagem" class="form-control select2">
+                          <option value="" disabled selected>Equipamento Rotulagem</option>
+                          <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
+                            <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">
+                              <?= $equipamentoRotulagem['nivel'] . ' - ' . $equipamentoRotulagem['nome']; ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+
+                      <!-- Quantd. KG. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <input disabled type="number" class="input-quantidade-rotulagem text-1000 form-control">
+                        </div>
+                      </div>
+
+                      <!-- Peças Hora -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <input disabled type="text" class="text-1000 form-control modal-desenvolver-custo-rotulagem-pecas-hora">
+                          <span class="input-group-text">PÇ.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-2">
+                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
+                      </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                      <div class="d-flex align-items-center">
+                        <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 3:</p>
+                        <input disabled type="text" class="text-1000 form-control input-sub-total-3" style="max-width: 120px;">
+                      </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                      <div class="mb-2">
+
+                        <h5>Embalagem</h5>
+
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Tipo</label>
+                        <input type="text" class="modal-desenvolver-custo-rotulo form-control text-1000" value="Rótulo (Frente + Verso)" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Quantidade</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
+                        <div class="input-group">
+                          <input type="text" class="mascara-dinheiro form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Total (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="modal-desenvolver-custo-frasco form-control text-1000" value="Frasco / Pote / Bisnaga / etc." disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="mascara-dinheiro form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="modal-desenvolver-custo-tampa text-1000 form-control" value="Tampa / Valvula" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="mascara-dinheiro form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="text-1000 form-control modal-desenvolver-custo-display" value="Display / Cartucho" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="mascara-dinheiro form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="modal-desenvolver-custo-caixa-embarque text-1000 form-control" value="Caixa de Embarque" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="mascara-dinheiro form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <hr class="my-3">
+
+                      <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                        <div class="d-flex align-items-center">
+                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 4:</p>
+                          <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                      <div class="mb-2">
+
+                        <h5>Custo Final</h5>
+
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Tipo</label>
+                        <input type="text" class="form-control text-1000" value="Produto" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Quantidade</label>
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <label class="form-label" style="padding-left:0;">Total (R$)</label>
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Manipulação" disabled>
+                      </div>
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Envase" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Rotulagem" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Embalagem" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Outros Custos" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">Un.</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <!-- Tipo -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" class="form-control text-1000" value="Percentual de perda" disabled>
+                      </div>
+
+
+                      <!-- Quantidade. -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="number" class="form-control">
+                          <span class="input-group-text">%</span>
+                        </div>
+                      </div>
+
+                      <!-- Valor Unit (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <div class="input-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Total (R$) -->
+                      <div class="col-md-3 mb-2">
+                        <input type="text" value="" disabled class="text-1000 form-control">
+                      </div>
+
+                      <hr>
+
+                      <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                        <div class="d-flex align-items-center">
+                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Total Unit.:</p>
+                          <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px; margin-right:0.5rem;">
+                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left:3rem;"> Total Geral:</p>
+
+                          <input disabled type="text" class="text-1000 form-control input-sub-total" style="max-width: 120px;">
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                      <div class="mb-2">
+
+                        <h5>Custo por lote de partida</h5>
+
+                      </div>
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <label class="form-label" style="padding-left:0;">Lote:</label>
+                        <input type="text" disabled class="text-1000 text-center form-control" value="Especial 50,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Produto</label>
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra(R$) -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Mão de Obra</label>
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Embalagem</label>
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <label class="form-label" style="padding-left:0;">Perda</label>
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra(R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="340,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra(R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="560,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+
+                      <!-- Lote -->
+                      <div class="col-md-4 mb-2">
+                        <input type="text" disabled class="text-1000 text-center form-control" value="1000,000">
+                      </div>
+
+
+                      <!-- Produto. -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Mão de Obra -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Embalagem -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                      <!-- Perda (R$) -->
+                      <div class="col-md-2 mb-2">
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="number" class="form-control">
+                        </div>
+                      </div>
+
+                    </div>
+
 
                   </div>
-
-                  <hr>
-
-                  <div class="row">
-                    <div class="mb-2">
-
-                      <h5>Custo por lote de partida</h5>
-
-                    </div>
-
-                    <!-- Lote -->
-                    <div class="col-md-4 mb-2">
-                      <label class="form-label" style="padding-left:0;">Lote:</label>
-                      <input type="text" disabled class="text-1000 text-center form-control" value="Especial 50,000">
-                    </div>
-
-
-                    <!-- Produto. -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Produto</label>
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Mão de Obra(R$) -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Mão de Obra</label>
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Embalagem (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Embalagem</label>
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Perda (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <label class="form-label" style="padding-left:0;">Perda</label>
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="row">
-
-                    <!-- Lote -->
-                    <div class="col-md-4 mb-2">
-                      <input type="text" disabled class="text-1000 text-center form-control" value="100,000">
-                    </div>
-
-
-                    <!-- Produto. -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Mão de Obra(R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Embalagem (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Perda -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="row">
-
-                    <!-- Lote -->
-                    <div class="col-md-4 mb-2">
-                      <input type="text" disabled class="text-1000 text-center form-control" value="340,000">
-                    </div>
-
-
-                    <!-- Produto. -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Mão de Obra(R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Embalagem (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Perda -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="row">
-
-                    <!-- Lote -->
-                    <div class="col-md-4 mb-2">
-                      <input type="text" disabled class="text-1000 text-center form-control" value="560,000">
-                    </div>
-
-
-                    <!-- Produto. -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Mão de Obra (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Embalagem (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Perda (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                  </div>
-                  <div class="row">
-
-                    <!-- Lote -->
-                    <div class="col-md-4 mb-2">
-                      <input type="text" disabled class="text-1000 text-center form-control" value="1000,000">
-                    </div>
-
-
-                    <!-- Produto. -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Mão de Obra -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Embalagem -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                    <!-- Perda (R$) -->
-                    <div class="col-md-2 mb-2">
-                      <div class="input-group">
-                        <span class="input-group-text">R$</span>
-                        <input type="number" class="form-control">
-                      </div>
-                    </div>
-
-                  </div>
-
-
                 </div>
               </div>
             </div>
@@ -919,7 +929,7 @@
         </div>
         <div class="modal-footer d-flex justify-content-between">
 
-          <button type="button" class="btn btn-phoenix-primary me-2" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
+          <button type="button" class="btn btn-phoenix-primary me-2 abre_modal_custo_produtivo">
             <span class="fa-solid fas fa-dollar-sign me-2"></span>
             Custo Produtivo
           </button>

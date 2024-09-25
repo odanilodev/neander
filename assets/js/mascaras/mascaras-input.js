@@ -33,7 +33,7 @@ $(function () {
     });
 
     // Máscara para tempo
-    $('.mascara-tempo').mask('00:00');
+    $('.mascara-tempo').mask('00:00:00');
 
     // Máscara para Telefone (00) 00000-0000
     $('.mascara-tel').mask('(00) 00000-0000');

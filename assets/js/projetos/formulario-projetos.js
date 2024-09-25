@@ -37,16 +37,22 @@ $(function () {
 });
 
 const cadastraProjeto = () => {
-
     let id = $('.input-id').val();
+    let idCliente = $('.input-id-cliente').val();
+    let permissao = true;
+    let primeiraAbaInvalida = '';
 
     let dadosInformacoes = {};
     $('#form-informacoes .campo-informacoes').each(function () {
-        // Trata os checkboxes como 0 ou 1
-        if ($(this).attr('type') == 'checkbox') {
-            dadosInformacoes[$(this).attr('name')] = $(this).is(':checked') ? 1 : 0;
-        } else {
-            dadosInformacoes[$(this).attr('name')] = $(this).val();
+        dadosInformacoes[$(this).attr('name')] = $(this).attr('type') == 'checkbox' ? ($(this).is(':checked') ? 1 : 0) : $(this).val();
+    });
+
+    $('#form-informacoes .campo-obrigatorio-informacoes').each(function () {
+        if ($(this).val() === '') {
+            permissao = false;
+            if (!primeiraAbaInvalida) {
+                primeiraAbaInvalida = '#bootstrap-wizard-tab1';
+            }
         }
     });
 
@@ -55,43 +61,62 @@ const cadastraProjeto = () => {
         dadosBriefing[$(this).attr('name')] = $(this).val();
     });
 
+    $('#form-briefing .campo-obrigatorio-briefing').each(function () {
+        if ($(this).val() === '') {
+            permissao = false;
+            if (!primeiraAbaInvalida) {
+                primeiraAbaInvalida = '#nbootstrap-wizard-tab2';
+            }
+        }
+    });
+
     let dadosCustos = {};
     $('#form-custos .campo-custos').each(function () {
         dadosCustos[$(this).attr('name')] = $(this).val();
     });
 
-    let idCliente = $('.input-id-cliente').val();
-
-    $.ajax({
-        type: 'POST',
-        url: `${baseUrl}projetos/cadastraProjeto`,
-        data: {
-            dadosInformacoes: dadosInformacoes,
-            dadosBriefing: dadosBriefing,
-            dadosCustos: dadosCustos,
-            id: id,
-            idCliente: idCliente
-        },
-        beforeSend: function () {
-            $('.load-form').removeClass('d-none');
-            $('.bnt-voltar').addClass('d-none');
-            $('.btn-proximo').addClass('d-none');
-        },
-        success: function (data) {
-
-            if (data.success) {
-
-                avisoRetorno('Sucesso!', `${data.message}`, 'success', `${baseUrl}/clientes/detalhes/${data.idClienteCadastrado}`);
-
-            } else {
-
-                avisoRetorno('Algo deu errado!', `${data.message}`, 'error', '#');
-
+    $('#form-custos .campo-obrigatorio-custos').each(function () {
+        if ($(this).val() === '') {
+            permissao = false;
+            if (!primeiraAbaInvalida) {
+                primeiraAbaInvalida = '#bootstrap-wizard-tab1';
             }
-
         }
     });
+
+    if (permissao) {
+        $.ajax({
+            type: 'POST',
+            url: `${baseUrl}projetos/cadastraProjeto`,
+            data: {
+                dadosInformacoes: dadosInformacoes,
+                dadosBriefing: dadosBriefing,
+                dadosCustos: dadosCustos,
+                id: id,
+                idCliente: idCliente
+            },
+            beforeSend: function () {
+                $('.load-form').removeClass('d-none');
+                $('.bnt-voltar').addClass('d-none');
+                $('.btn-proximo').addClass('d-none');
+            },
+            success: function (data) {
+                if (data.success) {
+                    avisoRetorno('Sucesso!', `${data.message}`, 'success', `${baseUrl}/clientes/detalhes/${data.idClienteCadastrado}`);
+                } else {
+                    avisoRetorno('Algo deu errado!', `${data.message}`, 'error', '#');
+                }
+            }
+        });
+    } else {
+        if (primeiraAbaInvalida) {
+            $(`${primeiraAbaInvalida}`).tab('show');
+        }
+        avisoRetorno('Erro!', 'Preencha todos os campos obrigatórios.', 'error', '#');
+    }
 }
+
+
 
 const inativaProjetoCliente = (id, idCliente) => {
 

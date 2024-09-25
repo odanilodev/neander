@@ -75,23 +75,22 @@
 
             <div class="card-body pt-4 pb-0">
               <div class="tab-content">
+                <input type="hidden" value="<?= isset($cliente['id']) ? $cliente['id'] : "" ?>" class="input-id">
+
                 <div class="tab-pane active" role="tabpanel" aria-labelledby="bootstrap-wizard-tab1" id="bootstrap-wizard-tab1">
-
-                  <input type="hidden" value="<?= isset($cliente['id']) ? $cliente['id'] : "" ?>" class="input-id">
-
                   <form id="form-informacoes" class="needs-validation" novalidate="novalidate" data-wizard-form="1">
 
                     <div class="row">
 
                       <div class="mb-2 mt-2 col-md-4">
                         <label class="form-label text-900">Nome da marca *</label>
-                        <input required class="form-control campo-informacoes" type="text" name="nome_marca" placeholder="Insira o nome da marca" />
+                        <input required class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="nome_marca" placeholder="Insira o nome da marca" />
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 mt-2 col-md-4">
                         <label class="form-label">Mercado Alvo *</label>
-                        <input required class="form-control campo-informacoes" type="text" name="mercado_alvo" placeholder="Insira o mercado Alvo" />
+                        <input required class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="mercado_alvo" placeholder="Insira o mercado Alvo" />
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
@@ -150,13 +149,13 @@
 
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Nome do produto *</label>
-                        <input required class="form-control campo-briefing" type="text" name="nome_produto" placeholder="Nome do produto">
+                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="nome_produto" placeholder="Nome do produto">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Tipo da embalagem *</label>
-                        <select required class="form-control campo-briefing select2" name="tipo_embalagem">
+                        <select required class="form-control campo-briefing select2 campo-obrigatorio-briefing" name="tipo_embalagem">
                           <option value="" disabled selected>Selecione o tipo da embalagem</option>
                           <?php foreach ($tiposEmbalagem as $tipoEmbalagem) : ?>
                             <option value="<?= $tipoEmbalagem['id']; ?>">
@@ -169,7 +168,7 @@
 
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Tipo da tampa *</label>
-                        <select required class="form-control campo-briefing select2" name="tipo_tampa">
+                        <select required class="form-control campo-briefing select2 campo-obrigatorio-briefing" name="tipo_tampa">
                           <option value="" disabled selected>Selecione o tipo da tampa</option>
                           <?php foreach ($tiposTampa as $tipoTampa) : ?>
                             <option value="<?= $tipoTampa['id']; ?>">
@@ -183,19 +182,19 @@
 
                       <div class="mb-2 col-md-3 mt-2">
                         <label class="form-label">Volumetria *</label>
-                        <input required class="form-control campo-briefing" type="text" name="volumetria" placeholder="Volumetria">
+                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="volumetria" placeholder="Volumetria">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Apelo do rotulo *</label>
-                        <input required class="form-control campo-briefing" type="text" name="apelo_rotulo" placeholder="Apelo do rotulo">
+                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="apelo_rotulo" placeholder="Apelo do rotulo">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Ativos do produto *</label>
-                        <input required class="form-control campo-briefing" type="text" name="ativos_produto" placeholder="Ativos do produto">
+                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="ativos_produto" placeholder="Ativos do produto">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
@@ -231,17 +230,17 @@
 
                       <div class="col-md-4">
                         <label class="form-label">Produto</label>
-                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
+                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Embalagens</label>
-                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
+                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Rótulos</label>
-                        <input class="form-control campo-custos mascara-dinheiro" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
+                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
                       </div>
 
                     </div>
@@ -249,8 +248,7 @@
                     <!-- Observação Custos -->
                     <div class="col-md-12 mb-3">
                       <label class="form-label">Observação Custos</label>
-                      <textarea name="observacao_custo" class="campo-custos form-control input-observacao-custo input-obrigatorio" rows="3" placeholder="Digite aqui a observação"><?= $projeto['observacao_custo'] ?? ''; ?></textarea>
-                      <div class="d-none aviso-obrigatorio">Preencha este campo</div>
+                      <textarea name="observacao_custo" class="campo-custos form-control input-observacao-custo" rows="3" placeholder="Digite aqui a observação"><?= $projeto['observacao_custo'] ?? ''; ?></textarea>
                     </div>
 
                   </form>
@@ -268,7 +266,7 @@
             </div>
             <div class="card-footer border-top-0" data-wizard-footer="data-wizard-footer">
               <div class="d-flex pager wizard list-inline mb-0">
-                <button class="d-none btn btn-link ps-0 bnt-voltar" type="button" data-wizard-prev-btn="data-wizard-prev-btn">
+                <button class="d-none btn btn-link ps-0 btn-voltar" type="button" data-wizard-prev-btn="data-wizard-prev-btn">
                   <span class="fas fa-chevron-left me-1" data-fa-transform="shrink-3"></span>Voltar
                 </button>
                 <div class="flex-1 text-end">
@@ -277,7 +275,6 @@
                   </button>
                 </div>
               </div>
-
               <div class="spinner-border text-primary load-form d-none" role="status"></div>
               <input class="input-id-cliente" type="hidden" value="<?= $this->uri->segment(3) ?>">
             </div>

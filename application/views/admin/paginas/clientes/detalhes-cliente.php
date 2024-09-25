@@ -181,11 +181,11 @@
         <h2 class="mb-6 d-flex justify-content-between align-items-center">
           <span>Histórico de projetos</span>
           <div class="d-flex">
-            <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+            <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="modalDesenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
               <span class="far fa-id-card me-2"></span>
               Desenvolver Projeto
             </a>
-            <button type="button" class="btn btn-phoenix-primary me-2" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
+            <button type="button" class="btn btn-phoenix-primary me-2 btn-abre-modal-custo-produtivo" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
               <span class="fa-solid fas fa-dollar-sign me-2"></span>
               Custo Produtivo
             </button>
@@ -195,9 +195,6 @@
             </a>
           </div>
         </h2>
-
-
-
         <div class="container">
 
           <!-- Filtros
@@ -249,6 +246,7 @@
                 <div class="flex-1">
 
                   <div class="d-flex justify-content-between flex-column flex-xl-row mb-2">
+
                     <div>
                       <h5 class="text-1000">
                         <h5><?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
@@ -307,16 +305,14 @@
                   </div>
 
                 </div>
-
               </div>
-              <hr>
-            <?php } ?>
+
 
             </div>
+            <hr>
+          <?php } ?>
         </div>
-
       </div>
+
+
     </div>
-
-  </div>
-

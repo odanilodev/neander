@@ -1,12 +1,12 @@
   <!-- Modal Custo Produtivo -->
   <div class="modal fade" id="modalCustoProdutivo" tabindex="-1" aria-labelledby="modalCustoProdutivo" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-dialog-scrollable" style="max-width: 800px;">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalCustoProdutivoLabel">Definir Custo Manipulação, Envase e Rotulagem</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="overflow-x:hidden;">
           <!-- Coloque todo o conteúdo aqui -->
           <div class="card theme-wizard mb-5">
 
@@ -77,13 +77,13 @@
                         </tr>
                       </thead>
                       <!-- <tbody>
-                        <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
-                          <tr>
-                            <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoManipulacao['nome'] ?></td>
-                            <td class="no-padding"><?= $equipamentoManipulacao['nivel'] . ' - ' . $equipamentoManipulacao['tanque'] ?> &nbsp; KG</td>
-                          </tr>
-                        <?php endforeach ?>
-                      </tbody> -->
+                          <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
+                            <tr>
+                              <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoManipulacao['nome'] ?></td>
+                              <td class="no-padding"><?= $equipamentoManipulacao['nivel'] . ' - ' . $equipamentoManipulacao['tanque'] ?> &nbsp; KG</td>
+                            </tr>
+                          <?php endforeach ?>
+                        </tbody> -->
                       <tbody class="text-center">
                         <tr>
                           <td class="ps-2">Artesanal</td>
@@ -127,7 +127,7 @@
                             <td class="no-padding" style="padding-left: 10px;"><?= $equipamentoEnvase['nome'] ?></td>
                             <td class="no-padding"><?= $equipamentoEnvase['nivel'] ?> </td>
                             <td class="editable no-padding">
-                              <input value="<?= $equipamentoEnvase['pcs_hora'] == 0 ? '' : $equipamentoEnvase['pcs_hora'] ?>" data-mo-envase="<?= $equipamentoEnvase['mo'] ?>" data-id-equipamento-envase="<?= $equipamentoEnvase['id'] ?>" class="input-custo-producao input-equipamento-envase" type="text" placeholder="00">
+                              <input value="<?= $equipamentoEnvase['pcs_hora'] == 0 ? '' : $equipamentoEnvase['pcs_hora'] ?>" data-mo-envase="<?= $equipamentoEnvase['mo'] ?>" data-id-equipamento-envase="<?= $equipamentoEnvase['id'] ?>" class="input-custo-producao input-equipamento-envase equipamento-envase-<?= $equipamentoEnvase['id'] ?>" type="text" placeholder="00">
                             </td>
                             <td class="no-padding valores-totais-envase valor-total-envase-<?= $equipamentoEnvase['id'] ?>">R$ <?= number_format($equipamentoEnvase['valor_mo'] ?? 0.00, 2, ',', '.') ?></td>
                           </tr>
@@ -170,12 +170,13 @@
             </div>
 
           </div>
-          <div class="modal-footer">
-            <a class="btn btn-phoenix-warning" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
-              <span class="far fa-id-card me-2"></span>
-              Desenvolver Projeto
-            </a>
-          </div>
+
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-phoenix-warning btn-abre-modal-desenvolver-projeto" title="Desenvolver Projeto" type="button" onclick="desenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+            <span class="far fa-id-card me-2"></span>
+            Desenvolver Projeto
+          </a>
         </div>
       </div>
     </div>
