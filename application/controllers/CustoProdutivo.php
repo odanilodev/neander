@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
+//CONTROLADOR DESCONTINUADO, SALVO APENAS PARA COTINGÊNCIA
+
+
 class CustoProdutivo extends CI_Controller
 {
   public function __construct()
@@ -114,3 +118,5 @@ class CustoProdutivo extends CI_Controller
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
 }
+
+

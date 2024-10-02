@@ -7,7 +7,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" style="overflow-x:hidden;">
-          <!-- Coloque todo o conteúdo aqui -->
           <div class="card theme-wizard mb-5">
 
             <div class="card-header bg-100 pt-3 pb-2 border-bottom-0">

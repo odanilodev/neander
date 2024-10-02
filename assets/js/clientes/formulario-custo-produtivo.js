@@ -29,11 +29,8 @@ $(function () {
 
           $(`.load-form-${idEquipamento}`).addClass('d-none');
           $(`.input-equipamento-${tipo}`).attr('disabled', false);
-
-          let idEquipamentoEnvase = $('#select-equipamentos-envase option:selected').val();
-          let pcsHoraEquipamentoEnvase = $(`.equipamento-envase-${idEquipamentoEnvase}`).val();
         
-          $('.modal-desenvolver-custo-envase-pecas-hora').val(pcsHoraEquipamentoEnvase);
+          $(`.modal-desenvolver-custo-${tipo}-pecas-hora`).val(valorInput);
         }
       },
       error: function (xhr, status, error) {

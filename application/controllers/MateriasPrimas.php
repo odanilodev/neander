@@ -74,7 +74,7 @@ class MateriasPrimas extends CI_Controller
 
     // Obtendo a matéria prima específica
     $data['materiaPrima'] = $this->MateriasPrimas_model->recebeMateriaPrima($id);
-    
+
     $data['fornecedores'] = $this->Fornecedores_model->recebeFornecedores();
 
     // Carregando as views com os dados
@@ -181,8 +181,8 @@ class MateriasPrimas extends CI_Controller
    */
   public function recebeTodasMateriasPrimas()
   {
-    $this->load->model('MateriasPrimas_model');
     $todasMaterias = $this->MateriasPrimas_model->recebeMateriasPrimas();
+
 
     if ($todasMaterias) {
       $response = array(
@@ -191,7 +191,10 @@ class MateriasPrimas extends CI_Controller
       );
     } else {
       $response = array(
-        'success' => false
+        'success' => false,
+        'title' => 'Erro!',
+        'message' => 'Erro ao receber Matérias Primas',
+        'type' => 'error',
       );
     }
 
