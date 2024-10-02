@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
+//CONTROLADOR DESCONTINUADO, SALVO APENAS PARA COTINGÊNCIA
+
+
 class CustoProdutivo extends CI_Controller
 {
   public function __construct()
@@ -69,10 +73,10 @@ class CustoProdutivo extends CI_Controller
     if ($tipo === 'manipulacao') {
       $dados['tempo_prod'] = $this->input->post('tempoProd');
     } else {
-      $dados['pcs_hora'] = $this->input->post('tempoProd');
+      $dados['pcs_hora'] = $this->input->post('valorInput');
     }
 
-    // Inserir dados no modelo
+    // Inserir dados no model
     $retorno = $this->CustoProdutivo_model->insereCustoProdutivo($idEquipamento, $tipo, $dados);
 
     // Preparar a resposta
@@ -85,4 +89,34 @@ class CustoProdutivo extends CI_Controller
     // Enviar a resposta JSON
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
+
+  public function insereCustoHoraManipulacao()
+  {
+    $this->load->model('EquipamentosManipulacao_model');
+
+    $dados['valor'] = $this->input->post('valorBase');
+    $dados['id_empresa'] = $this->session->userdata('id_empresa');
+
+    $registroExistente = $this->EquipamentosManipulacao_model->recebeCustoHoraManipulacao();
+
+    if ($registroExistente) {
+      $retorno = $this->EquipamentosManipulacao_model->atualizaCustoHoraManipulacao($dados);
+      $message = $retorno ? 'Custo Hora de Manipulação editado com sucesso!' : 'Erro ao atualizar os dados.';
+    } else {
+      $retorno = $this->EquipamentosManipulacao_model->insereCustoHoraManipulacao($dados);
+      $message = $retorno ? 'Custo Hora de Manipulação inserido com sucesso!' : 'Erro ao inserir os dados.';
+    }
+
+    // Preparar a resposta
+    $response = array(
+      'title' => $retorno ? 'Sucesso!' : 'Erro!',
+      'message' => $message,
+      'type' => $retorno ? 'success' : 'error',
+    );
+
+    // Retorna a resposta em formato JSON
+    return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+  }
 }
+
+

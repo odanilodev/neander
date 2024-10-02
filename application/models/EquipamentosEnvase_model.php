@@ -30,4 +30,12 @@ class EquipamentosEnvase_model extends CI_Model
 
     return $consulta->result_array();
   }
+
+  public function recebeDadosEquipamentoEnvase($id_equipamento)
+  {
+    $this->db->where('id', $id_equipamento);
+    $consulta = $this->db->get('ci_equipamento_envase');
+
+    return $consulta->row_array();
+  }
 }

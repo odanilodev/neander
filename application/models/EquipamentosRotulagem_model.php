@@ -25,8 +25,16 @@ class EquipamentosRotulagem_model extends CI_Model
 
   public function recebeEquipamentosRotulagemPorNivel($nivel)
   {
-      $this->db->where('nivel', $nivel);
-      $consulta = $this->db->get('ci_equipamento_rotulagem');
-      return $consulta->result_array();
+    $this->db->where('nivel', $nivel);
+    $consulta = $this->db->get('ci_equipamento_rotulagem');
+    return $consulta->result_array();
+  }
+
+  public function recebeDadosEquipamentoRotulagem($id_equipamento)
+  {
+    $this->db->where('id', $id_equipamento);
+    $consulta = $this->db->get('ci_equipamento_rotulagem');
+
+    return $consulta->row_array();
   }
 }

@@ -107,6 +107,10 @@
                                                         <span class="text-900 uil uil-eye"></span>
                                                         <span class="text-900"> Visualizar</span>
                                                     </a>
+                                                    <a class="dropdown-item" href="<?= base_url('projetos/formulario/' . $v['id']); ?>">
+                                                        <span class="text-900 fa-solid far fa-calendar-plus"></span>
+                                                        <span class="text-900"> Criar Projeto</span>
+                                                    </a>
                                                     <a class="dropdown-item text-danger" href="<?= base_url('clientes/formulario/' . $v['id']) ?>">
                                                         <span class="text-900 uil uil-pen"></span>
                                                         <span class="text-900"> Editar</span>

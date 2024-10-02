@@ -167,6 +167,7 @@ class Clientes extends CI_Controller
     public function detalhes()
     {
         $this->load->model('Projetos_model');
+        $this->load->model('Fornecedores_model');
         $this->load->model('EquipamentosManipulacao_model');
         $this->load->model('EquipamentosEnvase_model');
         $this->load->model('EquipamentosRotulagem_model');
@@ -179,6 +180,7 @@ class Clientes extends CI_Controller
         // scripts para clientes
         $scriptsClienteHead = scriptsClientesHead();
         $scriptsProjetoHead = scriptsProjetoHead();
+
         $scriptsClienteFooter = scriptsClientesFooter();
         $scriptsProjetoFooter = scriptsProjetoFooter();
 
@@ -189,10 +191,15 @@ class Clientes extends CI_Controller
 
         $data['cliente'] = $this->Clientes_model->recebeCliente($id);
         $data['projetos'] = $this->Projetos_model->recebeProjetoCliente($id);
+        $data['fornecedores'] = $this->Fornecedores_model->recebeFornecedores();
 
         $data['materiasPrimas'] = $this->MateriasPrimas_model->recebeMateriasPrimas();
 
         $data['equipamentosRotulagem'] = $this->EquipamentosRotulagem_model->recebeEquipamentosRotulagem();
+        $data['equipamentosManipulacao'] = $this->EquipamentosManipulacao_model->recebeEquipamentosManipulacao();
+        $data['equipamentosEnvase'] = $this->EquipamentosEnvase_model->recebeEquipamentosEnvase();
+
+        $data['custoHoraManipulacao'] = $this->EquipamentosManipulacao_model->recebeCustoHoraManipulacao();
 
         // verifica se existe cliente
         if (empty($data['cliente'])) {
@@ -202,6 +209,9 @@ class Clientes extends CI_Controller
 
         $this->load->view('admin/includes/painel/cabecalho', $data);
         $this->load->view('admin/paginas/clientes/detalhes-cliente');
+        $this->load->view('admin/paginas/clientes/modal-desenvolver-projeto');
+        $this->load->view('admin/paginas/clientes/modal-custo-produtivo');
+        $this->load->view('admin/paginas/clientes/modal-cadastro-materia-prima');
         $this->load->view('admin/includes/painel/rodape');
     }
 

@@ -1,5 +1,6 @@
 var baseUrl = $('.base-url').val();
 
+
 $(function () {
 
   // Função para formatar valores monetários
@@ -13,7 +14,7 @@ $(function () {
   // Função para enviar dados ao servidor
   function enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, tipo, valorBase) {
     $.ajax({
-      url: `${baseUrl}/custoProdutivo/insereCustoProdutivo`,
+      url: `${baseUrl}custoProdutivo/insereCustoProdutivo`,
       type: 'POST',
       data: {
         idEquipamento: idEquipamento,
@@ -22,9 +23,15 @@ $(function () {
         tipo: tipo,
         valorBase: valorBase
       },
-      success: function () {
-        $(`.load-form-${idEquipamento}`).addClass('d-none');
-        $(`.input-equipamento-${tipo}`).attr('disabled', false);
+      success: function (response) {
+
+        if (response.success) {
+
+          $(`.load-form-${idEquipamento}`).addClass('d-none');
+          $(`.input-equipamento-${tipo}`).attr('disabled', false);
+        
+          $(`.modal-desenvolver-custo-${tipo}-pecas-hora`).val(valorInput);
+        }
       },
       error: function (xhr, status, error) {
         console.error('Erro ao enviar dados:', error);
@@ -33,6 +40,7 @@ $(function () {
   }
 
   // Função para calcular custo de produção
+
   function calcularCustoProducao(tipoInput, sweetAlert, inputClasse, inputIndividualCompleto, envaseOuRotulagem, custoHora, valorClasse, calculaCustoProducao) {
 
     function atualizarCustos() {
@@ -108,7 +116,7 @@ $(function () {
     }
   });
 
-  $('.input-equipamento-envase').on('focusout', function () {
+  $('.input-equipamento-envase').on('input', function () {
     calcularCustoProducaoEnvase(false, 'input-individual', this);
   });
 
@@ -208,4 +216,11 @@ $(function () {
       }
     });
   }
+
+  $(document).on('click', '.btn-abre-modal-custo-produtivo', function () {
+
+    $('.btn-abre-modal-desenvolver-projeto').removeClass('d-none');
+
+  })
+
 });

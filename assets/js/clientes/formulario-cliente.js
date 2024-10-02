@@ -136,7 +136,10 @@ $(document).on('click', '.switch-status', function () {
   });
 });
 
-
+$(document).on('click', '.abre_modal_niveis', function () {
+  $('#modalNiveisProdutos').modal('show');
+  $('#modalNiveisProdutos').css('background-color', '#00000066');
+})
 
 
 

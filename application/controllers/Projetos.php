@@ -35,6 +35,7 @@ class Projetos extends CI_Controller
 
 		$data['projetos'] = $this->Projetos_model->recebeProjetos();
 
+
 		$this->load->view('admin/includes/painel/cabecalho', $data);
 		$this->load->view('admin/paginas/projetos/projetos');
 		$this->load->view('admin/includes/painel/rodape');
@@ -75,8 +76,8 @@ class Projetos extends CI_Controller
 
 		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
 
-		// Gera o código do projeto com a data e hora atual no formato DDMMAAHHIISS
-		$codigoProjeto = date('dmYHis');
+		// Gera o código do projeto com a data e hora atual no formato HHIISS
+		$codigoProjeto = $this->session->userdata('id_empresa') . $this->session->userdata('id_usuario') . random_int(100, 999) . date('His');
 
 		// Coloca os arrays em uma única variável e adiciona o código do projeto
 		$dados = array_merge(

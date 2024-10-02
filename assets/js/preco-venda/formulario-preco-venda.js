@@ -211,8 +211,8 @@ function finalizarPrecoVenda() {
         checkRotulo: $('#check_rotulo').is(':checked') ? 1 : 0,
         checkTransporte: $('#check_transporte').is(':checked') ? 1 : 0,
         condicaoPagamento: $('#condicao_pagamento').val(),
-        impostos:$('#impostos').val(),
-        observacoes:$('#observacoes').val()
+        impostos: $('#impostos').val(),
+        observacoes: $('#observacoes').val()
     };
 
     $.ajax({
@@ -258,7 +258,9 @@ $(document).on('change', '#select_cliente', function () {
                     projetosCliente += `<option value="${projeto.codigo_projeto}">${projeto.nome_produto}</option>`;
                 });
 
-                $('.select_projetos_cliente').html(projetosCliente);
+                $('#id_materia_prima').each(function () {
+                    $(this).html(projetosCliente);
+                })
 
             } else {
                 avisoRetorno(response.title, response.message, response.type, '#');

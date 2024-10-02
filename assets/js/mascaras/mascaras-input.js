@@ -32,8 +32,74 @@ $(function () {
         }
     });
 
-    // Máscara para tempo
-    $('.mascara-tempo').mask('00:00');
+
+    $('.mascara-custos').mask('000.000.000,000', {
+        reverse: true,
+        translation: {
+            0: {
+                pattern: /[0-9]/,
+                optional: true
+            }
+        }
+    }).on('input', function () {
+        // Remove pontos enquanto o usuário digita
+        let valor = $(this).val().replace(/\./g, ''); // Remove todos os pontos
+        $(this).val(valor);
+    }).on('focusout', function () {
+        let valor = $(this).val().replace('.', '').replace(',', '.'); // Troca vírgula por ponto e remove pontos
+        let valorNumerico = parseFloat(valor);
+
+        if (valor === '' || isNaN(valorNumerico)) {
+            // Se o campo estiver vazio ou o valor não é numérico, deixa o campo vazio
+            $(this).val('');
+        } else {
+            // Formata o valor para três casas decimais
+            $(this).val(valorNumerico.toLocaleString('pt-BR', {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            }));
+        }
+    });
+
+    $('.mascara-fase').mask('A00', {
+        translation: {
+            'A': { pattern: /[A-Za-z]/, optional: true, recursive: false },
+            '0': { pattern: /[0-9]/ }
+        },
+        onKeyPress: function (value, e, field, options) {
+            value = value.toUpperCase();
+            $(field).val(value);
+        }
+    });
+
+    $('.mascara-tempo').mask('00:00:00');
+
+    $('.mascara-tempo').on('focusout', function () {
+        let valor = $(this).val().split(':');
+    
+        
+        if (valor.length === 1) {
+            valor.push('00', '00'); 
+        } else if (valor.length === 2) {
+            valor.push('00'); 
+        }
+    
+        
+        valor[0] = valor[0].padStart(2, '0'); 
+        valor[1] = valor[1].padStart(2, '0'); 
+        valor[2] = valor[2].padStart(2, '0'); 
+        
+        if (parseInt(valor[1]) > 59) {
+            valor[1] = '59';
+        }
+    
+        if (parseInt(valor[2]) > 59) {
+            valor[2] = '59';
+        }
+    
+        $(this).val(valor.join(':'));
+    });
+    
 
     // Máscara para Telefone (00) 00000-0000
     $('.mascara-tel').mask('(00) 00000-0000');
@@ -58,6 +124,7 @@ $(function () {
     // Máscara para Data (00/00/0000)
     $('.mascara-data').mask('00/00/0000');
 
+
     // Máscara para CAS Registry Number (0000000-00-0), permitindo flexibilidade
     $('.mascara-cas-number').mask('0000000-00-0', {
         translation: {
@@ -72,5 +139,24 @@ $(function () {
             'A': { pattern: /[a-zA-Z]/ }
         }
     });
+
+    $('.mascara-porcentagem').mask('000,00', { // Permitir até 2 casas decimais
+        reverse: true
+    }).on('focusout', function () {
+        let valor = parseFloat($(this).val().replace('.', '').replace(',', '.'));
+
+        if (valor > 100) {
+            // Se o valor exceder o máximo permitido, define como 100
+            $(this).val('100');
+        } else {
+            // Formata o valor para manter até 2 casas decimais
+            $(this).val(valor.toLocaleString('pt-BR', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2 // Permitir até 2 casas decimais
+            }));
+        }
+    });
+
+
 });
 
