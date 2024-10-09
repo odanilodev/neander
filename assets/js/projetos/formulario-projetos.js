@@ -37,8 +37,9 @@ $(function () {
 });
 
 const cadastraProjeto = () => {
-    let id = $('.input-id').val();
+
     let idCliente = $('.input-id-cliente').val();
+    let idProjeto = $('.input-id-projeto').val();
     let permissao = true;
     let primeiraAbaInvalida = '';
 
@@ -92,8 +93,8 @@ const cadastraProjeto = () => {
                 dadosInformacoes: dadosInformacoes,
                 dadosBriefing: dadosBriefing,
                 dadosCustos: dadosCustos,
-                id: id,
-                idCliente: idCliente
+                idCliente: idCliente,
+                idProjeto:idProjeto
             },
             beforeSend: function () {
                 $('.load-form').removeClass('d-none');
@@ -118,7 +119,7 @@ const cadastraProjeto = () => {
 
 
 
-const inativaProjetoCliente = (id, idCliente) => {
+const inativaProjetoCliente = (idProjeto, idCliente) => {
 
     Swal.fire({
         title: 'Você tem certeza?',
@@ -135,7 +136,7 @@ const inativaProjetoCliente = (id, idCliente) => {
                 type: 'post',
                 url: `${baseUrl}projetos/inativaProjetoCliente`,
                 data: {
-                    id: id
+                    idProjeto: idProjeto
                 },
                 success: function (data) {
                     let redirect = data.type != 'error' ? `${baseUrl}clientes/detalhes/${idCliente}` : '#';

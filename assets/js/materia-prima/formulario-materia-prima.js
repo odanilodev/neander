@@ -39,7 +39,7 @@ const cadastraMateriaPrima = () => {
         $('.btn-envia').removeClass('d-none');
 
         let redirect = data.type != 'error' ? `${baseUrl}materiasPrimas` : '#';
-        avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, `${redirect}`);
+        avisoRetorno(data.title, data.message, data.type, redirect);
       },
       error: function (xhr, status, error) {
         if (xhr.status === 403) {

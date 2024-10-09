@@ -1,11 +1,11 @@
-<div class="content">
+<div class="content view-preco-venda">
 
     <div class="container-fluid container_duplicar_campos">
 
         <div class="row-selects-preco-venda row mb-3">
 
             <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
-                Para liberar os campos, selecione um cliente, seu projeto e lote.
+                Para liberar os campos, selecione um cliente e seu projeto.
             </div>
 
             <!-- Select Cliente -->
@@ -14,7 +14,7 @@
                 <select class="form-select select2" id="select_cliente" name="select_cliente">
                     <option value="" selected disabled>Selecione o cliente</option>
                     <?php foreach ($clientes as $cliente) : ?>
-                        <option value="<?= $cliente['id'] ?>"><?= $cliente['nome_fantasia'] ?></option>
+                        <option data-contato-cliente="<?= $cliente['contato'] ?>" value="<?= $cliente['id'] ?>"><?= $cliente['nome_fantasia'] ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Select tipo de lote (inicialmente apagado) -->
-            <div class="div_selects_preco_venda col-md-3 inactive div_select_valor_lote">
+            <!-- <div class="div_selects_preco_venda col-md-3 inactive div_select_valor_lote">
                 <label for="select_lote_projeto" class="form-label">Lote</label>
                 <select class="form-select select2 select_lote_projeto" name="select_lote_projeto">
                     <option value="" selected disabled>Selecione o cliente</option>
@@ -39,7 +39,7 @@
                     <option value="560">560</option>
                     <option value="1000">1000</option>
                 </select>
-            </div>
+            </div> -->
 
             <div class="col-md-1 ms-auto d-flex justify-content-end">
                 <button class="mt-4 btn btn-phoenix-success btn_duplica_div">+</button>
@@ -47,7 +47,7 @@
 
         </div>
 
-        <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4 container_pdf">
+        <div class="p-4 bg-light shadow rounded container_campos_preco_venda mb-4 container_pdf inputs-preco-venda">
             <div class="row mb-4 rows_preco_venda">
 
                 <input type="hidden" class="input_hidden_fator" value="1">
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-1 div_input_preco_venda">
                     <label for="input_lote_partida" class="form-label">Lote Partida</label>
-                    <input type="text" disabled class="form-control input_lote_partida text-1000" name="lote_partida">
+                    <input name="lote" type="text" disabled class="input-gravar-banco inputs-tipo-texto form-control input_lote_partida text-1000" name="lote_partida">
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_custo_produto" class="form-label">Custo do Produto</label>
@@ -92,77 +92,81 @@
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_frete_porcentagem" class="form-label">Frete</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input_frete_porcentagem input_porcentagem_disabled" name="input_frete_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_frete" type="text" class="form-control input-gravar-banco input_frete_porcentagem input_porcentagem_disabled" name="input_frete_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="form-control input_frete_calculado text-1000" name="input_frete_calculado">
+                        <input name="valor_frete" type="text" disabled class="form-control input-gravar-banco input_frete_calculado text-1000" name="input_frete_calculado" style="flex: 1 1 auto; max-width: 100px;">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_custo_financeiro_porcentagem" class="form-label">Custo Financeiro</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input_custo_financeiro_porcentagem input_porcentagem_disabled" name="input_custo_financeiro_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_custo_financeiro" type="text" class="form-control input-gravar-banco input_custo_financeiro_porcentagem input_porcentagem_disabled" name="input_custo_financeiro_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="form-control input_custo_financeiro_calculado text-1000" name="input_custo_financeiro_calculado">
+                        <input name="valor_custo_financeiro" type="text" disabled class="form-control input-gravar-banco input_custo_financeiro_calculado text-1000" name="input_custo_financeiro_calculado">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_margem_porcentagem" class="form-label">Margem (% - R$)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input_margem_porcentagem input_porcentagem_disabled" name="input_margem_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_margem" type="text" class="input-gravar-banco form-control input_margem_porcentagem input_porcentagem_disabled" name="input_margem_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="form-control text-1000 input_margem_calculado">
+                        <input name="valor_margem" type="text" disabled class="input-gravar-banco form-control text-1000 input_margem_calculado">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_sub_total" class="form-label">Sub-Total</label>
-                    <input type="text" disabled class="form-control input_sub_total text-1000" name="input_sub_total">
+                    <input name="sub_total" type="text" disabled class="input-gravar-banco form-control input_sub_total text-1000" name="input_sub_total">
                 </div>
             </div>
 
             <div class="row mb-4 rows_preco_venda">
                 <!-- Linha 3 -->
-                <div class="col-md-2 div_input_preco_venda">
+                <div class="col-md-2 div_input_preco_venda ">
                     <label for="input_comissao_porcentagem" class="form-label">Comissão (%)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input_comissao_porcentagem input_porcentagem_disabled" name="comissao_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_comissao" type="text" class="input-gravar-banco form-control input_comissao_porcentagem input_porcentagem_disabled" name="comissao_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="form-control input_comissao_calculada text-1000" name="input_comissao_calculada">
+                        <input name="valor_comissao" type="text" disabled class="input-gravar-banco form-control input_comissao_calculada text-1000" name="input_comissao_calculada">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_total_sem_imposto" class="form-label">Total Sem Imposto</label>
-                    <input type="text" disabled class="text-1000 form-control input_total_sem_imposto" name="input_total_sem_imposto">
+                    <input name="total_sem_imposto" type="text" disabled class="input-gravar-banco text-1000 form-control input_total_sem_imposto" name="input_total_sem_imposto">
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_imposto_porcentagem" class="form-label">Imposto (%)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control input_imposto_porcentagem input_porcentagem_disabled" name="input_imposto_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_imposto" type="text" class="input-gravar-banco form-control input_imposto_porcentagem input_porcentagem_disabled" name="input_imposto_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="text-1000 form-control input_imposto_calculado" name="input_imposto_calculado">
+                        <input name="valor_imposto" type="text" disabled class="input-gravar-banco text-1000 form-control input_imposto_calculado" name="input_imposto_calculado">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_total_unitario" class="form-label">Total Unit. (R$)</label>
-                    <input type="text" disabled class="text-1000 form-control input_total_unitario" name="input_total_unitario">
+                    <input name="total_unit" type="text" disabled class="input-gravar-banco text-1000 form-control input_total_unitario" name="input_total_unitario">
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_st_estado_porcentagem" class="form-label">ST do Estado (%)</label>
                     <div class="input-group">
-                        <input type="text" class="input_porcentagem_disabled form-control input_st_estado_porcentagem" name="input_st_estado_porcentagem" style="flex: 1 1 auto; max-width: 70px;">
+                        <input name="porcentagem_st_estado" type="text" class="input-gravar-banco input_porcentagem_disabled form-control input_st_estado_porcentagem" name="input_st_estado_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
                         <span class="input-group-text">%</span>
-                        <input type="text" disabled class="text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
+                        <input name="valor_st_estado" type="text" disabled class="input-gravar-banco text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda ms-auto">
                     <label for="input_total_st_estado" class="form-label">Valor total com ST</label>
-                    <input type="text" disabled class="text-1000 form-control input_total_st_estado" name="input_total_st_estado">
+                    <input name="total_st" type="text" disabled class="input-gravar-banco text-1000 form-control input_total_st_estado" name="input_total_st_estado">
                 </div>
             </div>
 
         </div>
 
         <div class="col-md-2 ms-auto d-flex justify-content-end">
-            <button disabled class="mt-2 btn btn-phoenix-success btn_gerar_pdf" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
+            <div class="p-3">
+                <div class="spinner-border text-primary load-form d-none" role="status"></div>
+            </div>
+            <button disabled class="mt-2 btn btn-phoenix-success btn-finalizar-preco-venda" data-bs-toggle="modal" data-bs-target="#condicoesModal">Finalizar</button>
+
         </div>
 
     </div>
@@ -221,13 +225,14 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="condicao_pagamento" class="form-label">Condição de Pagamento</label>
-                                        <select id="condicao_pagamento" class="form-select">
-                                            <option value="">Selecione uma condição</option>
+                                        <select id="condicao_pagamento" class="campo-obrigatorio form-select">
+                                            <option selected disabled value="">Selecione uma condição</option>
                                             <?php foreach ($condicoes as $condicao) : ?>
                                                 <option value="<?= $condicao['id'] ?>"><?= $condicao['nome'] ?></option>
                                                 <!-- Adicione mais opções conforme necessário -->
                                             <?php endforeach ?>
                                         </select>
+                                        <div class="aviso-obrigatorio d-none">Preencha este campo!</div>
                                     </div>
                                 </div>
 
@@ -235,7 +240,8 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="impostos" class="form-label">Impostos</label>
-                                        <input type="text" id="impostos" class="form-control" placeholder="Informe os impostos aplicáveis">
+                                        <input type="text" id="impostos" class="campo-obrigatorio form-control" placeholder="Informe os impostos aplicáveis">
+                                        <div class="aviso-obrigatorio d-none">Preencha este campo!</div>
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +260,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-phoenix-danger" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-phoenix-success" onclick="finalizarPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
+                    <button type="button" class="btn btn-phoenix-success btn-gera-pdf" onclick="gerarPdfPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
+                    <div class="p-3">
+                        <div class="spinner-border text-primary load-form d-none" role="status"></div>
+                    </div>
                 </div>
             </div>
         </div>

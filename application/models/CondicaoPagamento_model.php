@@ -118,4 +118,19 @@ class CondicaoPagamento_model extends CI_Model
 
     return false;
   }
+
+  public function recebeCondicaoPagamentoNome($id)
+  {
+      $this->db->select('nome');
+      $this->db->where('id', $id);
+      $this->db->from('ci_condicao_pagamento');
+  
+      $query = $this->db->get(); 
+  
+      if ($query->num_rows() > 0) {
+          return $query->row()->nome; 
+      }
+      
+      return null; 
+  }
 }

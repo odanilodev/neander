@@ -105,7 +105,7 @@
                                                 <div class="dropdown-menu dropdown-menu-end py-2">
                                                     <a class="dropdown-item" href="<?= base_url('clientes/detalhes/' . $v['id']); ?>">
                                                         <span class="text-900 uil uil-eye"></span>
-                                                        <span class="text-900"> Visualizar</span>
+                                                        <span class="text-900"> Detalhes</span>
                                                     </a>
                                                     <a class="dropdown-item" href="<?= base_url('projetos/formulario/' . $v['id']); ?>">
                                                         <span class="text-900 fa-solid far fa-calendar-plus"></span>
@@ -113,7 +113,7 @@
                                                     </a>
                                                     <a class="dropdown-item text-danger" href="<?= base_url('clientes/formulario/' . $v['id']) ?>">
                                                         <span class="text-900 uil uil-pen"></span>
-                                                        <span class="text-900"> Editar</span>
+                                                        <span class="text-900"> Editar Cliente</span>
                                                     </a>
                                                     <a class="dropdown-item text-danger" href="#" onclick="deletaCliente(<?= $v['id'] ?>)">
                                                         <span class="text-900 uil uil-trash"></span>

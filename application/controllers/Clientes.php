@@ -191,6 +191,9 @@ class Clientes extends CI_Controller
 
         $data['cliente'] = $this->Clientes_model->recebeCliente($id);
         $data['projetos'] = $this->Projetos_model->recebeProjetoCliente($id);
+
+        $data['projetosAtivos'] = $this->Projetos_model->recebeProjetoCliente($id, 1);
+
         $data['fornecedores'] = $this->Fornecedores_model->recebeFornecedores();
 
         $data['materiasPrimas'] = $this->MateriasPrimas_model->recebeMateriasPrimas();

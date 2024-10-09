@@ -103,87 +103,86 @@
         <!-- Título da Proposta -->
         <h4 style="margin-bottom:10px;">PROPOSTA COMERCIAL</h4>
 
-            <!-- Informações de Cliente, Contato e Data -->
-            <table>
-                <tr>
-                    <td><strong>Cliente:</strong> <?= htmlspecialchars($cliente['nome_fantasia']) ?></td>
-                    <td><strong>Contato:</strong> <?= htmlspecialchars($cliente['contato']) ?></td>
-                    <td><strong>Data:</strong> <?= date('d/m/Y') ?></td>
-                </tr>
-            </table>
+        <!-- Informações de Cliente, Contato e Data -->
+        <table>
+            <tr>
+                <td><strong>Cliente:</strong> <?= htmlspecialchars($nome_fantasia) ?></td>
+                <td><strong>Contato:</strong> <?= htmlspecialchars($contato) ?></td>
+                <td><strong>Data:</strong> <?= date('d/m/Y') ?></td>
+            </tr>
+        </table>
 
-            <!-- Tabela de Produtos -->
-            <table>
-                <thead>
+        <!-- Tabela de Produtos -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Descrição do Produto</th>
+                    <th>Lote Mínimo em pcs</th>
+                    <th>Valor unit. s/ impostos</th>
+                    <th>Valor unit. c/ impostos</th>
+                    <th>Valor unit. ST</th>
+                    <th>Total com impostos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $item = 1;
+                $totalGeral = 0;
+
+                foreach ($projetosClientes as $projetoCliente):
+                    $loteString = $projetoCliente['lote'];
+                    $loteFloat = floatval(preg_replace('/[^0-9.]/', '', $loteString));
+                    $totalComImpostos = $projetoCliente['total_st'];
+
+                    $totalGeral += $totalComImpostos;
+                ?>
                     <tr>
-                        <th>Item</th>
-                        <th>Descrição do Produto</th>
-                        <th>Lote Mínimo em pcs</th>
-                        <th>Valor unit. s/ impostos</th>
-                        <th>Valor unit. com impostos</th>
-                        <th>Valor unit. da ST</th>
-                        <th>Total com impostos</th>
+                        <td><?= $item++ ?></td>
+                        <td><?= htmlspecialchars($projetoCliente['nome_produto']) ?></td>
+                        <td><?= htmlspecialchars($loteFloat) ?></td> 
+                        <td><?= number_format($projetoCliente['total_sem_imposto'] / $loteFloat, 2, ',', '.') ?></td>
+                        <td><?= number_format($projetoCliente['total_unit'] / $loteFloat, 2, ',', '.') ?></td>
+                        <td><?= number_format($projetoCliente['total_st'] / $loteFloat, 2, ',', '.') ?></td>
+                        <td><?= number_format($totalComImpostos, 2, ',', '.') ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $item = 1;
-                    $totalComImposto = 0; // Inicializa o total
-                    ?>
-                    <?php foreach ($projetosClientes as $projetoCliente): ?>
-                        <?php
-                        // Calcula o total com impostos para a linha atual
-                        $loteMinimo = 10;
-                        $valorStEstado = isset($projetoCliente['valor_st_estado']) ? $projetoCliente['valor_st_estado'] : 0;
-                        $totalComImpostoLinha = $loteMinimo * $valorStEstado;
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                    <td><?= number_format($totalGeral, 2, ',', '.') ?></td>
+                </tr>
+            </tfoot>
+        </table>
 
-                        // Adiciona ao total geral
-                        $totalComImposto += $totalComImpostoLinha;
-                        ?>
-                        <tr>
-                            <td><?= $item++ ?></td>
-                            <td><?= htmlspecialchars($projetoCliente['nome_produto']) ?></td>
-                            <td><?= htmlspecialchars($loteMinimo) ?></td>
-                            <td><?= htmlspecialchars($projetoCliente['total_sem_imposto']) ?></td>
-                            <td><?= htmlspecialchars($projetoCliente['total_unit']) ?></td>
-                            <td><?= htmlspecialchars($valorStEstado) ?></td>
-                            <td><?= number_format($totalComImpostoLinha, 2, ',', '.') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
-                        <td><?= number_format($totalComImposto, 2, ',', '.') ?></td>
-                    </tr>
-                </tfoot>
-            </table>
 
-            <!-- Condições Gerais de Fornecimento -->
-            <h4 style="margin-bottom:10px;">CONDIÇÕES GERAIS DE FORNECIMENTO:</h4>
-            <table>
-                <tr>
-                    <td><strong>Condição de Pagamento:</strong> <?= $condicoesFornecimento['NOME_CONDICAO_FORNECIMENTO'] ?? 'Nenhuma condição de pagamento selecionada.' ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Matéria-Prima:</strong> <?= $condicoesFornecimento['checkMateriaPrima'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Embalagem:</strong> <?= $condicoesFornecimento['checkEmbalagem'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Rótulo:</strong> <?= $condicoesFornecimento['checkRotulo'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Impostos:</strong> <?= $condicoesFornecimento['impostos'] ?? '' ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Transporte:</strong> <?= $condicoesFornecimento['checkTransporte'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
-                </tr>
-            </table>
 
-            <h4>Observações importantes:</h4>
-            <p><?= $condicoesFornecimento['observacoes'] ?? '' ?></p>
+        <!-- Condições Gerais de Fornecimento -->
+        <h4 style="margin-bottom:10px;">CONDIÇÕES GERAIS DE FORNECIMENTO:</h4>
+        <table>
+            <tr>
+                <td><strong>Condição de Pagamento:</strong> <?= $condicoesFornecimento['NOME_CONDICAO_PAGAMENTO'] ?? 'Nenhuma condição de pagamento selecionada.' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Matéria-Prima:</strong> <?= $condicoesFornecimento['materia_prima'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Embalagem:</strong> <?= $condicoesFornecimento['embalagem'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Rótulo:</strong> <?= $condicoesFornecimento['rotulo'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Impostos:</strong> <?= $condicoesFornecimento['impostos'] ?? '' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Transporte:</strong> <?= $condicoesFornecimento['transporte'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+            </tr>
+        </table>
+
+        <h4>Observações importantes:</h4>
+        <p><?= $condicoesFornecimento['observacoes'] ?? '' ?></p>
 
 
     </div>

@@ -9,6 +9,8 @@
         </div>
         <div class="modal-body modal-body-desenvolver-projeto">
 
+          <input type="hidden" id="id_cliente_redirect" name="id_cliente_redirect" val="<?= $this->uri->segment(4) ?>">
+
           <div class="card">
             <div class="card-body">
               <div class="col-12">
@@ -22,9 +24,9 @@
                     <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
                     <select id="select_projeto_cliente" class="form-select select2">
                       <option selected disabled value="">Desenvolver Projeto</option>
-                      <?php foreach ($projetos as $projeto) : ?>
-                        <?php if ($projeto['desenvolvido'] == 0) : ?>
-                          <option data-id-projeto="<?= $projeto['id'] ?>" data-nome-produto="<?= $projeto['nome_produto'] ?>" data-nome-fantasia="<?= $projeto['nome_fantasia'] ?>" value="<?= $projeto['codigo_projeto'] ?>"><?= $projeto['nome_produto'] ?></option>
+                      <?php foreach ($projetosAtivos as $projetoAtivo) : ?>
+                        <?php if ($projetoAtivo['desenvolvido'] == 0) : ?>
+                          <option data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>" data-id-projeto="<?= $projetoAtivo['id'] ?>" data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>" data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>" value="<?= $projetoAtivo['codigo_projeto'] ?>"><?= $projetoAtivo['nome_produto'] ?></option>
                         <?php endif ?>
                       <?php endforeach ?>
                     </select>
@@ -88,8 +90,7 @@
                       <!-- fase -->
                       <div class="col-md-1 mb-2 div-fase">
                         <label class="form-label" style="padding-left:0;">Fase</label>
-                        <input disabled name="fase" type="text" class="mascara-fase inputs-tipo-texto mascara-fase input-materia-prima form-control modal-desenvolver-input-fase modal-desenvolver-input-fase">
-
+                        <input disabled name="fase" type="text" class="mascara-fase inputs-tipo-texto input-materia-prima form-control modal-desenvolver-input-fase modal-desenvolver-input-fase">
                       </div>
 
                       <!-- Percentual -->
@@ -180,7 +181,7 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
-                        <select required id="select-equipamentos-manipulacao" class="form-control modal-desenvolver-input-nivel-produto select2">
+                        <select required id="select-equipamentos-manipulacao" class="campo-obrigatorio form-control modal-desenvolver-input-nivel-produto select2">
                           <option value="" disabled selected>Equipamento Manipulação</option>
                           <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
                             <option data-custo-hora="<?= $equipamentoManipulacao['valor'] ?>" value="<?= $equipamentoManipulacao['id']; ?>">
@@ -188,6 +189,8 @@
                             </option>
                           <?php endforeach; ?>
                         </select>
+                        <div class="d-none aviso-obrigatorio">Preencha este campo</div>
+
                       </div>
 
 
@@ -195,15 +198,18 @@
                       <div class="col-md-2 mb-2 div-percentual">
                         <label class="form-label" style="padding-left:0;">Quant. Kg</label>
                         <div class="input-group">
-                          <input type="number" class="text-center form-control input-quantidade-manipulacao text-1000">
+                          <input type="number" class="campo-obrigatorio text-center form-control input-quantidade-manipulacao text-1000">
                           <span class="input-group-text">KG.</span>
+                          <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                         </div>
                       </div>
 
                       <!-- Tempo -->
                       <div class="col-md-2 mb-2 div-quantidade">
                         <label class="form-label" style="padding-left:0;">Tempo</label>
-                        <input type="text" class="mascara-tempo form-control modal-desenvolver-custo-manipulacao-tempo">
+                        <input type="text" class="campo-obrigatorio mascara-tempo form-control modal-desenvolver-custo-manipulacao-tempo">
+                        <div class="d-none aviso-obrigatorio">Preencha este campo</div>
+
                       </div>
 
                       <!-- Valor Unit (R$) -->
@@ -239,7 +245,7 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
-                        <select id="select-equipamentos-envase" class="form-control select2">
+                        <select id="select-equipamentos-envase" class="campo-obrigatorio form-control select2">
                           <option value="" disabled selected>Equipamento Envase</option>
                           <?php foreach ($equipamentosEnvase as $equipamentoEnvase) : ?>
                             <option value="<?= $equipamentoEnvase['id']; ?>" data-pecas-hora-envase="<?= $equipamentoEnvase['pcs_hora'] ?>" data-valores-unit-total-envase="<?= $equipamentoEnvase['valor_mo'] ?>">
@@ -247,6 +253,7 @@
                             </option>
                           <?php endforeach; ?>
                         </select>
+                        <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                       </div>
 
                       <!-- Quantd. KG. -->
@@ -282,7 +289,7 @@
 
                     <div class="row">
                       <div class="col-md-4 mb-2">
-                        <select id="select-equipamentos-rotulagem" class="form-control select2">
+                        <select id="select-equipamentos-rotulagem" class="campo-obrigatorio form-control select2">
                           <option value="" disabled selected>Equipamento Rotulagem</option>
                           <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                             <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">
@@ -290,6 +297,7 @@
                             </option>
                           <?php endforeach; ?>
                         </select>
+                        <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                       </div>
 
                       <!-- Quantd. KG. -->
@@ -358,8 +366,10 @@
                         <div class=" 5 col-md-3 mb-2 div-valor-unit-embalagem">
                           <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
                           <div class="input-group">
-                            <input type="text" class="input-valor-unit-embalagem form-control">
+                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                            <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
+
                         </div>
 
                         <!-- Total (R$) -->
@@ -386,7 +396,9 @@
                         <!-- Valor Unit (R$) -->
                         <div class="4 col-md-3 mb-2 div-valor-unit-embalagem">
                           <div class="input-group ">
-                            <input type="text" class="4 input-valor-unit-embalagem form-control">
+                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                            <div class="d-none aviso-obrigatorio">Preencha este campo</div>
+
                           </div>
                         </div>
 
@@ -413,7 +425,8 @@
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
                           <div class="input-group ">
-                            <input type="text" class="3 input-valor-unit-embalagem form-control">
+                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                            <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
 
@@ -440,7 +453,8 @@
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
                           <div class="input-group ">
-                            <input type="text" class="1 input-valor-unit-embalagem form-control">
+                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                            <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
 
@@ -467,7 +481,8 @@
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
                           <div class="input-group ">
-                            <input type="text" class="2 input-valor-unit-embalagem form-control">
+                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                            <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
 
@@ -745,7 +760,7 @@
           </button>
 
           <div class="ms-auto">
-            <button class="btn btn-phoenix-success" type="submit" onclick="desenvolverProjeto()">Vincular Valores</button>
+            <button class="btn btn-phoenix-success btn-desenvolver-projeto d-none" type="submit" onclick="desenvolverProjeto(<?= $this->uri->segment(3) ?>)">Vincular Valores</button>
           </div>
         </div>
 

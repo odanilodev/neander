@@ -19,11 +19,9 @@ $('#modalCadastroMateriaPrima').on('hidden.bs.modal', function () {
 
 const modalDesenvolverProjeto = () => {
 
-    recebeMateriasPrimas();
 
     $('.modal-desenvolver-input-fase').attr('disabled', true);
     $('.modal-desenvolver-input-percentual').attr('disabled', true);
-    $('.novo-input-materia-prima').attr('disabled', true);
     $('.btn-duplica-linha').attr('disabled', true);
 
     $('#select_projeto_cliente').val(null).trigger('change');
@@ -33,12 +31,25 @@ const modalDesenvolverProjeto = () => {
 
     $('.modal-body-desenvolver-projeto').find(':input').val('');
 
+    $('.campo-obrigatorio').each(function () {
+        $(this).removeClass('invalido');
+        $(this).next().removeClass('select2-obrigatorio');
+    });
+
+    recebeMateriasPrimas();
+    $('.btn-desenvolver-projeto').addClass('d-none');
+
 };
 
 
 $(document).on('change', '#select_projeto_cliente', function () {
 
-    $('#modalDesenvolverProjetoTitulo').html($(this).find('option:selected').text());
+
+    if ($(this).val()) {
+        $('#modalDesenvolverProjetoTitulo').html($(this).find('option:selected').text() + " | Versão: " + $(this).find('option:selected').data('versao-projeto') + " | Código: " + $(this).find('option:selected').val());
+    } else {
+        $('#modalDesenvolverProjetoTitulo').html("Selecione o projeto que deseja desenvolver!");
+    }
 
     let hoje = new Date().toISOString().split('T')[0];
     $('.modal-desenvolver-input-data').val(formatarDatas(hoje));
@@ -60,6 +71,7 @@ $(document).on('change', '#select_projeto_cliente', function () {
         $('.input-porcentagem-total').removeClass('invalido')
     }
 
+    $('.btn-desenvolver-projeto').removeClass('d-none');
 
 });
 
@@ -242,7 +254,7 @@ function duplicarLinhas() {
                 </select>
             </div>
             <div class="col-md-1 div-fase">
-                <input disabled name="fase" type="text" class="mascara-fase input-materia-prima form-control modal-desenvolver-input-fase">
+                <input disabled name="fase" type="text" class="inputs-tipo-texto mascara-fase form-control input-materia-prima form-control modal-desenvolver-input-fase">
             </div>
             <div class="col-md-2 div-percentual">
                 <div class="input-group">
@@ -345,6 +357,7 @@ const calculaQuantidade = () => {
     if (quantidadeGeral !== 0) {
         quantidade = quantidadeManipulacao / quantidadeGeral;
     }
+
     let quantidadeFormatada = quantidade % 1 === 0 ? quantidade.toString() : quantidade.toFixed(2).replace(/\.?0+$/, '');
 
     $('.input-quantidade').val(quantidadeFormatada);
@@ -691,6 +704,7 @@ const calculaTotalLinhaOutrosCustos = () => {
 
 //----------- Percentual Perda  -----------//
 $(document).on('focusout', '.input-quantidade-percentual-perda', function () {
+
     if (!isNaN($(this).val())) {
         const valorPercentual = parseFloat($(this).val().replace(',', '.')) / 100 || 0;
 
@@ -720,7 +734,6 @@ $(document).on('focusout', '.input-quantidade-percentual-perda', function () {
         $('.input-custo-final-valor-unit-percentual-perda').val(formatarValorMoeda(valorFinalUnitario));
         $('.input-custo-final-total-percentual-perda').val(formatarValorMoeda(valorFinalTotal));
 
-
         calculaTotalUnitCustoFinal();
         calculaTotalGeralCustoFinal();
 
@@ -728,12 +741,15 @@ $(document).on('focusout', '.input-quantidade-percentual-perda', function () {
 
     } else {
 
-        $(this).val(0)
+        $(this).val(0);
+
         $('.input-custo-final-valor-unit-percentual-perda').val(formatarValorMoeda(0));
         $('.input-custo-final-total-percentual-perda').val(formatarValorMoeda(0));
 
         calculaTotalUnitCustoFinal();
         calculaTotalGeralCustoFinal();
+
+        $('.input-custo-final-total-percentual-perda-lote-partida').val(formatarValorMoeda(0));
 
     }
 
@@ -801,82 +817,87 @@ $(document).on('click', '.abre_modal_cadastro_materia_prima', function () {
 
 //========================================== Desenvolver Projeto
 
-const desenvolverProjeto = () => {
+const desenvolverProjeto = (idClienteRedirect) => {
 
     let idProjeto = $('#select_projeto_cliente option:selected').data('id-projeto');
     let codigoProjeto = $('#select_projeto_cliente').val();
+    let versaoProjeto = $('#select_projeto_cliente option:selected').data('versao-projeto');
 
-    let inputsProjeto = {};
-    $('.inputs-projeto').find(':input').each(function () {
-        if ($(this).hasClass('inputs-tipo-texto')) {
-            inputsProjeto[$(this).attr('name')] = $(this).val();
-        } else {
-            inputsProjeto[$(this).attr('name')] = converterParaNumero($(this).val());
-        }
-    });
+    let permissao = verificaCamposObrigatorios('campo-obrigatorio');
 
-    let materiasPrimas = {};
-    $('.inputs-materia-prima').each(function (index) {
-        materiasPrimas[index] = {};
+    if (permissao) {
 
-        $(this).find('.input-materia-prima').each(function () {
-            let nameInput = $(this).attr('name');
+        let inputsProjeto = {};
 
+        inputsProjeto['versao_projeto'] = versaoProjeto;
+
+        $('.inputs-projeto').find(':input').each(function () {
             if ($(this).hasClass('inputs-tipo-texto')) {
-                materiasPrimas[index][nameInput] = $(this).val();
+                inputsProjeto[$(this).attr('name')] = $(this).val();
             } else {
-                materiasPrimas[index][nameInput] = converterParaNumero($(this).val());
-
+                inputsProjeto[$(this).attr('name')] = converterParaNumero($(this).val());
             }
-
         });
-    });
 
-    // verificaCamposObrigatorios('campo-obrigatorio');
+        let materiasPrimas = {};
+        $('.inputs-materia-prima').each(function (index) {
+            materiasPrimas[index] = {};
 
-    // if (permissao) {
-    $.ajax({
-        type: 'POST',
-        url: `${baseUrl}desenvolverProjeto/insereDesenvolvimentoProjeto`,
-        data: {
-            idProjeto: idProjeto,
-            codigoProjeto: codigoProjeto,
-            inputsProjeto: inputsProjeto,
-            materiasPrimas: materiasPrimas
-        },
-        success: function (data) {
-            if (data.success) {
+            $(this).find('.input-materia-prima').each(function () {
+                let nameInput = $(this).attr('name');
 
-                Swal.fire({
-                    title: data.title,
-                    text: data.message,
-                    icon: data.type,
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: 'Não',
-                    confirmButtonText: 'Sim, redirecionar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = `${baseUrl}precoVenda`
-                    } else {
+                if ($(this).hasClass('inputs-tipo-texto')) {
+                    materiasPrimas[index][nameInput] = $(this).val();
+                } else {
+                    materiasPrimas[index][nameInput] = converterParaNumero($(this).val()).toFixed(3);
 
-                        window.location.href = `${baseUrl}clientes/detalhes/`;
-                    }
-                });
+                }
 
-            } else {
+            });
+        });
 
-                avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, `#`);
 
+        $.ajax({
+            type: 'POST',
+            url: `${baseUrl}desenvolverProjeto/insereDesenvolvimentoProjeto`,
+            data: {
+                idProjeto: idProjeto,
+                codigoProjeto: codigoProjeto,
+                inputsProjeto: inputsProjeto,
+                materiasPrimas: materiasPrimas
+            },
+            success: function (data) {
+                if (data.success) {
+
+                    Swal.fire({
+                        title: data.title,
+                        text: data.message,
+                        icon: data.type,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'Não',
+                        confirmButtonText: 'Sim, redirecionar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = `${baseUrl}precoVenda`
+                        } else {
+                            window.location.href = `${baseUrl}clientes/detalhes/${idClienteRedirect}`;
+                        }
+                    });
+
+                } else {
+
+                    avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, `#`);
+
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Erro na requisição:', status, error);
+                alert('Erro na requisição. Por favor, tente novamente.');
             }
-        },
-        error: function (xhr, status, error) {
-            console.error('Erro na requisição:', status, error);
-            alert('Erro na requisição. Por favor, tente novamente.');
-        }
-    });
-    // }
+        });
+    }
 };
 
 
