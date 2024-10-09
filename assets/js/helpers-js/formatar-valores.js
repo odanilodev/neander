@@ -47,3 +47,12 @@ function formatarPercentual(valor) {
         return numero.toFixed(1).replace(/\.0$/, '');
     }
 }
+
+// Função para converter valores de string para float, tratando diferentes formatações
+const converterParaFloat = (valor) => {
+    if (valor) {
+        let convertido = parseFloat(valor.replace(/[^0-9.,]/g, '').replace(',', '.'));
+        return isNaN(convertido) ? 0 : convertido;
+    }
+    return 0; // Retorna 0 se o valor for undefined, null ou vazio
+};

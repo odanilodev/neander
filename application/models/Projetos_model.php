@@ -40,6 +40,17 @@ class Projetos_model extends CI_Model
         return $query->result_array();
     }
 
+    public function recebeProjetoPorCodigo($id_projeto)
+    {
+        $this->db->where('id', $id_projeto);
+        if ($this->session->userdata('id_empresa') > 1) {
+            $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
+        }
+
+        $query = $this->db->get('ci_projetos');
+
+        return $query->row_array();
+    }
 
     public function recebeProjeto($id)
     {
@@ -53,11 +64,16 @@ class Projetos_model extends CI_Model
         return $query->row_array();
     }
 
-    public function recebeProjetoCliente($id_cliente)
+    public function recebeProjetoCliente($id_cliente, $status = null)
     {
+        $this->db->select('P.*, C.*, P.status as STATUS_PROJETO');
         $this->db->from('ci_projetos P');
         $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
         $this->db->where('P.id_cliente', $id_cliente);
+
+        if ($status) {
+            $this->db->where('P.status', $status);
+        }
 
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
@@ -130,7 +146,7 @@ class Projetos_model extends CI_Model
         return false;
     }
 
-    public function editaProjeto($id, $dados, $status_desenvolvido = null)
+    public function editaProjeto($id_projeto, $dados = null, $status_desenvolvido = null)
     {
         $dados['editado_em'] = date('Y-m-d H:i:s');
         if ($status_desenvolvido) {
@@ -138,7 +154,7 @@ class Projetos_model extends CI_Model
             $dados['desenvolvido'] = $status_desenvolvido;
         }
 
-        $this->db->where('id', $id);
+        $this->db->where('id', $id_projeto);
 
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
@@ -147,9 +163,9 @@ class Projetos_model extends CI_Model
         $this->db->update('ci_projetos', $dados);
 
         if ($this->db->affected_rows() > 0) {
-            $this->Log_model->insereLog($id);
+            $this->Log_model->insereLog($id_projeto);
 
-            $this->db->where('id', $id);
+            $this->db->where('id', $id_projeto);
             $query = $this->db->get('ci_projetos');
             return $query->row_array();
         }
@@ -157,10 +173,10 @@ class Projetos_model extends CI_Model
         return false;
     }
 
-    public function inativaProjetoCliente($id)
+    public function inativaProjetoCliente($id_projeto)
     {
         $dados['status'] = 0;
-        $this->db->where('id', $id);
+        $this->db->where('id', $id_projeto);
 
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
@@ -168,7 +184,7 @@ class Projetos_model extends CI_Model
         $this->db->update('ci_projetos', $dados);
 
         if ($this->db->affected_rows()) {
-            $this->Log_model->insereLog($id);
+            $this->Log_model->insereLog($id_projeto);
         }
 
         return $this->db->affected_rows() > 0;

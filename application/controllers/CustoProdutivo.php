@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-//CONTROLADOR DESCONTINUADO, SALVO APENAS PARA COTINGÊNCIA
+//CONTROLADOR DESCONTINUADO, SALVO APENAS PARA CONTINGÊNCIA
 
 
 class CustoProdutivo extends CI_Controller

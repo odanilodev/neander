@@ -9,7 +9,7 @@
 
         <a href="<?= base_url('clientes/formulario/' . $cliente['id'] ?? "") ?>" class="btn btn-phoenix-secondary px-3 px-sm-5 me-2">
           <span class="fa-solid fa-edit me-sm-2"></span>
-          <span class="d-none d-sm-inline">Editar </span>
+          <span class="d-none d-sm-inline">Editar Cliente </span>
         </a>
 
         <button class="btn btn-phoenix-danger me-2" onclick="deletaCliente(<?= $cliente['id'] ?>)">
@@ -180,22 +180,30 @@
 
         <h2 class="mb-6 d-flex justify-content-between align-items-center">
           <span>Histórico de projetos</span>
+
           <div class="d-flex">
-            <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="modalDesenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
-              <span class="far fa-id-card me-2"></span>
-              Desenvolver Projeto
-            </a>
-            <button type="button" class="btn btn-phoenix-primary me-2 btn-abre-modal-custo-produtivo" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
-              <span class="fa-solid fas fa-dollar-sign me-2"></span>
-              Custo Produtivo
-            </button>
+            <?php if (count($projetos) > 0) :  ?>
+              <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="modalDesenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
+                <span class="far fa-id-card me-2"></span>
+                Desenvolver Projeto
+              </a>
+
+              <button type="button" class="btn btn-phoenix-primary me-2 btn-abre-modal-custo-produtivo" data-bs-toggle="modal" data-bs-target="#modalCustoProdutivo">
+                <span class="fa-solid fas fa-dollar-sign me-2"></span>
+                Custo Produtivo
+              </button>
+            <?php endif  ?>
+
             <a href="<?= base_url('projetos/formulario/' . $this->uri->segment(3)) ?>" class="btn btn-phoenix-success px-3 px-sm-5">
               <span class="fa-solid far fa-calendar-plus me-2"></span>
               <span class="d-none d-sm-inline">+ Novo Projeto</span>
             </a>
+
           </div>
         </h2>
+
         <div class="container">
+          <hr>
 
           <!-- Filtros
         
@@ -235,8 +243,8 @@
 
               <div class="d-flex">
                 <?php
-                $statusBg = $projeto['status'] == 1 ? 'bg-primary-100' : 'bg-danger-100';
-                $statusTxt = $projeto['status'] == 1 ? 'dark__text-primary-300 text-primary-600' : 'dark__text-danger-300 text-danger-600';
+                $statusBg = $projeto['STATUS_PROJETO'] == 1 ? 'bg-primary-100' : 'bg-danger-100';
+                $statusTxt = $projeto['STATUS_PROJETO'] == 1 ? 'dark__text-primary-300 text-primary-600' : 'dark__text-danger-300 text-danger-600';
                 ?>
                 <div class="d-flex <?= $statusBg ?> rounded-circle flex-center me-3" style="width:25px; height:25px">
                   <span class="fa-solid <?= $statusTxt ?> fs--1 fa-clipboard"></span>
@@ -250,7 +258,7 @@
                     <div>
                       <h5 class="text-1000">
                         <h5><?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
-                        <span class="fw-semi-bold"><?= date('d/m/Y', strtotime($projeto['criado_em'])) . ' / VERSÃO ' . $projeto['versao'] ?> </span>
+                        <span class="fw-semi-bold"><?= date('d/m/Y', strtotime($projeto['criado_em'])) . ' / VERSÃO ' . $projeto['versao_projeto'] ?> </span>
                       </h5>
                     </div>
 
@@ -269,7 +277,7 @@
                         </li>
 
                         <li>
-                          <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $projeto['codigo_projeto'] ?? "") ?>">
+                          <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $this->uri->segment(3) . '/' . $projeto['id']) ?>">
                             <span class="text-900 fa-solid fa-edit"></span>
                             <span class="text-900"> Editar Projeto</span>
                           </a>
@@ -282,7 +290,7 @@
                           </a>
                         </li>
                         <?php
-                        $statusAction = $projeto['status'] == 1 ?
+                        $statusAction = $projeto['STATUS_PROJETO'] == 1 ?
                           ['onclick' => "inativaProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Inativar Projeto', 'icon' => 'fas fa-toggle-off', 'text' => 'Inativar Projeto'] :
                           ['onclick' => "ativarProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Ativar Projeto', 'icon' => 'fas fa-toggle-on', 'text' => 'Ativar Projeto'];
                         ?>
@@ -292,14 +300,14 @@
                             <span class="text-900"> <?= $statusAction['text'] ?></span>
                           </a>
                         </li>
-                        <?php if ($projeto['status'] == 0): ?>
+                        <!-- <?php if ($projeto['STATUS_PROJETO'] == 0): ?>
                           <li>
                             <a class="dropdown-item cursor-pointer" onclick="excluirProjeto(<?= $projeto['codigo_projeto'] ?>)" title="Excluir Projeto">
                               <span class="text-900 fas fa-trash-alt"></span>
                               <span class="text-900"> Excluir Projeto</span>
                             </a>
                           </li>
-                        <?php endif; ?>
+                        <?php endif; ?> -->
                       </ul>
                     </div>
                   </div>
@@ -311,6 +319,7 @@
             </div>
             <hr>
           <?php } ?>
+
         </div>
       </div>
 

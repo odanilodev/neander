@@ -11,13 +11,14 @@ class CondicoesGeraisFornecimento_model extends CI_Model
     }
 
 
-    public function recebeCondicoesFornecimentoProjeto($codigo_projeto)
+    public function recebeCondicoesFornecimentoProjeto($codigo_projeto, $ultima_versao)
     {
         $this->db->select('CGFP.*, CP.nome AS NOME_CONDICAO_FORNECIMENTO');
 
 
         $this->db->from('ci_condicoes_gerais_fornecimento_projeto CGFP');
         $this->db->join('ci_condicao_pagamento CP', 'CP.id = CGFP.id_condicao_pagamento', 'left');
+        $this->db->where('CGFP.versao_preco_venda', $ultima_versao);
         $this->db->where('CGFP.codigo_projeto', $codigo_projeto);
 
 
@@ -29,4 +30,5 @@ class CondicoesGeraisFornecimento_model extends CI_Model
 
         return $consulta->row_array();
     }
+
 }

@@ -56,9 +56,13 @@ class Projetos extends CI_Controller
 
 		$this->load->model('Empresas_model');
 
-		$data['empresas'] = $this->Empresas_model->recebeEmpresas();
-		$data['tiposEmbalagem'] = $this->Projetos_model->recebeTiposEmbalagem();
+		$id_projeto = $this->uri->segment(4);
 
+		$data['projeto'] = $this->Projetos_model->recebeProjetoPorCodigo($id_projeto);
+
+		$data['empresas'] = $this->Empresas_model->recebeEmpresas();
+
+		$data['tiposEmbalagem'] = $this->Projetos_model->recebeTiposEmbalagem();
 		$data['tiposTampa'] = $this->Projetos_model->recebeTiposTampa();
 
 		$this->load->view('admin/includes/painel/cabecalho', $data);
@@ -68,7 +72,9 @@ class Projetos extends CI_Controller
 
 	public function cadastraProjeto()
 	{
-		$id = $this->input->post('id');
+		$id_projeto = $this->input->post('idProjeto');
+
+		$codigo_projeto = $this->input->post('codigoProjeto');
 
 		$dadosInformacoes = $this->input->post('dadosInformacoes');
 		$dadosBriefing = $this->input->post('dadosBriefing');
@@ -76,10 +82,12 @@ class Projetos extends CI_Controller
 
 		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
 
-		// Gera o código do projeto com a data e hora atual no formato HHIISS
-		$codigoProjeto = $this->session->userdata('id_empresa') . $this->session->userdata('id_usuario') . random_int(100, 999) . date('His');
+		if (!$id_projeto) {
+			$codigoProjeto = $this->session->userdata('id_empresa') . $this->session->userdata('id_usuario') . random_int(100, 999) . date('His');
+		} else {
+			$codigoProjeto = $codigo_projeto;
+		}
 
-		// Coloca os arrays em uma única variável e adiciona o código do projeto
 		$dados = array_merge(
 			array('codigo_projeto' => $codigoProjeto),
 			$dadosInformacoes,
@@ -87,23 +95,27 @@ class Projetos extends CI_Controller
 			$dadosCustos
 		);
 
+		$id_cliente = $this->input->post('idCliente');
+
 		$dados['id_empresa'] = $this->session->userdata('id_empresa');
-		$dados['id_cliente'] = $this->input->post('idCliente');
 
-		$retorno = $id ? $this->Projetos_model->editaProjeto($id, $dados) : $this->Projetos_model->insereProjeto($dados); // se tiver ID edita se não INSERE
+		if (!$id_projeto) {
+			$dados['versao_projeto'] = 1;
+			$dados['id_cliente'] = $id_cliente;
+		}
 
-		if ($retorno) { // inseriu ou editou
+		$retorno = $id_projeto ? $this->Projetos_model->editaProjeto($id_projeto, $dados) : $this->Projetos_model->insereProjeto($dados);
 
+		if ($retorno) {
 			$response = array(
 				'success' => true,
-				'message' => $id ? 'Projeto editado com sucesso!' : 'Projeto cadastrado com sucesso!',
-				'idClienteCadastrado' => $this->input->post('idCliente')
+				'message' => $id_projeto ? 'Projeto editado com sucesso!' : 'Projeto cadastrado com sucesso!',
+				'idClienteCadastrado' => $id_cliente
 			);
-		} else { // erro ao inserir ou editar
-
+		} else {
 			$response = array(
 				'success' => false,
-				'message' => $id ? "Erro ao editar o projeto!" : "Erro ao cadastrar o projeto!"
+				'message' => $id_projeto ? "Erro ao editar o projeto!" : "Erro ao cadastrar o projeto!"
 			);
 		}
 
@@ -113,10 +125,10 @@ class Projetos extends CI_Controller
 	public function inativaProjetoCliente()
 	{
 		// Obtendo o ID da matéria prima do formulário
-		$id = (int) $this->input->post('id');
+		$id_projeto = (int) $this->input->post('idProjeto');
 
 		// Deletando a matéria prima
-		$retorno = $this->Projetos_model->inativaProjetoCliente($id);
+		$retorno = $this->Projetos_model->inativaProjetoCliente($id_projeto);
 
 		if ($retorno) {
 			// Resposta de sucesso

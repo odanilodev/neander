@@ -7,7 +7,7 @@
         <div class="card-header p-4 bg-soft">
           <div class="row g-3 justify-content-between align-items-center">
             <div class="col-12 col-md">
-              <h4 class="text-900 mb-0" data-anchor="data-anchor" id="with-validation">Cadastrar Projeto<a class="anchorjs-link " aria-label="Anchor" style="padding-left: 0.375em;"></a></h4>
+              <h4 class="text-900 mb-0" data-anchor="data-anchor" id="with-validation"><?= !$this->uri->segment(4) ? 'Cadastrar Projeto' : 'Editar Projeto' ?><a class="anchorjs-link " aria-label="Anchor" style="padding-left: 0.375em;"></a></h4>
             </div>
           </div>
         </div>
@@ -56,7 +56,6 @@
                   </a>
                 </li>
 
-
                 <li class="nav-item">
                   <a class="nav-link fw-semi-bold btn-etapas" href="#bootstrap-wizard-tab4" data-bs-toggle="tab" data-wizard-step="4" onclick="cadastraProjeto()">
                     <div class="text-center d-inline-block">
@@ -75,7 +74,6 @@
 
             <div class="card-body pt-4 pb-0">
               <div class="tab-content">
-                <input type="hidden" value="<?= isset($cliente['id']) ? $cliente['id'] : "" ?>" class="input-id">
 
                 <div class="tab-pane active" role="tabpanel" aria-labelledby="bootstrap-wizard-tab1" id="bootstrap-wizard-tab1">
                   <form id="form-informacoes" class="needs-validation" novalidate="novalidate" data-wizard-form="1">
@@ -84,25 +82,25 @@
 
                       <div class="mb-2 mt-2 col-md-4">
                         <label class="form-label text-900">Nome da marca *</label>
-                        <input required class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="nome_marca" placeholder="Insira o nome da marca" />
+                        <input required value="<?= $projeto['nome_marca'] ?? '' ?>" class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="nome_marca" placeholder="Insira o nome da marca" />
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 mt-2 col-md-4">
                         <label class="form-label">Mercado Alvo *</label>
-                        <input required class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="mercado_alvo" placeholder="Insira o mercado Alvo" />
+                        <input value="<?= $projeto['mercado_alvo'] ?? '' ?>" required class="form-control campo-informacoes campo-obrigatorio-informacoes" type="text" name="mercado_alvo" placeholder="Insira o mercado Alvo" />
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 mt-2 col-md-4">
                         <label class="form-label text-900">Associar concorrentes</label>
-                        <input class="form-control campo-informacoes" type="text" name="associar_concorrentes" placeholder="Concorrentes" />
+                        <input value="<?= $projeto['associar_concorrentes'] ?? '' ?>" class="form-control campo-informacoes" type="text" name="associar_concorrentes" placeholder="Concorrentes" />
 
                       </div>
 
                       <div class="mb-2 mt-5 col-md-3">
                         <div class="form-check form-switch">
-                          <input name="cliente_fornecera_embalagens" class="form-check-input campo-informacoes" type="checkbox" id="cliente_fornecera_embalagem">
+                          <input name="cliente_fornecera_embalagens" <?= isset($projeto['cliente_fornecera_embalagens']) == 1 ? 'checked' : '' ?> class="form-check-input campo-informacoes" type="checkbox" id="cliente_fornecera_embalagem">
                           <label class="form-check-label" for="cliente_fornecera_embalagem">Cliente fornecerá embalagens</label>
                         </div>
                       </div>
@@ -110,7 +108,7 @@
                       <div class="mb-2 mt-5 col-md-3">
 
                         <div class="form-check form-switch">
-                          <input name="cliente_fornecera_materia_prima" class="form-check-input campo-informacoes" type="checkbox" id="cliente_fornecera_materia_prima">
+                          <input name="cliente_fornecera_materia_prima" <?= isset($projeto['cliente_fornecera_materia_prima']) == 1 ? 'checked' : '' ?> class="form-check-input campo-informacoes" type="checkbox" id="cliente_fornecera_materia_prima">
                           <label class="form-check-label" for="cliente_fornecera_materia_prima">Cliente fornecerá matéria-prima</label>
                         </div>
 
@@ -118,14 +116,14 @@
 
                       <div class="mb-2 mt-5 col-md-3">
                         <div class="form-check form-switch">
-                          <input name="cliente_fornecera_rotulos" class="form-check-input campo-informacoes" type="checkbox" id="cliente-fornecera-rotulos">
+                          <input name="cliente_fornecera_rotulos" <?= isset($projeto['cliente_fornecera_rotulos']) == 1 ? 'checked' : '' ?> class="form-check-input campo-informacoes" type="checkbox" id="cliente-fornecera-rotulos">
                           <label class="form-check-label" for="cliente-fornecera-rotulos">Cliente fornecerá rótulos</label>
                         </div>
                       </div>
 
                       <div class="mb-2 mt-5 col-md-3">
                         <div class="form-check form-switch">
-                          <input name="cliente_fornecera_caixas_embarque" class="form-check-input campo-informacoes" type="checkbox" id="cliente-fornecera-caixas">
+                          <input name="cliente_fornecera_caixas_embarque" <?= isset($projeto['cliente_fornecera_caixas_embarque']) == 1 ? 'checked' : '' ?> class="form-check-input campo-informacoes" type="checkbox" id="cliente-fornecera-caixas">
                           <label class="form-check-label" for="cliente-fornecera-caixas">Cliente fornecerá caixas de embarque</label>
                         </div>
                       </div>
@@ -133,7 +131,7 @@
                       <!-- Observação Informações -->
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Observação Informações</label>
-                        <textarea name="observacao_info" class="form-control input-observacao-info input-obrigatorio campo-informacoes" rows="3" placeholder="Digite aqui a descrição"><?= $materiaPrima['observacao_info'] ?? ''; ?></textarea>
+                        <textarea name="observacao_info" class="form-control input-observacao-info input-obrigatorio campo-informacoes" rows="3" placeholder="Digite aqui a descrição"><?= $projeto['observacao_info'] ?? ''; ?></textarea>
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                       </div>
 
@@ -149,16 +147,16 @@
 
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Nome do produto *</label>
-                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="nome_produto" placeholder="Nome do produto">
+                        <input required value="<?= $projeto['nome_produto'] ?? ''; ?>" class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="nome_produto" placeholder="Nome do produto">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Tipo da embalagem *</label>
                         <select required class="form-control campo-briefing select2 campo-obrigatorio-briefing" name="tipo_embalagem">
-                          <option value="" disabled selected>Selecione o tipo da embalagem</option>
+                          <option value="" disabled <?= empty($projeto['tipo_embalagem']) ? 'selected' : ''; ?>>Selecione o tipo da embalagem</option>
                           <?php foreach ($tiposEmbalagem as $tipoEmbalagem) : ?>
-                            <option value="<?= $tipoEmbalagem['id']; ?>">
+                            <option value="<?= $tipoEmbalagem['id']; ?>" <?= (isset($projeto['tipo_embalagem']) && $projeto['tipo_embalagem'] == $tipoEmbalagem['id']) ? 'selected' : ''; ?>>
                               <?= $tipoEmbalagem['nome']; ?>
                             </option>
                           <?php endforeach; ?>
@@ -166,12 +164,13 @@
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
+
                       <div class="mb-2 mt-2 col-md-3">
                         <label class="form-label">Tipo da tampa *</label>
                         <select required class="form-control campo-briefing select2 campo-obrigatorio-briefing" name="tipo_tampa">
-                          <option value="" disabled selected>Selecione o tipo da tampa</option>
+                          <option value="" <?= empty($projeto['tipo_tampa']) ? 'selected' : '' ?> disabled selected>Selecione o tipo da tampa</option>
                           <?php foreach ($tiposTampa as $tipoTampa) : ?>
-                            <option value="<?= $tipoTampa['id']; ?>">
+                            <option <?= (isset($projeto['tipo_tampa']) && $projeto['tipo_tampa'] == $tipoTampa['id']) ? 'selected' : '' ?> value="<?= $tipoTampa['id']; ?>">
                               <?= $tipoTampa['nome']; ?>
                             </option>
                           <?php endforeach; ?>
@@ -182,39 +181,38 @@
 
                       <div class="mb-2 col-md-3 mt-2">
                         <label class="form-label">Volumetria *</label>
-                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="volumetria" placeholder="Volumetria">
+                        <input value="<?= $projeto['volumetria'] ?? '' ?>" required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="volumetria" placeholder="Volumetria">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Apelo do rotulo *</label>
-                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="apelo_rotulo" placeholder="Apelo do rotulo">
+                        <input value="<?= $projeto['apelo_rotulo'] ?? '' ?>" required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="apelo_rotulo" placeholder="Apelo do rotulo">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Ativos do produto *</label>
-                        <input required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="ativos_produto" placeholder="Ativos do produto">
+                        <input value="<?= $projeto['ativos_produto'] ?? '' ?>" required class="form-control campo-briefing campo-obrigatorio-briefing" type="text" name="ativos_produto" placeholder="Ativos do produto">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Cor *</label>
-                        <input class="form-control campo-briefing" type="text" name="cor" placeholder="Cor">
+                        <input value="<?= $projeto['cor'] ?? '' ?>" class="form-control campo-briefing" type="text" name="cor" placeholder="Cor">
                         <div class="invalid-feedback">Preencha este campo</div>
-
                       </div>
 
                       <div class="mb-2 col-md-3 mt-3">
                         <label class="form-label">Fragrância *</label>
-                        <input class="form-control campo-briefing" type="text" name="fragrancia" placeholder="Fragrância">
+                        <input value="<?= $projeto['fragrancia'] ?? '' ?>" class="form-control campo-briefing" type="text" name="fragrancia" placeholder="Fragrância">
                         <div class="invalid-feedback">Preencha este campo</div>
                       </div>
 
                       <!-- Observação Briefing -->
                       <div class="col-md-12 mb-3">
                         <label class="form-label">Observação Briefing</label>
-                        <textarea name="observacao_briefing" class="campo-briefing form-control input-observacao-briefing input-obrigatorio" rows="3" placeholder="Digite aqui a observação"><?= $materiaPrima['observacao_briefing'] ?? ''; ?></textarea>
+                        <textarea name="observacao_briefing" class="campo-briefing form-control input-observacao-briefing input-obrigatorio" rows="3" placeholder="Digite aqui a observação"><?= $projeto['observacao_briefing'] ?? ''; ?></textarea>
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                       </div>
 
@@ -230,17 +228,17 @@
 
                       <div class="col-md-4">
                         <label class="form-label">Produto</label>
-                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
+                        <input value="<?= $projeto['custo_cliente_produto'] ?? '' ?>" class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do produto" name="custo_cliente_produto" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Embalagens</label>
-                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
+                        <input value="<?= $projeto['custo_cliente_embalagens'] ?? '' ?>" required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo da embalagem" name="custo_cliente_embalagens" type="text" />
                       </div>
 
                       <div class="col-md-4">
                         <label class="form-label">Rótulos</label>
-                        <input required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
+                        <input value="<?= $projeto['custo_cliente_rotulos'] ?? '' ?>" required class="form-control campo-custos mascara-dinheiro campo-obrigatorio-custos" placeholder="Custo do Rótulo" name="custo_cliente_rotulos" type="text" />
                       </div>
 
                     </div>
@@ -276,7 +274,8 @@
                 </div>
               </div>
               <div class="spinner-border text-primary load-form d-none" role="status"></div>
-              <input class="input-id-cliente" type="hidden" value="<?= $this->uri->segment(3) ?>">
+              <input class="input-id-cliente" type="hidden" value="<?= $this->uri->segment(3) ?? '' ?>">
+              <input class="input-id-projeto" type="hidden" value="<?= $this->uri->segment(4) ?? '' ?>">
             </div>
           </div>
         </div>
