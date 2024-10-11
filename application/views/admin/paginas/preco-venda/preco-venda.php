@@ -4,7 +4,7 @@
 
         <div class="row-selects-preco-venda row mb-3">
 
-            <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
+            <div id="alerta-selecione-campos" class="alert alert-phoenix-secondary text-1000" role="alert">
                 Para liberar os campos, selecione um cliente e seu projeto.
             </div>
 
@@ -89,6 +89,8 @@
                     <label for="input_perda" class="form-label">Perda</label>
                     <input disabled type="text" class="form-control text-1000 input_perda" name="input_perda">
                 </div>
+
+
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_frete_porcentagem" class="form-label">Frete</label>
                     <div class="input-group">
@@ -153,6 +155,13 @@
                         <input name="valor_st_estado" type="text" disabled class="input-gravar-banco text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
                     </div>
                 </div>
+                <div class="col-md-2 div_input_preco_venda div_input_outros inactive">
+                    <label for="input_outros" class="form-label">Outros</label>
+                    <input disabled type="text" class="input-gravar-banco form-control text-1000 input_outros" name="outros">
+                </div>
+            </div>
+
+            <div class="row mb-4 rows_preco_venda">
                 <div class="col-md-2 div_input_preco_venda ms-auto">
                     <label for="input_total_st_estado" class="form-label">Valor total com ST</label>
                     <input name="total_st" type="text" disabled class="input-gravar-banco text-1000 form-control input_total_st_estado" name="input_total_st_estado">
@@ -259,10 +268,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-phoenix-danger" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-phoenix-danger btn-fecha-modal-condicao-fornecimento" data-bs-dismiss="modal">Fechar</button>
                     <button type="button" class="btn btn-phoenix-success btn-gera-pdf" onclick="gerarPdfPrecoVenda()"><span class="far fa-file-pdf me-2"></span>Gerar PDF</button>
                     <div class="p-3">
-                        <div class="spinner-border text-primary load-form d-none" role="status"></div>
+                        <div class="spinner-border text-primary load-form-gera-pdf d-none" role="status"></div>
                     </div>
                 </div>
             </div>

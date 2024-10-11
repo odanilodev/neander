@@ -270,14 +270,14 @@
 
                       <ul class="dropdown-menu dropdown-menu-end" style="z-index: 9999;">
                         <li>
-                          <a class="dropdown-item cursor-pointer" onclick="detalhesProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
+                          <a class="dropdown-item cursor-pointer" onclick="visualizarDesenvolvimentoProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
                             <span class="text-900 fas fa-eye"></span>
                             <span class="text-900"> Detalhes</span>
                           </a>
                         </li>
 
                         <li>
-                          <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $this->uri->segment(3) . '/' . $projeto['id']) ?>">
+                          <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $this->uri->segment(3) . '/' . $projeto['ID_PROJETO']) ?>">
                             <span class="text-900 fa-solid fa-edit"></span>
                             <span class="text-900"> Editar Projeto</span>
                           </a>

@@ -29,8 +29,24 @@ $(function () {
 
           $(`.load-form-${idEquipamento}`).addClass('d-none');
           $(`.input-equipamento-${tipo}`).attr('disabled', false);
-        
+
           $(`.modal-desenvolver-custo-${tipo}-pecas-hora`).val(valorInput);
+
+          // Exibe o toast de sucesso
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Custo atualizado com sucesso!',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer);
+              toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+          });
+
         }
       },
       error: function (xhr, status, error) {
@@ -84,13 +100,6 @@ $(function () {
       }).then((result) => {
         if (result.isConfirmed) {
           atualizarCustos();
-          Swal.fire({
-            title: 'Sucesso!',
-            text: "Dados alterados com sucesso.",
-            icon: 'success',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Fechar'
-          });
         }
       });
     } else {
@@ -116,8 +125,20 @@ $(function () {
     }
   });
 
-  $('.input-equipamento-envase').on('input', function () {
-    calcularCustoProducaoEnvase(false, 'input-individual', this);
+  $('.input-equipamento-envase').on('focus', function () {
+    let $input = $(this);
+    $input.data('valor-antigo', $input.val().replace(/\./g, '').replace(',', '.'));
+  });
+
+  $('.input-equipamento-envase').on('focusout', function () {
+    let $input = $(this);
+    let valorAtual = parseFloat($input.val().replace(/\./g, '').replace(',', '.'));
+    let valorAntigo = parseFloat($input.data('valor-antigo'));
+
+    if (valorAtual !== valorAntigo) {
+      calcularCustoProducaoEnvase(false, 'input-individual', this);
+      $input.data('valor-antigo', valorAtual);
+    }
   });
 
   function calcularCustoProducaoEnvase(sweetAlert, tipoInput, inputIndividualCompleto) {
@@ -151,9 +172,22 @@ $(function () {
     }
   });
 
-  $('.input-equipamento-rotulagem').on('focusout', function () {
-    calcularCustoProducaoRotulagem(false, 'input-individual', this);
+  $('.input-equipamento-rotulagem').on('focus', function () {
+    let $input = $(this);
+    $input.data('valor-antigo', $input.val().replace(/\./g, '').replace(',', '.'));
   });
+
+  $('.input-equipamento-rotulagem').on('focusout', function () {
+    let $input = $(this);
+    let valorAtual = parseFloat($input.val().replace(/\./g, '').replace(',', '.'));
+    let valorAntigo = parseFloat($input.data('valor-antigo'));
+
+    if (valorAtual !== valorAntigo) {
+      calcularCustoProducaoRotulagem(false, 'input-individual', this);
+      $input.data('valor-antigo', valorAtual);
+    }
+  });
+
 
   function calcularCustoProducaoRotulagem(sweetAlert, tipoInput, inputIndividualCompleto) {
     calcularCustoProducao(
@@ -194,6 +228,7 @@ $(function () {
         if (result.isConfirmed) {
           insereCustoProducaoManipulacao(valorAtual);
           $input.data('valor-antigo', valorAtual);
+
         } else {
           $input.val(formatarValor(valorAntigo));
         }

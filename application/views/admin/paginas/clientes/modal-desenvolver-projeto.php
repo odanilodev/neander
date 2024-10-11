@@ -16,7 +16,7 @@
               <div class="col-12">
                 <div class="mb-3">
 
-                  <div id="alerta-selecione-campos" class="alert alert-secondary" role="alert">
+                  <div id="alerta-selecione-campos" class="alert alert-phoenix-secondary text-1000" role="alert">
                     Para liberar os campos selecione um dos projetos deste cliente.
                   </div>
 

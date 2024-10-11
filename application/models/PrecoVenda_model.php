@@ -11,7 +11,7 @@ class PrecoVenda_model extends CI_Model
 
     public function recebePrecoVendaProjetosCliente($codigo_projeto,  $versao_projeto, $versao_preco_venda)
     {
-        $this->db->select('PVP.total_sem_imposto, PVP.total_unit, PVP.valor_st_estado, P.nome_produto, C.nome_fantasia, PVP.codigo_projeto, PVP.versao_projeto, PVP.lote, PVP.total_st, PVP.versao_preco_venda');
+        $this->db->select('PVP.total_sem_imposto, PVP.total_unit, PVP.valor_st_estado, P.nome_produto, C.nome_fantasia, PVP.codigo_projeto, PVP.versao_projeto, PVP.lote, PVP.total_st, PVP.versao_preco_venda, PVP.outros');
 
         // Joins
         $this->db->join('ci_ncm_projeto NP', 'NP.codigo_projeto = PVP.codigo_projeto', 'left');

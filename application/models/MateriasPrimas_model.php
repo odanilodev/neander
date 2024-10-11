@@ -41,22 +41,25 @@ class MateriasPrimas_model extends CI_Model
     return $query->row_array() ?? [];
   }
 
-  /**
-   * Retorna uma matéria prima específica pelo nome, excluindo um ID específico.
-   * 
-   * @param string $nome
-   * @param int $id
-   * @return array
-   */
-  public function recebeNomeMateriaPrima(string $nome, int $id): array
-  {
-    $this->db->where('nome', $nome);
+/**
+ * Verifica se um fornecedor já possui a mesma matéria-prima cadastrada.
+ * 
+ * @param string $nome_materia_prima
+ * @param string $id_fornecedor
+ * @param int $id
+ * @return array
+ */
+public function verificaMateriaPrimaFornecedor(string $razao_social, string $id_fornecedor, int $id): array
+{
+    $this->db->where('id_fornecedor', $id_fornecedor);
+    $this->db->where('razao_social', $razao_social); 
     $this->db->where('id <>', $id);
     $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
     $query = $this->db->get('ci_materias_primas');
 
     return $query->row_array() ?? [];
-  }
+}
+
 
   /**
    * Insere uma nova matéria prima e registra o log.

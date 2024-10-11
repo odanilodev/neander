@@ -39,6 +39,26 @@ class Fornecedores_model extends CI_Model
     return $query->row_array() ?? [];
   }
 
+/**
+ * Verifica se um fornecedor com o CNPJ especificado já existe.
+ * 
+ * @param int|null $cnpj
+ * @return bool
+ */
+public function verificaCnpjFornecedores(?string $cnpj): bool
+{
+    // Verifica se o CNPJ está presente
+    $this->db->where('cnpj', $cnpj);
+    $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
+    
+    // Realiza a consulta
+    $query = $this->db->get('ci_fornecedores');
+    
+    // Se encontrar uma linha, retorna true, senão false
+    return $query->num_rows() > 0;
+}
+
+
   /**
    * Retorna um fornecedor específico pelo nome, excluindo um ID específico.
    * 
@@ -46,9 +66,9 @@ class Fornecedores_model extends CI_Model
    * @param int $id
    * @return array
    */
-  public function recebeNomeFornecedor(string $nome_fantasia, int $id): array
+  public function recebeNomeFornecedor(string $razao_social, int $id): array
   {
-    $this->db->where('nome_fantasia', $nome_fantasia);
+    $this->db->where('razao_social', $razao_social);
     $this->db->where('id <>', $id);
     $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
     $query = $this->db->get('ci_fornecedores');

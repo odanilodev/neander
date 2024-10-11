@@ -21,6 +21,7 @@ class DesenvolvimentoProjeto_model extends CI_Model
             'DP.lote_partida_mao_de_obra',
             'DP.lote_partida_embalagem',
             'DP.lote_partida_perda',
+            'DP.custo_final_outros',
             'NP.codigo_ncm',
             'NP.descricao_ncm'
         ]);

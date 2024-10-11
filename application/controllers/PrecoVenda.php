@@ -60,7 +60,7 @@ class PrecoVenda extends CI_Controller
 
     $id_cliente = $this->input->post('idCliente');
 
-    $retorno = $this->Projetos_model->recebeProjetoCliente($id_cliente);
+    $retorno = $this->Projetos_model->recebeProjetoCliente($id_cliente, 1);
 
     if ($retorno) {
       $response = array(

@@ -19,10 +19,12 @@ class CustoProdutivo_model extends CI_Model
   public function insereCustoProdutivo(int $id, string $tipo, array $dados): bool
   {
     $dados['editado_em'] = date('Y-m-d H:i:s');
+
     $this->db->where('id', $id);
     $this->db->update('ci_equipamento_' . $tipo, $dados);
 
     if ($this->db->affected_rows() > 0) {
+      $this->Log_model->insereLog($id);
       return true;
     }
 

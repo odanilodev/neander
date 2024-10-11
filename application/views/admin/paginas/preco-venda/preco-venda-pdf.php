@@ -99,7 +99,6 @@
             <h2 class="header-text" style="margin: 10px 0;">Neander Cosméticos Indústria e Comércio LTDA - ME</h2>
         </div>
 
-
         <!-- Título da Proposta -->
         <h4 style="margin-bottom:10px;">PROPOSTA COMERCIAL</h4>
 
@@ -122,6 +121,9 @@
                     <th>Valor unit. s/ impostos</th>
                     <th>Valor unit. c/ impostos</th>
                     <th>Valor unit. ST</th>
+                    <?php if (!empty($projetosClientes[0]['outros'])) : ?>
+                        <th>Outros Custos</th>
+                    <?php endif ?>
                     <th>Total com impostos</th>
                 </tr>
             </thead>
@@ -130,33 +132,36 @@
                 $item = 1;
                 $totalGeral = 0;
 
-                foreach ($projetosClientes as $projetoCliente):
+                foreach ($projetosClientes as $projetoCliente) :
                     $loteString = $projetoCliente['lote'];
                     $loteFloat = floatval(preg_replace('/[^0-9.]/', '', $loteString));
                     $totalComImpostos = $projetoCliente['total_st'];
 
-                    $totalGeral += $totalComImpostos;
+                    // Adiciona o valor dos outros custos ao total geral
+                    $outrosCustos = !empty($projetoCliente['outros']) ? $projetoCliente['outros'] : 0;
+                    $totalGeral += $totalComImpostos + $outrosCustos;
                 ?>
                     <tr>
                         <td><?= $item++ ?></td>
                         <td><?= htmlspecialchars($projetoCliente['nome_produto']) ?></td>
-                        <td><?= htmlspecialchars($loteFloat) ?></td> 
+                        <td><?= htmlspecialchars($loteFloat) ?></td>
                         <td><?= number_format($projetoCliente['total_sem_imposto'] / $loteFloat, 2, ',', '.') ?></td>
                         <td><?= number_format($projetoCliente['total_unit'] / $loteFloat, 2, ',', '.') ?></td>
                         <td><?= number_format($projetoCliente['total_st'] / $loteFloat, 2, ',', '.') ?></td>
+                        <?php if (!empty($projetoCliente['outros'])) : ?>
+                            <td><?= number_format($outrosCustos, 2, ',', '.') ?></td>
+                        <?php endif ?>
                         <td><?= number_format($totalComImpostos, 2, ',', '.') ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" style="text-align: right;"><strong>Total:</strong></td>
+                    <td colspan="7" style="text-align: right;"><strong>Total:</strong></td>
                     <td><?= number_format($totalGeral, 2, ',', '.') ?></td>
                 </tr>
             </tfoot>
         </table>
-
-
 
         <!-- Condições Gerais de Fornecimento -->
         <h4 style="margin-bottom:10px;">CONDIÇÕES GERAIS DE FORNECIMENTO:</h4>
@@ -184,8 +189,8 @@
         <h4>Observações importantes:</h4>
         <p><?= $condicoesFornecimento['observacoes'] ?? '' ?></p>
 
-
     </div>
 </body>
 
 </html>
+F

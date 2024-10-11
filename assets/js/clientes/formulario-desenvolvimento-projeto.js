@@ -532,6 +532,9 @@ const calculaLinhaEmbalagem = (inputValorUnitEmbalagem) => {
 
     const total = quantidade * valorUnit;
     linhaAtual.find('.input-total-linha-embalagem').val(formatarValorMoeda(total));
+
+    calculaTotalUnitCustoFinal();
+    calculaTotalGeralCustoFinal();
 }
 
 let valorEmbalagemGlobal = 0;
@@ -675,9 +678,9 @@ const calculaTotalLinhaCustoFinal = (valor, inputTotalLinha) => {
 
 const calculaTotalMaoDeObraLotePartida = () => {
 
-    const valorManipulacao = converterParaNumero($('.input-custo-final-total-manipulacao').val()) || 0;
-    const valorEnvase = converterParaNumero($('.input-custo-final-total-envase').val()) || 0;
-    const valorRotulagem = converterParaNumero($('.input-custo-final-total-rotulagem').val()) || 0;
+    const valorManipulacao = converterParaFloat($('.input-custo-final-total-manipulacao').val()) || 0;
+    const valorEnvase = converterParaFloat($('.input-custo-final-total-envase').val()) || 0;
+    const valorRotulagem = converterParaFloat($('.input-custo-final-total-rotulagem').val()) || 0;
 
     const valorTotalMaoDeObra = valorManipulacao + valorEnvase + valorRotulagem;
 
@@ -693,8 +696,8 @@ $(document).on('focusout', '.input-custo-final-quantidade-outros-custos, .input-
 });
 
 const calculaTotalLinhaOutrosCustos = () => {
-    const quantidadeOutrosCustos = converterParaNumero($('.input-custo-final-quantidade-outros-custos').val());
-    const valorUnitOutrosCustos = converterParaNumero($('.input-custo-final-valor-unit-outros-custos').val());
+    const quantidadeOutrosCustos = converterParaFloat($('.input-custo-final-quantidade-outros-custos').val());
+    const valorUnitOutrosCustos = converterParaFloat($('.input-custo-final-valor-unit-outros-custos').val());
 
     const valorTotalOutrosCustos = quantidadeOutrosCustos * valorUnitOutrosCustos;
 
@@ -709,7 +712,7 @@ $(document).on('focusout', '.input-quantidade-percentual-perda', function () {
         const valorPercentual = parseFloat($(this).val().replace(',', '.')) / 100 || 0;
 
         const calcularTotal = (campos) => {
-            return campos.reduce((somaTotal, campo) => somaTotal + converterParaNumero(campo.val()), 0);
+            return campos.reduce((somaTotal, campo) => somaTotal + converterParaFloat(campo.val()), 0);
         };
 
         const custosFinaisUnitarios = [
@@ -770,7 +773,7 @@ const calculaTotalUnitCustoFinal = () => {
     ];
 
     const totalUnitFinal = custosUnitFinais.reduce((somaTotal, campo) => {
-        return somaTotal + converterParaNumero(campo.val());
+        return somaTotal + converterParaFloat(campo.val());
     }, 0);
 
     $('.input-custo-final-total-unit').val(formatarValorMoeda(totalUnitFinal));
@@ -789,7 +792,7 @@ const calculaTotalGeralCustoFinal = () => {
     ];
 
     const totalFinal = custosFinais.reduce((somaTotal, campo) => {
-        return somaTotal + converterParaNumero(campo.val());
+        return somaTotal + converterParaFloat(campo.val());
     }, 0);
 
     $('.input-custo-final-total-geral').val(formatarValorMoeda(totalFinal));
@@ -835,7 +838,7 @@ const desenvolverProjeto = (idClienteRedirect) => {
             if ($(this).hasClass('inputs-tipo-texto')) {
                 inputsProjeto[$(this).attr('name')] = $(this).val();
             } else {
-                inputsProjeto[$(this).attr('name')] = converterParaNumero($(this).val());
+                inputsProjeto[$(this).attr('name')] = converterParaFloat($(this).val());
             }
         });
 
@@ -849,7 +852,7 @@ const desenvolverProjeto = (idClienteRedirect) => {
                 if ($(this).hasClass('inputs-tipo-texto')) {
                     materiasPrimas[index][nameInput] = $(this).val();
                 } else {
-                    materiasPrimas[index][nameInput] = converterParaNumero($(this).val()).toFixed(3);
+                    materiasPrimas[index][nameInput] = converterParaFloat($(this).val()).toFixed(3);
 
                 }
 
@@ -899,12 +902,6 @@ const desenvolverProjeto = (idClienteRedirect) => {
         });
     }
 };
-
-
-
-
-
-
 
 ////////////////////////////////////
 // const editarProjetoDesenvolvido = () => {
