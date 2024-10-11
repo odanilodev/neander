@@ -215,6 +215,7 @@ class Clientes extends CI_Controller
         $this->load->view('admin/paginas/clientes/modal-desenvolver-projeto');
         $this->load->view('admin/paginas/clientes/modal-custo-produtivo');
         $this->load->view('admin/paginas/clientes/modal-cadastro-materia-prima');
+        $this->load->view('admin/paginas/clientes/modal-visualizar-desenvolvimento-projeto');
         $this->load->view('admin/includes/painel/rodape');
     }
 

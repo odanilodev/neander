@@ -90,7 +90,7 @@ class CondicaoPagamento extends CI_Controller
 
     // Obtendo os dados do formulário e atribuindo ao array $dados
     $dados = array(
-      'nome' => $this->input->post('nomeCondicaoPagamento'),
+      'nome' => trim($this->input->post('nomeCondicaoPagamento')),
       'id_empresa' => (int) $this->session->userdata('id_empresa')
     );
 

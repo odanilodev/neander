@@ -1,5 +1,5 @@
 <div class="content">
-  <div id="members" data-list='{"valueNames":["td_nome_fornecedor", "td_cnpj", "td_email"],"page":10,"pagination":true}'>
+  <div id="members" data-list='{"valueNames":["td_razao_social","td_nome_fornecedor", "td_cnpj", "td_email"],"page":10,"pagination":true}'>
     <div class="row align-items-center justify-content-between g-3 mb-4">
       <div class="col-auto">
         <div class="d-flex align-items-center">
@@ -31,7 +31,8 @@
                   <input class="form-check-input" id="checkbox-bulk-members-select" type="checkbox" data-bulk-select='{"body":"members-table-body"}' />
                 </div>
               </th>
-              <th class="sort align-middle" scope="col" data-sort="td_nome_fornecedor">Fornecedor</th>
+              <th class="sort align-middle" scope="col" data-sort="td_razao_social">Razão Social</th>
+              <th class="sort align-middle" scope="col" data-sort="td_nome_fornecedor">Nome Fantasia</th>
               <th class="sort align-middle" scope="col" data-sort="td_cnpj">CNPJ</th>
               <th class="sort align-middle" scope="col" data-sort="td_email">Email</th>
               <th class="sort align-middle pe-3">Ações</th>
@@ -44,6 +45,9 @@
                   <div class="form-check mb-0 fs-0">
                     <input class="form-check-input" type="checkbox" />
                   </div>
+                </td>
+                <td class="td_razao_social align-middle white-space-nowrap">
+                  <?= $fornecedor['razao_social'] ?>
                 </td>
                 <td class="td_nome_fornecedor align-middle white-space-nowrap">
                   <?= $fornecedor['nome_fantasia'] ?>

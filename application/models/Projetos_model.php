@@ -66,7 +66,7 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetoCliente($id_cliente, $status = null)
     {
-        $this->db->select('P.*, C.*, P.status as STATUS_PROJETO');
+        $this->db->select('P.*, C.*, P.status as STATUS_PROJETO, P.id as ID_PROJETO');
         $this->db->from('ci_projetos P');
         $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
         $this->db->where('P.id_cliente', $id_cliente);

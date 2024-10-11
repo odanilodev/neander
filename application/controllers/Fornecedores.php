@@ -79,6 +79,37 @@ class Fornecedores extends CI_Controller
     $this->load->view('admin/includes/painel/rodape');
   }
 
+
+  public function validaDadosFornecedor(array $dados): array
+  {
+    $this->load->helper('validacao_helper');
+
+    $erros = [];
+
+    // CNPJ
+    if (!validarCnpj($dados['cnpj'])) {
+      $erros[] = "O CNPJ especificado não é válido!";
+    }
+
+    //  CNPJ já está cadastrado
+    if ($this->Fornecedores_model->verificaCnpjFornecedores($dados['cnpj'])) {
+      $erros[] = "O CNPJ especificado já está cadastrado para outro Fornecedor!";
+    }
+
+    // e-mail
+    if (!validarEmail($dados['email'])) {
+      $erros[] = "O e-mail especificado não é válido!";
+    }
+
+    // telefone
+    if (!validarTelefone($dados['telefone'])) {
+      $erros[] = "O telefone especificado não é válido!";
+    }
+
+    return $erros;
+  }
+
+
   /**
    * Processa o cadastro ou edição de um Fornecedor.
    * Verifica se o nome do Fornecedor já existe e insere ou edita conforme necessário.
@@ -86,7 +117,7 @@ class Fornecedores extends CI_Controller
    */
   public function cadastraFornecedor()
   {
-    $id = (int) $this->input->post('id');
+    $this->load->helper('validacao_helper');
 
     // Obtendo os dados do formulário e atribuindo ao array $dados
     $dados = array(
@@ -107,8 +138,23 @@ class Fornecedores extends CI_Controller
       'id_empresa' => (int) $this->session->userdata('id_empresa')
     );
 
+    $erros = $this->validaDadosFornecedor($dados);
+
+    if (!empty($erros)) {
+      $response = array(
+          'title' => "Algo deu errado!",
+          'type' => "error",
+          'success' => false,
+          'erros' => $erros
+      );
+
+      return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+  }
+
+
     // Verificando se o fornecedor já existe
-    $fornecedor = $this->Fornecedores_model->recebeNomeFornecedor($dados['nome_fantasia'], $id);
+    $id = (int) $dados['id'];
+    $fornecedor = $this->Fornecedores_model->recebeNomeFornecedor($dados['razao_social'], $id);
 
     if ($fornecedor) {
       // Resposta caso o fornecedor já exista
@@ -125,23 +171,18 @@ class Fornecedores extends CI_Controller
     // Inserindo ou editando o fornecedor
     $retorno = $id ? $this->Fornecedores_model->editaFornecedor($id, $dados) : $this->Fornecedores_model->insereFornecedor($dados);
 
-    if ($retorno) {
-      // Resposta de sucesso
-      $response = array(
-        'success' => true,
-        'title' => 'Sucesso!',
-        'message' => $id ? 'Fornecedor editado com sucesso!' : 'Fornecedor cadastrado com sucesso!',
-        'type' => 'success'
-      );
-    } else {
-      // Resposta de erro
-      $response = array(
-        'success' => false,
-        'title' => 'Algo deu errado!',
-        'message' => $id ? "Erro ao editar o Fornecedor!" : "Erro ao cadastrar o Fornecedor!",
-        'type' => 'error'
-      );
-    }
+    // Retorna a resposta de sucesso ou erro
+    $response = $retorno ? array(
+      'success' => true,
+      'title' => 'Sucesso!',
+      'message' => $id ? 'Fornecedor editado com sucesso!' : 'Fornecedor cadastrado com sucesso!',
+      'type' => 'success'
+    ) : array(
+      'success' => false,
+      'title' => 'Algo deu errado!',
+      'message' => $id ? "Erro ao editar o Fornecedor!" : "Erro ao cadastrar o Fornecedor!",
+      'type' => 'error'
+    );
 
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }

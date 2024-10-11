@@ -94,7 +94,7 @@ class MateriasPrimas extends CI_Controller
 
     // Obtendo os dados do formulário e atribuindo ao array $dados
     $dados = array(
-      'nome' => $this->input->post('nome'),
+      'nome' => trim($this->input->post('nome')),
       'id_fornecedor' => $this->input->post('idFornecedor'),
       'composicao_ptbr' => $this->input->post('composicao_ptbr'),
       'valor' => str_replace(['.', ','], ['', '.'], $this->input->post('valor')),
@@ -105,15 +105,15 @@ class MateriasPrimas extends CI_Controller
     );
 
     // Verificando se a matéria prima já existe
-    $materiaPrima = $this->MateriasPrimas_model->recebeNomeMateriaPrima($dados['nome'], $id);
+    $fornecedor = $this->MateriasPrimas_model->verificaMateriaPrimaFornecedor($dados['nome'], $dados['id_fornecedor'], $id);
 
-    if ($materiaPrima) {
+    if ($fornecedor) {
       // Resposta caso a matéria prima já exista
       $response = array(
         'title' => "Algo deu errado!",
         'type' => "error",
         'success' => false,
-        'message' => "Esta Matéria Prima já existe! Tente cadastrar uma diferente."
+        'message' => "Este Fornecedor já possue esta matéria prima cadastrada á ele! Tente cadastrar uma diferente."
       );
 
       return $this->output->set_content_type('application/json')->set_output(json_encode($response));

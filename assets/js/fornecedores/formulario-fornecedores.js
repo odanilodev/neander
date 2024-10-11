@@ -1,6 +1,6 @@
 var baseUrl = $('.base-url').val();
 $(function () {
-  
+
   // Função para manipular o CEP
   function manipularCEP() {
     let cep = $(this).val().replace(/\D/g, '');
@@ -30,15 +30,10 @@ $(function () {
 
 });
 
-
-
-
-
 const cadastraFornecedor = () => {
   let formData = new FormData();
 
   formData.append('id', $('.input-id').val());
-
   formData.append('razao_social', $('.input-razao-social').val());
   formData.append('nome_fantasia', $('.input-nome-fantasia').val());
   formData.append('cnpj', $('.input-cnpj').val());
@@ -71,17 +66,35 @@ const cadastraFornecedor = () => {
         $('.load-form').addClass('d-none');
         $('.btn-envia').removeClass('d-none');
 
-        let redirect = data.type != 'error' ? `${baseUrl}fornecedores` : '#';
-        avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, `${redirect}`);
+        // Verifica se há erros retornados na resposta
+        if (data.success === false) {
+          Swal.fire({
+            title: data.title,
+            html: `
+              <p>As seguintes validações falharam:</p>
+              <ul style="list-style-position: inside; padding-left: 0;">
+                  ${data.erros.map(erro => `<li><strong>${erro}</strong></li>`).join('')}
+              </ul>
+              <p>Tente novamente com outros valores!</p>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok'
+          });
+        } else {
+          avisoRetorno(data.title, data.message, data.type, `${baseUrl}fornecedores`);
+        }
       },
       error: function (xhr, status, error) {
         if (xhr.status === 403) {
-          avisoRetorno('Algo deu errado!', `Você não tem permissão para esta ação..`, 'error', '#');
+          avisoRetorno('Algo deu errado!', 'Você não tem permissão para esta ação.', 'error', '#');
         }
       }
     });
   }
 }
+
 
 const deletaFornecedor = (id) => {
   Swal.fire({

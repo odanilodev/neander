@@ -48,7 +48,8 @@ $(document).on('change', '#select_cliente', function () {
                     avisoRetorno(response.title, response.message, response.type, '#');
 
                     $('.div_select_projeto_cliente').addClass('inactive');
-                    $('.select_projetos_cliente').val(null).trigger('change');
+
+                    $('.div_input_outros').addClass('inactive');
 
                     const $containerCamposPrecoVenda = $this.closest('.row-selects-preco-venda').next('.container_campos_preco_venda');
 
@@ -62,6 +63,10 @@ $(document).on('change', '#select_cliente', function () {
                     $('#alerta-selecione-campos').fadeIn(1000);
 
                     $this.val(null).trigger('change');
+
+                    $('.select_projetos_cliente').each(function () {
+                        $(this).html('<option value="" selected disabled>Selecione o Projeto</option>');
+                    });
 
 
                 }
@@ -98,7 +103,7 @@ function atualizarSelects() {
 
 $(document).on('change', '.select_projetos_cliente', function () {
 
-    if ($(this).val() !== '' || null) {
+    if ($(this).val() != '') {
 
         const $this = $(this);
         const valorSelecionado = $this.val();
@@ -141,6 +146,8 @@ $(document).on('change', '.select_projetos_cliente', function () {
             success: function (response) {
                 if (response.success) {
 
+                    console.log(response)
+
                     $('.btn_duplica_div').prop('disabled', false);
                     $('.btn-finalizar-preco-venda').prop('disabled', false);
                     $('#alerta-selecione-campos').fadeOut(1000);
@@ -157,6 +164,16 @@ $(document).on('change', '.select_projetos_cliente', function () {
                     $divCamposPrecoVenda.find('.input_custo_mao_de_obra').val(formatarValorMoeda(response.projeto[`${prefixo}mao_de_obra`]));
                     $divCamposPrecoVenda.find('.input_embalagem').val(formatarValorMoeda(response.projeto[`${prefixo}embalagem`]));
                     $divCamposPrecoVenda.find('.input_perda').val(formatarValorMoeda(response.projeto[`${prefixo}perda`]));
+
+                    if (response.projeto.custo_final_outros != '0' || response.projeto.custo_final_outros != '') {
+                        $divCamposPrecoVenda.find('.div_input_outros').removeClass('d-none');
+                        $divCamposPrecoVenda.find('.input_outros').val(formatarValorMoeda(response.projeto.custo_final_outros));
+                    } else {
+                        $divCamposPrecoVenda.find('.div_input_outros').addClass('d-none');
+                        $divCamposPrecoVenda.find('.input_outros').val(formatarValorMoeda(0));
+                    }
+
+                    $('.div_input_outros').removeClass('inactive');
 
                     $divCamposPrecoVenda.find('.input_porcentagem_disabled').prop('disabled', false);
 
@@ -177,7 +194,10 @@ $(document).on('change', '.select_projetos_cliente', function () {
                     atualizarValorTotalSt($divCamposPrecoVenda);
 
                 } else {
+
                     const idCliente = $('#select_cliente option:selected').val();
+
+                    $('.div_input_outros').addClass('inactive');
 
                     Swal.fire({
                         title: response.title,
@@ -216,63 +236,63 @@ $(document).on('change', '.select_projetos_cliente', function () {
 
 
 // DESCARTADO APÓS MUDANÇA EM ESTRUTURA - GUARDAR PARA FUTUROS IMPREVISTOS
-    // $(document).on('change', '.select_lote_projeto', function () {
+// $(document).on('change', '.select_lote_projeto', function () {
 
-    //     const loteProjeto = $(this).val();
-    //     const $divLoteCliente = $(this).closest('.div_select_valor_lote');
-    //     const codigoProjeto = $divLoteCliente.siblings('.div_selects_preco_venda').find('.select_projetos_cliente').val();
-    //     const $divCamposPrecoVenda = $(this).closest('.row-selects-preco-venda').siblings('.container_campos_preco_venda');
+//     const loteProjeto = $(this).val();
+//     const $divLoteCliente = $(this).closest('.div_select_valor_lote');
+//     const codigoProjeto = $divLoteCliente.siblings('.div_selects_preco_venda').find('.select_projetos_cliente').val();
+//     const $divCamposPrecoVenda = $(this).closest('.row-selects-preco-venda').siblings('.container_campos_preco_venda');
 
-    //     $.ajax({
-    //         type: 'post',
-    //         url: `${baseUrl}precoVenda/recebeDesenvolvimentoProjeto  `,
-    //         data: {
-    //             codigoProjeto: codigoProjeto,
-    //             loteProjeto: loteProjeto
-    //         },
-    //         success: function (response) {
-    //             if (response.success) {
+//     $.ajax({
+//         type: 'post',
+//         url: `${baseUrl}precoVenda/recebeDesenvolvimentoProjeto  `,
+//         data: {
+//             codigoProjeto: codigoProjeto,
+//             loteProjeto: loteProjeto
+//         },
+//         success: function (response) {
+//             if (response.success) {
 
-    //                 // Preencher inputs com informações do banco de dados
-    //                 const prefixo = `custo_lote_${loteProjeto}_`;
+//                 // Preencher inputs com informações do banco de dados
+//                 const prefixo = `custo_lote_${loteProjeto}_`;
 
-    //                 $divCamposPrecoVenda.find('.input_nome_produto').val(response.projeto.nome_produto);
-    //                 $divCamposPrecoVenda.find('.input_ncm').val(response.projeto.codigo_ncm);
-    //                 $divCamposPrecoVenda.find('.input_descricao_ncm').val(response.projeto.descricao_ncm);
-    //                 $divCamposPrecoVenda.find('.input_lote_partida').val(response.projeto.lote_partida);
-    //                 $divCamposPrecoVenda.find('.input_custo_produto').val(formatarValorMoeda(response.projeto[`${prefixo}produto`]));
-    //                 $divCamposPrecoVenda.find('.input_custo_mao_de_obra').val(formatarValorMoeda(response.projeto[`${prefixo}mao_de_obra`]));
-    //                 $divCamposPrecoVenda.find('.input_embalagem').val(formatarValorMoeda(response.projeto[`${prefixo}embalagem`]));
-    //                 $divCamposPrecoVenda.find('.input_perda').val(formatarValorMoeda(response.projeto[`${prefixo}perda`]));
+//                 $divCamposPrecoVenda.find('.input_nome_produto').val(response.projeto.nome_produto);
+//                 $divCamposPrecoVenda.find('.input_ncm').val(response.projeto.codigo_ncm);
+//                 $divCamposPrecoVenda.find('.input_descricao_ncm').val(response.projeto.descricao_ncm);
+//                 $divCamposPrecoVenda.find('.input_lote_partida').val(response.projeto.lote_partida);
+//                 $divCamposPrecoVenda.find('.input_custo_produto').val(formatarValorMoeda(response.projeto[`${prefixo}produto`]));
+//                 $divCamposPrecoVenda.find('.input_custo_mao_de_obra').val(formatarValorMoeda(response.projeto[`${prefixo}mao_de_obra`]));
+//                 $divCamposPrecoVenda.find('.input_embalagem').val(formatarValorMoeda(response.projeto[`${prefixo}embalagem`]));
+//                 $divCamposPrecoVenda.find('.input_perda').val(formatarValorMoeda(response.projeto[`${prefixo}perda`]));
 
-    //                 $divCamposPrecoVenda.find('.input_porcentagem_disabled').prop('disabled', false);
+//                 $divCamposPrecoVenda.find('.input_porcentagem_disabled').prop('disabled', false);
 
-    //                 // Funções para atualizar os campos já preenchidos ao trocar de lote
-    //                 if ($('.input_margem_porcentagem').val() != '') {
-    //                     atualizarMargem($divCamposPrecoVenda);
-    //                 }
-    //                 if ($('.input_frete_porcentagem').val() != '') {
-    //                     atualizarFrete($divCamposPrecoVenda);
-    //                 }
-    //                 if ($('.input_custo_financeiro_porcentagem').val() != '') {
-    //                     atualizarCustoFinanceiro($divCamposPrecoVenda);
-    //                 }
+//                 // Funções para atualizar os campos já preenchidos ao trocar de lote
+//                 if ($('.input_margem_porcentagem').val() != '') {
+//                     atualizarMargem($divCamposPrecoVenda);
+//                 }
+//                 if ($('.input_frete_porcentagem').val() != '') {
+//                     atualizarFrete($divCamposPrecoVenda);
+//                 }
+//                 if ($('.input_custo_financeiro_porcentagem').val() != '') {
+//                     atualizarCustoFinanceiro($divCamposPrecoVenda);
+//                 }
 
-    //                 atualizarSubtotal($divCamposPrecoVenda);
-    //                 atualizarTotalSemImposto($divCamposPrecoVenda);
-    //                 atualizarTotalUnitario($divCamposPrecoVenda);
-    //                 atualizarValorTotalSt($divCamposPrecoVenda);
+//                 atualizarSubtotal($divCamposPrecoVenda);
+//                 atualizarTotalSemImposto($divCamposPrecoVenda);
+//                 atualizarTotalUnitario($divCamposPrecoVenda);
+//                 atualizarValorTotalSt($divCamposPrecoVenda);
 
-    //             } else {
-    //                 avisoRetorno(response.title, response.message, response.type, '#');
-    //             }
-    //         },
-    //         error: function (xhr) {
-    //             if (xhr.status === 403) {
-    //                 avisoRetorno('Algo deu errado!', 'Você não tem permissão para esta ação.', 'error', '#');
-    //             }
-    //         }
-    //     });
+//             } else {
+//                 avisoRetorno(response.title, response.message, response.type, '#');
+//             }
+//         },
+//         error: function (xhr) {
+//             if (xhr.status === 403) {
+//                 avisoRetorno('Algo deu errado!', 'Você não tem permissão para esta ação.', 'error', '#');
+//             }
+//         }
+//     });
 
 // });
 
@@ -414,11 +434,19 @@ function duplicarCamposPrecoVenda() {
                     <input name="valor_st_estado" type="text" disabled class="input-gravar-banco text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
                 </div>
             </div>
+            <div class="col-md-2 div_input_preco_venda div_input_outros inactive">
+                <label for="input_outros" class="form-label">Outros</label>
+                <input disabled type="text" class="input-gravar-banco form-control text-1000 input_outros" name="input_outros">
+            </div>
+        </div>
+
+        <div class="row mb-4 rows_preco_venda">
             <div class="col-md-2 div_input_preco_venda ms-auto">
                 <label for="input_total_st_estado" class="form-label">Valor total com ST</label>
                 <input name="total_st" type="text" disabled class="input-gravar-banco text-1000 form-control input_total_st_estado" name="input_total_st_estado">
             </div>
         </div>
+        
     </div>
     `);
 
@@ -636,14 +664,17 @@ function gerarPdfPrecoVenda() {
                         responseType: 'blob'
                     }, beforeSend: function () {
 
-                        $('.load-form').removeClass('d-none');
+                        $('.load-form-gera-pdf').removeClass('d-none');
                         $('.btn-gera-pdf').addClass('d-none');
+                        $('.btn-fecha-modal-condicao-fornecimento').addClass('d-none');
 
                     },
                     success: function (blob) {
 
-                        $('.load-form').addClass('d-none');
+                        $('.load-form-gera-pdf').addClass('d-none');
                         $('.btn-gera-pdf').removeClass('d-none');
+                        $('.btn-fecha-modal-condicao-fornecimento').removeClass('d-none');
+
 
                         let url = window.URL.createObjectURL(blob);
                         window.open(url, '_blank');
@@ -848,8 +879,9 @@ function atualizarStEstado(containerCamposPrecoVenda) {
 function atualizarValorTotalSt(containerCamposPrecoVenda) {
     let totalUnit = converterParaFloat(containerCamposPrecoVenda.find('.input_total_unitario').val());
     let stEstado = converterParaFloat(containerCamposPrecoVenda.find('.input_st_estado_calculado').val());
+    let valorOutros = converterParaFloat(containerCamposPrecoVenda.find('.input_outros').val());
 
-    let valorTotalStEstado = totalUnit + stEstado;
+    let valorTotalStEstado = totalUnit + stEstado + valorOutros;
 
     containerCamposPrecoVenda.find('.input_total_st_estado').val(formatarValorMoeda(valorTotalStEstado));
 }
