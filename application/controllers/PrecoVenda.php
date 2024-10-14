@@ -60,7 +60,7 @@ class PrecoVenda extends CI_Controller
 
     $id_cliente = $this->input->post('idCliente');
 
-    $retorno = $this->Projetos_model->recebeProjetoCliente($id_cliente, 1);
+    $retorno = $this->Projetos_model->recebeProjetoCliente($id_cliente, 1, 1);
 
     if ($retorno) {
       $response = array(
@@ -201,4 +201,5 @@ class PrecoVenda extends CI_Controller
 
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
+  
 }

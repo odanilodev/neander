@@ -64,26 +64,30 @@ class Projetos_model extends CI_Model
         return $query->row_array();
     }
 
-    public function recebeProjetoCliente($id_cliente, $status = null)
+    public function recebeProjetoCliente($id_cliente, $status = null, $status_desenvolvido = null)
     {
         $this->db->select('P.*, C.*, P.status as STATUS_PROJETO, P.id as ID_PROJETO');
         $this->db->from('ci_projetos P');
         $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
         $this->db->where('P.id_cliente', $id_cliente);
-
-        if ($status) {
+    
+        if (!is_null($status)) {
             $this->db->where('P.status', $status);
         }
-
+    
+        if (!is_null($status_desenvolvido)) {
+            $this->db->where('P.desenvolvido', $status_desenvolvido);
+        }
+    
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
         }
-
+    
         $query = $this->db->get();
-
+    
         return $query->result_array();
     }
-
+    
 
     public function recebeDadosProjetoCliente($id_cliente)
     {
@@ -149,29 +153,30 @@ class Projetos_model extends CI_Model
     public function editaProjeto($id_projeto, $dados = null, $status_desenvolvido = null)
     {
         $dados['editado_em'] = date('Y-m-d H:i:s');
-        if ($status_desenvolvido) {
-
+        
+        if (!is_null($status_desenvolvido)) {
             $dados['desenvolvido'] = $status_desenvolvido;
         }
-
+    
         $this->db->where('id', $id_projeto);
-
+    
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
         }
-
+    
         $this->db->update('ci_projetos', $dados);
-
+    
         if ($this->db->affected_rows() > 0) {
             $this->Log_model->insereLog($id_projeto);
-
+    
             $this->db->where('id', $id_projeto);
             $query = $this->db->get('ci_projetos');
             return $query->row_array();
         }
-
+    
         return false;
     }
+    
 
     public function inativaProjetoCliente($id_projeto)
     {

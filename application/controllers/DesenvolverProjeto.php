@@ -67,11 +67,12 @@ class DesenvolverProjeto extends CI_Controller
 
         $dados['codigo_projeto'] = $codigo_projeto;
         $dados['id_empresa '] = $id_empresa;
-        
+
         $status_desenvolvido = 1;
+
         $retorno_projeto = $this->Projetos_model->editaProjeto($idProjeto, null, $status_desenvolvido);
 
-        
+
         $retorno = $this->DesenvolverProjeto_model->insereDesenvolvimentoProjeto($codigo_projeto, $dados);
 
         if ($retorno || $retorno_projeto) {

@@ -26,7 +26,7 @@
                       <option selected disabled value="">Desenvolver Projeto</option>
                       <?php foreach ($projetosAtivos as $projetoAtivo) : ?>
                         <?php if ($projetoAtivo['desenvolvido'] == 0) : ?>
-                          <option data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>" data-id-projeto="<?= $projetoAtivo['id'] ?>" data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>" data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>" value="<?= $projetoAtivo['codigo_projeto'] ?>"><?= $projetoAtivo['nome_produto'] ?></option>
+                          <option data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>" data-id-projeto="<?= $projetoAtivo['ID_PROJETO'] ?>" data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>" data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>" value="<?= $projetoAtivo['codigo_projeto'] ?>"><?= $projetoAtivo['nome_produto'] ?></option>
                         <?php endif ?>
                       <?php endforeach ?>
                     </select>
