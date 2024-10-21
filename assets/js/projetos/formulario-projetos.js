@@ -121,8 +121,6 @@ const cadastraProjeto = () => {
 
 const inativaProjetoCliente = (idProjeto, idCliente) => {
 
-    alert(idProjeto)
-
     Swal.fire({
         title: 'Você tem certeza?',
         text: "O Cliente será inativado mas seu projeto continuará salvo.",
