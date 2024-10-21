@@ -31,7 +31,7 @@ $(function () {
 
 });
 
-
+//================================================
 
 const cadastraCliente = () => {
 
@@ -141,69 +141,12 @@ $(document).on('click', '.abre_modal_niveis', function () {
   $('#modalNiveisProdutos').css('background-color', '#00000066');
 })
 
-const preencherModalComDados = (dados) => {
-  Object.keys(dados).forEach(campo => {
-    const seletor = `.modal-visualizar-${campo.toLowerCase().replace(/_/g, '-')}`;
-
-    if ($(seletor).length > 0) {
-      let valor = dados[campo];
-
-      switch (true) {
-        case campo === 'custo_sub_total_1':
-        case campo === 'custo_total':
-        case campo === 'total_materia_prima':
-        case campo.startsWith('lote_partida_'):
-          valor = formatarValorMoeda(valor);
-          break;
-
-        case campo === 'criado_em':
-        case campo === 'editado_em':
-          valor = formatarDatasComHora(valor);
-          break;
-
-        case campo === 'quantidade_geral_projeto':
-          valor = valor.replace('.', ',') + ' g';
-          break;
-
-        case campo === 'quantidade_manipulacao':
-        case campo === 'pcs_hora_envase':
-        case campo === 'pcs_hora_rotulagem':
-        case campo === 'quantidade_final':
-        case campo === 'custo_outros':
-        case campo === 'custo_perda':
-          valor = parseInt(valor);
-          break;
-
-        case campo.startsWith('custo_'):
-        case campo.startsWith('valor_'):
-          valor = formatarValorMoeda(valor);
-          break;
-      }
-
-      // Verifica se o campo usa select2 e dá trigger change
-      if ($(seletor).hasClass('select2-hidden-accessible')) {
-        $(seletor).addClass('inactive');
-        $(seletor).val(valor).trigger('change');
-      } else {
-        $(seletor).val(valor);
-      }
-
-      if (campo === 'porcentagem_total') {
-        if (valor > 100) {
-          $('.modal-visualizar-aviso-porcentagem').removeClass('d-none');
-          $('.modal-visualizar-porcentagem-total').addClass('invalido');
-        }
-      }
-    }
-  });
-}
-
-
+//================================================
 
 const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
 
   $('#modalVisualizarDesenvolvimentoProjeto').modal('show');
-  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true); 
+  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true);
   $('#modalVisualizarDesenvolvimentoProjeto').find(':input').addClass('text-1000');
 
   $('#alerta-apenas-visualizacao').hide();
@@ -277,6 +220,63 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
 
 }
 
+const preencherModalComDados = (dados) => {
+  Object.keys(dados).forEach(campo => {
+    const seletor = `.modal-visualizar-${campo.toLowerCase().replace(/_/g, '-')}`;
+
+    if ($(seletor).length > 0) {
+      let valor = dados[campo];
+
+      switch (true) {
+        case campo === 'custo_sub_total_1':
+        case campo === 'custo_total':
+        case campo === 'total_materia_prima':
+        case campo.startsWith('lote_partida_'):
+          valor = formatarValorMoeda(valor);
+          break;
+
+        case campo === 'criado_em':
+        case campo === 'editado_em':
+          valor = formatarDatasComHora(valor);
+          break;
+
+        case campo === 'quantidade_geral_projeto':
+          valor = valor.replace('.', ',') + ' g';
+          break;
+
+        case campo === 'quantidade_manipulacao':
+        case campo === 'pcs_hora_envase':
+        case campo === 'pcs_hora_rotulagem':
+        case campo === 'quantidade_final':
+        case campo === 'custo_outros':
+        case campo === 'custo_perda':
+          valor = parseInt(valor);
+          break;
+
+        case campo.startsWith('custo_'):
+        case campo.startsWith('valor_'):
+          valor = formatarValorMoeda(valor);
+          break;
+      }
+
+      // Verifica se o campo usa select2 e dá trigger change
+      if ($(seletor).hasClass('select2-hidden-accessible')) {
+        $(seletor).addClass('inactive');
+        $(seletor).val(valor).trigger('change');
+      } else {
+        $(seletor).val(valor);
+      }
+
+      if (campo === 'porcentagem_total') {
+        if (valor > 100) {
+          $('.modal-visualizar-aviso-porcentagem').removeClass('d-none');
+          $('.modal-visualizar-porcentagem-total').addClass('invalido');
+        }
+      }
+    }
+  });
+}
+
 $('.novo-btn-duplicar-linhas').on('click', function () {
   duplicarLinhasVisualizar();
   carregaSelect2('select2', 'modalVisualizarDesenvolvimentoProjeto');
@@ -317,5 +317,47 @@ function duplicarLinhasVisualizar() {
   $('.campos-duplicados-visualizar').append(novaLinha);
 
 }
+
+//================================================
+
+function reformularProjeto(projetoId, idCliente) {
+
+ 
+  Swal.fire({
+    title: 'Você tem certeza?',
+    text: "Isso irá reformular o projeto!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, reformular!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: `${baseUrl}projetos/reformularProjeto`,
+        type: 'POST',
+        data: {
+          id: projetoId
+        },
+        success: function (response) {
+          if (response.success) {
+            let redirect = response.data.type !== 'error' ? `${baseUrl}clientes/detalhes/${idCliente}` : '#';
+            avisoRetorno(`${response.data.title}`, `${response.data.message}`, `${response.data.type}`, redirect);
+          } else {
+            avisoRetorno(`${response.title}`, `${response.message}`, `${response.type}`, '#');
+          }
+        },
+        error: function (xhr, status, error) {
+          Swal.fire(
+            'Erro!',
+            'Ocorreu um erro: ' + error,
+            'error'
+          );
+        }
+      });
+    }
+  });
+}
+
 
 

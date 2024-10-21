@@ -184,7 +184,7 @@ class Projetos extends CI_Controller
 	{
 		$codigo_projeto = $this->input->post('codigoProjeto');
 		$versao_projeto = $this->input->post('versaoProjeto');
-		
+
 		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
 		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto);
 
@@ -192,6 +192,52 @@ class Projetos extends CI_Controller
 
 		if (!empty($retorno)) {
 
+			$response = array(
+				'success' => true,
+				'data' => $retorno,
+				'type' => "success"
+			);
+		} else {
+			$response = array(
+				'success' => false,
+				'title' => "Algo deu errado!",
+				'message' => "Não foi possível encontrar o projeto, tente novamente mais tarde!",
+				'type' => "error"
+			);
+		}
+
+		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+
+	public function reformularProjeto()
+	{
+		$projetoId = $this->input->post('id');
+		$projeto = $this->Projetos_model->recebeProjeto($projetoId);
+		$retorno = null;
+
+		if ($projeto) {
+			$novaVersao = $projeto['versao_projeto'] + 1;
+			
+			$projetoData = $projeto;
+			$projetoData['versao_projeto'] = $novaVersao;
+			$projetoData['desenvolvido'] = 0;
+
+			unset($projetoData['id']);
+			unset($projetoData['editado_em']);
+
+			$novoProjeto = $this->Projetos_model->insereProjeto($projetoData);
+
+			if ($novoProjeto) {
+				$this->Projetos_model->inativaProjetoCliente($projetoId);
+				$retorno = [
+					'title' => "Nova versão criada!",
+					'message' => "Uma nova versão do projeto foi criada com sucesso.",
+					'type' => "success"
+				];
+			}
+		}
+
+		if (!empty($retorno)) {
 			$response = array(
 				'success' => true,
 				'data' => $retorno,
