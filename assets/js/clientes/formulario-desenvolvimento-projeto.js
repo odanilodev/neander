@@ -823,6 +823,7 @@ $(document).on('click', '.abre_modal_cadastro_materia_prima', function () {
 const desenvolverProjeto = (idClienteRedirect) => {
 
     let idProjeto = $('#select_projeto_cliente option:selected').data('id-projeto');
+
     let codigoProjeto = $('#select_projeto_cliente').val();
     let versaoProjeto = $('#select_projeto_cliente option:selected').data('versao-projeto');
 
