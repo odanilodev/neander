@@ -203,7 +203,7 @@ const preencherModalComDados = (dados) => {
 const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
 
   $('#modalVisualizarDesenvolvimentoProjeto').modal('show');
-  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true);
+  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true); 
   $('#modalVisualizarDesenvolvimentoProjeto').find(':input').addClass('text-1000');
 
   $('#alerta-apenas-visualizacao').hide();
@@ -222,13 +222,9 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
     },
     success: function (response) {
 
-      console.log(response)
-
-      $('.campos-duplicados').html('');
-      $('.btn-duplica-linha').show();
+      $('.campos-duplicados-visualizar').html('');
 
       if (response.success) {
-
 
         if (response.data.length < 2) {
           $('.modal-desenvolver-select-materia-prima').val('').trigger('change');
@@ -243,17 +239,17 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
 
         if (selectsCriados < numSelects) {
           for (let i = selectsCriados; i < numSelects; i++) {
-            $('.btn-duplica-linha').last().trigger('click');
+            $('.novo-btn-duplicar-linhas').trigger('click');
           }
 
           setTimeout(() => {
             $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
               setTimeout(() => {
-                $('.modal-visualizar-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
+                $('.modal-visualizar-select-materia-prima').eq(selectIndex).val(materiaPrima.ID_MATERIA_PRIMA).trigger('change');
                 $('.modal-visualizar-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+                $('.modal-visualizar-fase').eq(selectIndex).val((materiaPrima.FASE_MATERIA_PRIMA));
                 $('.modal-visualizar-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
-                $('.modal-visualizar-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
-                $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+                $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(formatarValorMoeda(materiaPrima.TOTAL_MP_PROJETO));
               }, 100);
             });
           }, 500);
@@ -262,16 +258,15 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
         $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
           $('.modal-visualizar-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
           $('.modal-visualizar-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+          $('.modal-visualizar-fase').eq(selectIndex).val((materiaPrima.FASE_MATERIA_PRIMA));
           $('.modal-visualizar-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
-          $('.modal-visualizar-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
-          $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+          $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(formatarValorMoeda(materiaPrima.TOTAL_MP_PROJETO));
 
         });
 
+        $('.select2').attr('disabled', true);
+
         $('.input-sub-total').val(formatarValorMoeda(response.data[0].custo_sub_total_1));
-
-
-
 
       } else {
 
@@ -279,6 +274,47 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
       }
     }
   });
+
+}
+
+$('.novo-btn-duplicar-linhas').on('click', function () {
+  duplicarLinhasVisualizar();
+  carregaSelect2('select2', 'modalVisualizarDesenvolvimentoProjeto');
+
+})
+
+function duplicarLinhasVisualizar() {
+  let optionsMateriaPrima = $('.modal-visualizar-select-materia-prima').html();
+
+  let novaLinha = $(`
+      <div class="row mb-2">
+          <div class="col-md-4">
+              <select name="id_materia_prima" class="form-control select2 modal-visualizar-select-materia-prima">
+                  ${optionsMateriaPrima}
+              </select>
+          </div>
+          <div class="col-md-1">
+              <input disabled type="text" class="text-1000 mascara-fase form-control input-materia-prima form-control modal-visualizar-fase">
+          </div>
+          <div class="col-md-2">
+              <div class="input-group">
+                  <input disabled  type="number" class="text-1000 form-control modal-visualizar-input-percentual">
+                  <span class="input-group-text">%</span>
+              </div>
+          </div>
+          <div class="col-md-2">
+              <div class="input-group">
+                  <input type="text" disabled class=" text-1000 mascara-peso form-control modal-visualizar-input-quantidade-materia-prima">
+                  <span class="input-group-text">KG.</span>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <input type="text" disabled class="text-1000 form-control modal-visualizar-input-total-materia-prima">
+          </div>
+      </div>
+  `);
+
+  $('.campos-duplicados-visualizar').append(novaLinha);
 
 }
 
