@@ -60,8 +60,10 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Matéria-Prima </label>
-                        <select class="form-control select2 modal-visualizar-select-materia-prima">
-                          <!-- js -->
+                        <select class="form-control select2 modal-visualizar-select-materia-prima modal-visualizar-select-materia-prima-main">
+                          <?php foreach ($materiasPrimas as $materiaPrima) { ?>
+                            <option value="<?= $materiaPrima['id'] ?>"><?= $materiaPrima['nome'] ?></option>
+                          <?php } ?>
                         </select>
                       </div>
 
@@ -75,7 +77,7 @@
                       <div class="col-md-2 mb-2">
                         <label class="form-label" for="percentualInput" style="padding-left: 0;">Percentual</label>
                         <div class="input-group">
-                          <input id="percentualInput" type="number" class="form-control modal-visualizar-percentual text-1000" disabled aria-describedby="percentual-addon">
+                          <input id="percentualInput" type="number" class="form-control modal-visualizar-input-percentual text-1000" disabled aria-describedby="percentual-addon">
                           <span class="input-group-text" id="percentual-addon">%</span>
                         </div>
                       </div>
@@ -84,20 +86,18 @@
                       <div class="col-md-2 mb-2">
                         <label class="form-label" for="quantidadeInput" style="padding-left: 0;">Quantidade</label>
                         <div class="input-group">
-                          <input id="quantidadeInput" type="text" class="form-control text-1000 mascara-peso modal-visualizar-quantidade-materia-prima" disabled aria-describedby="quantidade-addon">
+                          <input id="quantidadeInput" type="text" class="form-control text-1000 mascara-peso modal-visualizar-input-quantidade-materia-prima" disabled aria-describedby="quantidade-addon">
                           <span class="input-group-text" id="quantidade-addon">KG.</span>
                         </div>
                       </div>
 
                       <!-- Total -->
-                      <div class="col-md-2 mb-2">
+                      <div class="col-md-3 mb-2">
                         <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                        <input type="text" disabled class="text-1000 form-control modal-visualizar-total-materia-prima">
+                        <input type="text" disabled class="text-1000 form-control modal-visualizar-input-total-materia-prima">
                       </div>
 
-                      <div class="col-md-1">
-                        <button disabled class="mt-4 btn btn-phoenix-success novo-btn-duplica-linha">+</button>
-                      </div>
+                        <button disabled class="mt-4 btn btn-phoenix-success novo-btn-duplicar-linhas d-none">+</button>
                     </div>
 
                     <div class="campos-duplicados-visualizar">

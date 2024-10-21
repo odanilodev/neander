@@ -122,7 +122,7 @@ class Projetos_model extends CI_Model
 
     public function recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto)
     {
-        $this->db->select('MP.*, MP.nome AS NOME_MATERIA_PRIMA, MPP.total AS VALOR_MP_PROJETO, MPP.quantidade AS QUANTIDADE_MP_PROJETO, MPP.percentual AS PERCENTUAL_MP_PROJETO, MPP.total AS TOTAL_MP_PROJETO');
+        $this->db->select('MP.*, MP.id as ID_MATERIA_PRIMA, MPP.fase as FASE_MATERIA_PRIMA, MP.nome AS NOME_MATERIA_PRIMA, MPP.total AS VALOR_MP_PROJETO, MPP.quantidade AS QUANTIDADE_MP_PROJETO, MPP.percentual AS PERCENTUAL_MP_PROJETO, MPP.total AS TOTAL_MP_PROJETO');
         $this->db->join('ci_materia_prima_projeto MPP', 'MP.id = MPP.id_materia_prima', 'left');
         $this->db->where('MPP.codigo_projeto', $codigo_projeto);
         $this->db->where('MPP.versao_projeto', $versao_projeto);
