@@ -183,9 +183,10 @@ class Projetos extends CI_Controller
 	public function recebeProjetoClienteCodigo()
 	{
 		$codigo_projeto = $this->input->post('codigoProjeto');
-
+		$versao_projeto = $this->input->post('versaoProjeto');
+		
 		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
-		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto);
+		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto);
 
 		$retorno = array_merge($retornoProjetoCliente, $retornoMateriasPrimas);
 
@@ -206,9 +207,5 @@ class Projetos extends CI_Controller
 		}
 
 		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
-	}
-
-	public function reformularProjeto() {
-		
 	}
 }

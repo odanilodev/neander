@@ -16,21 +16,41 @@
               <div class="col-12">
                 <div class="mb-3">
 
-                  <div id="alerta-selecione-campos" class="alert alert-phoenix-secondary text-1000" role="alert">
+                  <div id="alerta-selecione-campos" class="text-center text-danger alert alert-phoenix-secondary text-1000" role="alert">
                     Para liberar os campos selecione um dos projetos deste cliente.
                   </div>
 
-                  <div class="col-md-3 mb-3">
+                  <?php
+                  $projetosNaoDesenvolvidos = array_filter($projetosAtivos, function ($projeto) {
+                    return $projeto['desenvolvido'] == 0;
+                  });
+                  ?>
+
+                  <div class="col-md-4 mb-3">
                     <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
                     <select id="select_projeto_cliente" class="form-select select2">
-                      <option selected disabled value="">Desenvolver Projeto</option>
-                      <?php foreach ($projetosAtivos as $projetoAtivo) : ?>
-                        <?php if ($projetoAtivo['desenvolvido'] == 0) : ?>
-                          <option data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>" data-id-projeto="<?= $projetoAtivo['ID_PROJETO'] ?>" data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>" data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>" value="<?= $projetoAtivo['codigo_projeto'] ?>"><?= $projetoAtivo['nome_produto'] ?></option>
-                        <?php endif ?>
-                      <?php endforeach ?>
+                      <?php if (empty($projetosNaoDesenvolvidos)): ?>
+                        <option selected disabled value="">Nenhum projeto disponível.</option>
+                      <?php else: ?>
+                        <option selected disabled value="">Selecione o Projeto</option>
+                        <?php foreach ($projetosNaoDesenvolvidos as $projetoAtivo): ?>
+                          <option
+                            data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>"
+                            data-id-projeto="<?= $projetoAtivo['ID_PROJETO'] ?>"
+                            data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>"
+                            data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>"
+                            data-custo-produto="<?= $projetoAtivo['custo_cliente_produto'] ?>"
+                            data-custo-embalagem="<?= $projetoAtivo['custo_cliente_embalagens'] ?>"
+                            data-custo-rotulo="<?= $projetoAtivo['custo_cliente_rotulos'] ?>"
+                            value="<?= $projetoAtivo['codigo_projeto'] ?>">
+                            <?= $projetoAtivo['nome_produto'] ?>
+                          </option>
+                        <?php endforeach; ?>
+                      <?php endif; ?>
                     </select>
                   </div>
+
+
 
                   <div class="container container-modal-desenvolver-projeto d-none">
 
@@ -128,18 +148,24 @@
                       <!-- JS -->
                     </div>
 
-
                     <hr>
+
                     <div class="row inputs-projeto">
                       <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
                         <a type="button" class="btn btn-phoenix-info abre_modal_cadastro_materia_prima" style="position: absolute;left:15px;">+ Cadastrar matéria prima</a>
-                        <div class="d-flex align-items-center" style="margin-right: 1rem;">
-                          <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left: 10px; font-weight: bold;">Porcentagem Total:</p>
-                          <div style="display: flex; flex-direction: column; align-items: flex-start; margin-left: 5px;">
-                            <input name="porcentagem_total" disabled type="text" class="input-formulacao form-control input-porcentagem-total text-1000" style="max-width: 120px; border-radius: 4px; padding: 0.5rem;">
-                            <div class="aviso-porcentagem d-none" style="color: red; margin-top: 5px; font-size: 0.9rem;">Porcentagem excedeu 100%.</div>
+
+                        <div class="d-flex flex-column align-items-end" style="margin-right: 1rem;">
+                          <div class="d-flex align-items-center">
+                            <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left: 10px; font-weight: bold;">Porcentagem Total:</p>
+                            <div class="input-group" style="max-width: 150px; margin-left: 5px;">
+                              <input name="porcentagem_total" disabled type="text" class="input-formulacao form-control input-porcentagem-total text-1000" style="border-radius: 4px; padding: 0.5rem;">
+                              <span class="input-group-text">%</span>
+                            </div>
                           </div>
+                          <!-- Mensagem de aviso completamente à direita -->
+                          <div class="aviso-porcentagem d-none" style="color: red; margin-top: 5px; font-size: 0.9rem; text-align: right; width: 100%;">Porcentagem excedeu 100%.</div>
                         </div>
+
                         <div class="d-flex align-items-center">
                           <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; font-weight: bold;">Sub-Total 1:</p>
                           <input name="custo_sub_total_1" disabled type="text" class="input-formulacao text-1000 form-control input-sub-total" style="max-width: 120px; border-radius: 4px; padding: 0.5rem;">
@@ -149,8 +175,6 @@
 
 
                     <hr>
-
-
 
                     <div class="inputs-projeto">
                       <label class="form-label">Modo de Fabricação</label>
@@ -179,9 +203,9 @@
 
                       </div>
 
-                      <div class="col-md-4 mb-2">
+                      <div class="col-md-4 mb-2 inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
-                        <select required id="select-equipamentos-manipulacao" class="campo-obrigatorio form-control modal-desenvolver-input-nivel-produto select2">
+                        <select name="id_equipamento_manipulacao" required id="select-equipamentos-manipulacao" class="campo-obrigatorio form-control modal-desenvolver-input-nivel-produto select2">
                           <option value="" disabled selected>Equipamento Manipulação</option>
                           <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
                             <option data-custo-hora="<?= $equipamentoManipulacao['valor'] ?>" value="<?= $equipamentoManipulacao['id']; ?>">
@@ -190,46 +214,43 @@
                           <?php endforeach; ?>
                         </select>
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
-
                       </div>
 
-
                       <!-- Quantd. KG. -->
-                      <div class="col-md-2 mb-2 div-percentual">
+                      <div class="col-md-2 mb-2 div-percentual inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Quant. Kg</label>
                         <div class="input-group">
-                          <input type="number" class="campo-obrigatorio text-center form-control input-quantidade-manipulacao text-1000">
+                          <input name="quantidade_manipulacao" type="number" class="campo-obrigatorio text-center form-control input-quantidade-manipulacao text-1000">
                           <span class="input-group-text">KG.</span>
                           <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                         </div>
                       </div>
 
                       <!-- Tempo -->
-                      <div class="col-md-2 mb-2 div-quantidade">
+                      <div class="col-md-2 mb-2 div-quantidade inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Tempo</label>
-                        <input type="text" class="campo-obrigatorio mascara-tempo form-control modal-desenvolver-custo-manipulacao-tempo">
+                        <input name="tempo_manipulacao" type="text" class="campo-obrigatorio mascara-tempo form-control modal-desenvolver-custo-manipulacao-tempo">
                         <div class="d-none aviso-obrigatorio">Preencha este campo</div>
-
                       </div>
 
                       <!-- Valor Unit (R$) -->
-                      <div class="col-md-2 mb-2 div-total-linha">
+                      <div class="col-md-2 mb-2 div-total-linha inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
+                        <input name="valor_unit_manipulacao" type="text" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
                       </div>
 
                       <!-- Total (R$) -->
                       <div class="col-md-2 inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                        <input name="custo_manipulacao_total" type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
+                        <input name="custo_manipulacao_total" type="text" disabled class="text-1000 form-control modal-desenvolver-custo-manipulacao-valor-unit">
                       </div>
 
                     </div>
 
                     <hr>
 
-                    <div class="d-flex inputs-projeto" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                      <div class="d-flex align-items-center">
+                    <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                      <div class="d-flex align-items-center inputs-projeto">
                         <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 2:</p>
                         <input name="custo_sub_total_2" disabled type="text" class="text-1000 form-control input-sub-total-2 modal-desenvolver-custo-manipulacao-valor-unit" style="max-width: 120px;">
                       </div>
@@ -243,9 +264,9 @@
                         <h5>Custo de Envase + Rotulagem</h5>
                       </div>
 
-                      <div class="col-md-4 mb-2">
+                      <div class="col-md-4 mb-2 inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
-                        <select id="select-equipamentos-envase" class="campo-obrigatorio form-control select2">
+                        <select name="id_equipamento_envase" id="select-equipamentos-envase" class="campo-obrigatorio form-control select2">
                           <option value="" disabled selected>Equipamento Envase</option>
                           <?php foreach ($equipamentosEnvase as $equipamentoEnvase) : ?>
                             <option value="<?= $equipamentoEnvase['id']; ?>" data-pecas-hora-envase="<?= $equipamentoEnvase['pcs_hora'] ?>" data-valores-unit-total-envase="<?= $equipamentoEnvase['valor_mo'] ?>">
@@ -257,39 +278,39 @@
                       </div>
 
                       <!-- Quantd. KG. -->
-                      <div class="col-md-2 mb-2">
+                      <div class="col-md-2 mb-2 ">
                         <label class="form-label" style="padding-left:0;">Quantidade</label>
-                        <div class="input-group">
-                          <input disabled class="text-center text-1000 form-control input-quantidade input-quantidade-envase">
+                        <div class="input-group inputs-projeto">
+                          <input disabled name="quantidade_final" class="text-center text-1000 form-control input-quantidade input-quantidade-envase">
                         </div>
                       </div>
 
                       <!-- Tempo -->
-                      <div class="col-md-2 mb-2">
+                      <div class="col-md-2 mb-2 ">
                         <label class="form-label" style="padding-left:0;">Peças / Hora</label>
-                        <div class="input-group">
-                          <input type="text" disabled class="text-1000 form-control modal-desenvolver-custo-envase-pecas-hora">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="pcs_hora_envase" disabled class="text-1000 form-control modal-desenvolver-custo-envase-pecas-hora">
                           <span class="input-group-text">PÇ.</span>
                         </div>
                       </div>
 
                       <!-- Valor Unit (R$) -->
-                      <div class="col-md-2 mb-2">
+                      <div class="col-md-2 mb-2 inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-unit">
+                        <input type="text" name="valor_unit_envase" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-unit">
                       </div>
 
                       <!-- Total (R$) -->
                       <div class="col-md-2 inputs-projeto">
                         <label class="form-label" style="padding-left:0;">Total (R$)</label>
-                        <input name="custo_envase_total" type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-total">
+                        <input name="custo_envase_total" type="text" disabled class="text-1000 form-control modal-desenvolver-custo-envase-valor-total">
                       </div>
 
                     </div>
 
                     <div class="row">
-                      <div class="col-md-4 mb-2">
-                        <select id="select-equipamentos-rotulagem" class="campo-obrigatorio form-control select2">
+                      <div class="col-md-4 mb-2 inputs-projeto">
+                        <select name="id_equipamento_rotulagem" id="select-equipamentos-rotulagem" class="campo-obrigatorio form-control select2">
                           <option value="" disabled selected>Equipamento Rotulagem</option>
                           <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                             <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">
@@ -309,15 +330,15 @@
 
                       <!-- Peças Hora -->
                       <div class="col-md-2 mb-2">
-                        <div class="input-group">
-                          <input disabled type="text" class="text-1000 form-control modal-desenvolver-custo-rotulagem-pecas-hora">
+                        <div class="input-group inputs-projeto">
+                          <input name="pcs_hora_rotulagem" disabled type="text" class="text-1000 form-control modal-desenvolver-custo-rotulagem-pecas-hora">
                           <span class="input-group-text">PÇ.</span>
                         </div>
                       </div>
 
                       <!-- Valor Unit (R$) -->
-                      <div class="col-md-2 mb-2">
-                        <input type="text" value="" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
+                      <div class="col-md-2 mb-2 inputs-projeto">
+                        <input type="text" name="valor_unit_rotulagem" disabled class="text-1000 form-control modal-desenvolver-custo-rotulagem-valor-unit">
                       </div>
 
                       <!-- Total (R$) -->
@@ -329,8 +350,8 @@
 
                     <hr>
 
-                    <div class="d-flex inputs-projeto" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                      <div class="d-flex align-items-center">
+                    <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                      <div class="d-flex align-items-center inputs-projeto">
                         <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 3:</p>
                         <input name="custo_sub_total_3" disabled type="text" class="text-1000 form-control input-sub-total-3" style="max-width: 120px;">
                       </div>
@@ -339,10 +360,9 @@
                     <hr>
 
                     <div class="row">
+
                       <div class="mb-2">
-
                         <h5>Embalagem</h5>
-
                       </div>
 
                       <div class="row">
@@ -352,24 +372,22 @@
                           <div class="fake-input form-control">Rótulo (Frente + Verso)</div>
                         </div>
 
-
                         <!-- Quantidade. -->
                         <div class="col-md-3 mb-2 div-quantidade-embalagem">
                           <label class="form-label" style="padding-left:0;">Quantidade</label>
-                          <div class="input-group ">
+                          <div class="input-group">
                             <input type="number" disabled class="form-control text-1000 text-center input-quantidade">
                             <span class="input-group-text">Un.</span>
                           </div>
                         </div>
 
                         <!-- Valor Unit (R$) -->
-                        <div class=" 5 col-md-3 mb-2 div-valor-unit-embalagem">
+                        <div class="col-md-3 mb-2 div-valor-unit-embalagem">
                           <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                          <div class="input-group">
-                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                          <div class="input-group inputs-projeto">
+                            <input type="text" name="valor_unit_rotulo" class="campo-obrigatorio input-valor-unit-embalagem form-control">
                             <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
-
                         </div>
 
                         <!-- Total (R$) -->
@@ -387,7 +405,7 @@
 
                         <!-- Quantidade. -->
                         <div class="col-md-3 mb-2 div-quantidade-embalagem">
-                          <div class="input-group ">
+                          <div class="input-group">
                             <input type="number" disabled class="form-control text-1000 text-center input-quantidade">
                             <span class="input-group-text">Un.</span>
                           </div>
@@ -395,8 +413,8 @@
 
                         <!-- Valor Unit (R$) -->
                         <div class="4 col-md-3 mb-2 div-valor-unit-embalagem">
-                          <div class="input-group ">
-                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                          <div class="input-group inputs-projeto">
+                            <input type="text" name="valor_unit_frasco" class="campo-obrigatorio input-valor-unit-embalagem form-control">
                             <div class="d-none aviso-obrigatorio">Preencha este campo</div>
 
                           </div>
@@ -424,8 +442,8 @@
 
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
-                          <div class="input-group ">
-                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                          <div class="input-group inputs-projeto">
+                            <input type="text" name="valor_unit_tampa" class="campo-obrigatorio input-valor-unit-embalagem form-control">
                             <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
@@ -452,8 +470,8 @@
 
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
-                          <div class="input-group ">
-                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                          <div class="input-group inputs-projeto">
+                            <input type="text" name="valor_unit_display" class="campo-obrigatorio input-valor-unit-embalagem form-control">
                             <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
@@ -480,8 +498,8 @@
 
                         <!-- Valor Unit (R$) -->
                         <div class="col-md-3 mb-2 div-valor-unit-embalagem">
-                          <div class="input-group ">
-                            <input type="text" class="campo-obrigatorio input-valor-unit-embalagem form-control">
+                          <div class="input-group inputs-projeto">
+                            <input type="text" name="valor_unit_caixa_embarque" class="campo-obrigatorio input-valor-unit-embalagem form-control">
                             <div class="d-none aviso-obrigatorio">Preencha este campo</div>
                           </div>
                         </div>
@@ -495,8 +513,8 @@
 
                       <hr class="my-3">
 
-                      <div class="d-flex inputs-projeto" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
-                        <div class="d-flex align-items-center">
+                      <div class="d-flex" style="flex-grow: 1; justify-content: flex-end; align-items: center;">
+                        <div class="d-flex align-items-center inputs-projeto">
                           <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Sub-Total 4:</p>
                           <input name="custo_sub_total_4" disabled type="text" class="text-1000 form-control input-sub-total-4" style="max-width: 120px;">
                         </div>
@@ -532,8 +550,8 @@
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
                         <label class="form-label" style="padding-left:0;">Valor Unit (R$)</label>
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-produto form-control text-1000 text-center">
+                        <div class="input-group inputs-projeto">
+                          <input name="custo_final_valor_unit_produto" type="text" disabled class="input-custo-final-valor-unit-produto form-control text-1000 text-center">
                         </div>
                       </div>
 
@@ -558,8 +576,8 @@
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-manipulacao form-control text-1000 text-center">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="custo_final_valor_unit_manipulacao" disabled class="input-custo-final-valor-unit-manipulacao form-control text-1000 text-center">
                         </div>
                       </div>
 
@@ -583,8 +601,8 @@
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-envase form-control text-1000 text-center">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="custo_final_valor_unit_envase" disabled class="input-custo-final-valor-unit-envase form-control text-1000 text-center">
                         </div>
                       </div>
 
@@ -608,8 +626,8 @@
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-rotulagem text-1000 text-center form-control">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="custo_final_valor_unit_rotulagem" disabled class="input-custo-final-valor-unit-rotulagem text-1000 text-center form-control">
                         </div>
                       </div>
 
@@ -633,8 +651,8 @@
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-embalagem text-1000 text-center form-control">
+                        <div class="input-group inputs-projeto">
+                          <input name="custo_final_valor_unit_embalagem" type="text" disabled class="input-custo-final-valor-unit-embalagem text-1000 text-center form-control">
                         </div>
                       </div>
 
@@ -651,16 +669,16 @@
 
                       <!-- Quantidade. -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" class="mascara-custos input-custo-final-quantidade-outros-custos form-control text-center text-1000">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="custo_outros" class="mascara-custos input-custo-final-quantidade-outros-custos form-control text-center text-1000">
                           <span class="input-group-text">Un.</span>
                         </div>
                       </div>
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" class="mascara-custos input-custo-final-valor-unit-outros-custos text-1000 text-center form-control">
+                        <div class="input-group inputs-projeto">
+                          <input name="custo_final_valor_unit_outros" type="text" class="mascara-custos input-custo-final-valor-unit-outros-custos text-1000 text-center form-control">
                         </div>
                       </div>
 
@@ -677,16 +695,16 @@
 
                       <!-- Quantidade. -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" class="mascara-porcentagem input-quantidade-percentual-perda form-control text-center text-1000">
+                        <div class="input-group inputs-projeto">
+                          <input type="text" name="custo_perda" class="mascara-porcentagem input-quantidade-percentual-perda form-control text-center text-1000">
                           <span class="input-group-text justify-content-center" style="width:53px;"> %</span>
                         </div>
                       </div>
 
                       <!-- Valor Unit (R$) -->
                       <div class="col-md-3 mb-2">
-                        <div class="input-group">
-                          <input type="text" disabled class="input-custo-final-valor-unit-percentual-perda text-1000 text-center form-control">
+                        <div class="input-group inputs-projeto">
+                          <input name="custo_final_valor_unit_perda" type="text" disabled class="input-custo-final-valor-unit-percentual-perda text-1000 text-center form-control">
                         </div>
                       </div>
 
@@ -702,7 +720,7 @@
                           <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem;">Total Unit.:</p>
                           <input name="custo_final_total_valor_unit" disabled type="text" class="text-1000 form-control input-custo-final-total-unit" style="max-width: 120px; margin-right:0.5rem;">
                           <p class="mb-0" style="margin-bottom: 0; margin-right: 0.5rem; margin-left:3rem;"> Total Geral:</p>
-                          <input name="custo_final_total" disabled type="text" class="teste text-1000 form-control input-custo-final-total-geral" style="max-width: 120px;">
+                          <input name="custo_final_total" disabled type="text" class="text-1000 form-control input-custo-final-total-geral" style="max-width: 120px;">
                         </div>
                       </div>
 
@@ -711,7 +729,7 @@
                     <hr>
 
                     <!-- Custo Lote Partida -->
-                    <div class="row inputs-projeto">
+                    <div class="row inputs-projeto mb-4">
                       <div class="mb-2">
                         <h5>Custo por lote de partida</h5>
                       </div>
@@ -742,10 +760,11 @@
                       </div>
                     </div>
 
-
+                    <hr>
 
 
                   </div>
+
                 </div>
               </div>
             </div>
@@ -767,203 +786,3 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-  <!-- Custo por lote -->
-  <!-- <hr>
-  <div class="row">
-
-    <div class="mb-2">
-
-      <h5>Custo por lote de partida</h5>
-
-    </div>
-
-    <div class="col-md-4 mb-2">
-      <label class="form-label" style="padding-left:0;">Lote:</label>
-      <div class="fake-input text-center">Especial 50,000</div>
-    </div>
-
-
-    <div class="col-md-2 mb-2">
-      <label class="form-label" style="padding-left:0;">Produto</label>
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <label class="form-label" style="padding-left:0;">Mão de Obra</label>
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <label class="form-label" style="padding-left:0;">Embalagem</label>
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <label class="form-label" style="padding-left:0;">Perda</label>
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-4 mb-2">
-      <div class="fake-input text-center">100,000</div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-4 mb-2">
-      <div class="fake-input text-center">340,000</div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-4 mb-2">
-      <div class="fake-input text-center">560,000</div>
-    </div>
-
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-4 mb-2">
-      <div class="fake-input text-center">1000,000</div>
-    </div>
-
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-    <div class="col-md-2 mb-2">
-      <div class="input-group">
-        <span class="input-group-text">R$</span>
-        <input type="number" class="form-control">
-      </div>
-    </div>
-
-  </div> -->

@@ -184,7 +184,7 @@
           <div class="d-flex">
             <?php if (count($projetos) > 0) :  ?>
               <a class="btn btn-phoenix-warning me-2" title="Desenvolver Projeto" type="button" onclick="modalDesenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto">
-                <span class="far fa-id-card me-2"></span>
+                <span class="fa-solid fa-clipboard-question me-2"></span>
                 Desenvolver Projeto
               </a>
 
@@ -236,89 +236,116 @@
             </div>
 
           </div> -->
+          <?php if ($projetos): ?>
+            <?php foreach ($projetos as $projeto) { ?>
 
-          <?php foreach ($projetos as $projeto) { ?>
-
-            <div class="py-2">
-
-              <div class="d-flex">
-                <?php
-                $statusBg = $projeto['STATUS_PROJETO'] == 1 ? 'bg-primary-100' : 'bg-danger-100';
-                $statusTxt = $projeto['STATUS_PROJETO'] == 1 ? 'dark__text-primary-300 text-primary-600' : 'dark__text-danger-300 text-danger-600';
-                ?>
-                <div class="d-flex <?= $statusBg ?> rounded-circle flex-center me-3" style="width:25px; height:25px">
-                  <span class="fa-solid <?= $statusTxt ?> fs--1 fa-clipboard"></span>
-                </div>
-
-
-                <div class="flex-1">
-
-                  <div class="d-flex justify-content-between flex-column flex-xl-row mb-2">
-
-                    <div>
-                      <h5 class="text-1000">
-                        <h5><?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?> <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?> </h5>
-                        <span class="fw-semi-bold"><?= date('d/m/Y', strtotime($projeto['criado_em'])) . ' / VERSÃO ' . $projeto['versao_projeto'] ?> </span>
-                      </h5>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-
-                      <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
-                        <span class="fa-solid fa-ellipsis"></span>
-                      </button>
-
-                      <ul class="dropdown-menu dropdown-menu-end" style="z-index: 9999;">
-                        <li>
-                          <a class="dropdown-item cursor-pointer" onclick="visualizarDesenvolvimentoProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
-                            <span class="text-900 fas fa-eye"></span>
-                            <span class="text-900"> Detalhes</span>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $this->uri->segment(3) . '/' . $projeto['ID_PROJETO']) ?>">
-                            <span class="text-900 fa-solid fa-edit"></span>
-                            <span class="text-900"> Editar Projeto</span>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a class="dropdown-item cursor-pointer" onclick="reformularProjeto(<?= $projeto['id'] ?>)" title="Reformular Projeto">
-                            <span class="text-900 fas fa-pen-square"></span>
-                            <span class="text-900"> Reformular</span>
-                          </a>
-                        </li>
-                        <?php
-                        $statusAction = $projeto['STATUS_PROJETO'] == 1 ?
-                          ['onclick' => "inativaProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Inativar Projeto', 'icon' => 'fas fa-toggle-off', 'text' => 'Inativar Projeto'] :
-                          ['onclick' => "ativarProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Ativar Projeto', 'icon' => 'fas fa-toggle-on', 'text' => 'Ativar Projeto'];
-                        ?>
-                        <li>
-                          <a class="dropdown-item cursor-pointer" onclick="<?= $statusAction['onclick'] ?>" title="<?= $statusAction['title'] ?>">
-                            <span class="text-900 fas <?= $statusAction['icon'] ?>"></span>
-                            <span class="text-900"> <?= $statusAction['text'] ?></span>
-                          </a>
-                        </li>
-                        <!-- <?php if ($projeto['STATUS_PROJETO'] == 0): ?>
-                          <li>
-                            <a class="dropdown-item cursor-pointer" onclick="excluirProjeto(<?= $projeto['codigo_projeto'] ?>)" title="Excluir Projeto">
-                              <span class="text-900 fas fa-trash-alt"></span>
-                              <span class="text-900"> Excluir Projeto</span>
-                            </a>
-                          </li>
-                        <?php endif; ?> -->
-                      </ul>
-                    </div>
+              <div class="py-2">
+                <div class="d-flex">
+                  <?php
+                  $statusBg = $projeto['STATUS_PROJETO'] == 1 ? 'bg-primary-100' : 'bg-danger-100';
+                  $statusTxt = $projeto['STATUS_PROJETO'] == 1 ? 'dark__text-primary-300 text-primary-600' : 'dark__text-danger-300 text-danger-600';
+                  ?>
+                  <div class="d-flex <?= $statusBg ?> rounded-circle flex-center me-3" style="width:45px; height:45px">
+                    <span class="fa-solid <?= $statusTxt ?> fa-clipboard" style="font-size: 20px;"></span>
                   </div>
 
+
+                  <div class="flex-1">
+                    <div class="d-flex justify-content-between flex-column flex-xl-row mb-2">
+                      <div>
+                        <h5 class="text-1000">
+                          <?php
+                          if ($projeto['desenvolvido'] == 1) {
+                            $on_click = 'onclick="visualizarDesenvolvimentoProjeto(' . $projeto['codigo_projeto'] . ', ' . $projeto['versao_projeto'] . ')"';
+                            $pointer = 'cursor-pointer';
+                            $badge = '<span class="ms-2 badge bg-success"><i class="fa-solid fa-clipboard-check me-1"></i>Desenvolvido</span>';
+                          } else {
+                            $on_click = 'onclick="modalDesenvolverProjeto()" data-bs-toggle="modal" data-bs-target="#modalDesenvolverProjeto"';
+                            $pointer = 'cursor-pointer';
+                            $badge = '<span class="ms-2 badge bg-warning"><i class="fa-solid fa-clipboard-question"></i></span>';
+                          }
+                          ?>
+
+                          <a class="<?= $pointer ?> nome_projeto d-flex align-items-center" <?= $on_click ?> title="Ver Detalhes" style="text-decoration:none; color:#fff;">
+                            <span class="texto-titulo">
+                              <?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?>
+                            </span>
+                            <?= $projeto['status'] == 0 ? ' - INATIVO' : '' ?>
+                            <?= $badge ?>
+                          </a>
+                        </h5>
+
+                        <span class="fw-semi-bold d-flex">
+                          <?= date('d/m/Y', strtotime($projeto['criado_em'])) . ' / VERSÃO ' . $projeto['versao_projeto'] ?>
+                        </span>
+                      </div>
+
+                      <div class="d-flex align-items-center">
+                        <button class="btn px-3 btn-phoenix-secondary" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                          <span class="fa-solid fa-ellipsis"></span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end" style="z-index: 9999;">
+                          <?php if ($projeto['desenvolvido'] == 1): ?>
+                            <li>
+                              <a class="dropdown-item cursor-pointer" onclick="visualizarDesenvolvimentoProjeto(<?= $projeto['id'] ?>)" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#modal-visualizar-projeto">
+                                <span class="text-900 fas fa-eye"></span>
+                                <span class="text-900"> Detalhes</span>
+                              </a>
+                            </li>
+                          <?php endif; ?>
+
+                          <li>
+                            <a class="dropdown-item cursor-pointer" href="<?= base_url('projetos/formulario/' . $this->uri->segment(3) . '/' . $projeto['ID_PROJETO']) ?>">
+                              <span class="text-900 fa-solid fa-edit"></span>
+                              <span class="text-900"> Editar Projeto</span>
+                            </a>
+                          </li>
+
+                          <li>
+                            <a class="dropdown-item cursor-pointer inactive" onclick="reformularProjeto(<?= $projeto['id'] ?>)" title="Reformular Projeto">
+                              <span class="text-900 fas fa-user-edit"></span>
+                              <span class="text-900"> Reformular</span>
+                            </a>
+                          </li>
+
+                          <?php
+                          $statusAction = $projeto['STATUS_PROJETO'] == 1 ?
+                            ['onclick' => "inativaProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Inativar Projeto', 'icon' => 'fas fa-toggle-off', 'text' => 'Inativar Projeto'] :
+                            ['onclick' => "ativarProjetoCliente('{$projeto['id']}', '{$this->uri->segment(3)}')", 'title' => 'Ativar Projeto', 'icon' => 'fas fa-toggle-on', 'text' => 'Ativar Projeto'];
+                          ?>
+                          <li>
+                            <a class="dropdown-item cursor-pointer" onclick="<?= $statusAction['onclick'] ?>" title="<?= $statusAction['title'] ?>">
+                              <span class="text-900 fas <?= $statusAction['icon'] ?>"></span>
+                              <span class="text-900"> <?= $statusAction['text'] ?></span>
+                            </a>
+                          </li>
+
+                          <?php if ($projeto['desenvolvido'] == 1 && $projeto['STATUS_PROJETO'] == 1): ?>
+                            <li>
+                              <a class="dropdown-item cursor-pointer inactive" onclick="excluirDesenvolvimentoProjeto(<?= $projeto['codigo_projeto'] ?>)" title="Excluir Projeto">
+                                <span class="text-900 fas fa-trash-alt"></span>
+                                <span class="text-900"> Excluir Projeto</span>
+                              </a>
+                            </li>
+                          <?php endif; ?>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <hr>
 
+            <?php } ?>
 
+          <?php else: ?>
+            <div class="alert alert-phoenix-secondary text-1000" role="alert">
+              Não existe nenhum projeto criado para este cliente no momento.
             </div>
-            <hr>
-          <?php } ?>
+          <?php endif; ?>
+
+
 
         </div>
       </div>

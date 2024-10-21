@@ -28,6 +28,8 @@ class DesenvolverProjeto extends CI_Controller
         $this->load->model('Projetos_model');
 
         $codigo_projeto = $this->input->post('codigoProjeto');
+        $versao_projeto = $this->input->post('versaoProjeto');
+        
         $id_empresa = $this->session->userdata('id_empresa');
 
         /* =============== Matérias Primas ============ */
@@ -36,6 +38,8 @@ class DesenvolverProjeto extends CI_Controller
         $materia_prima_inserida = true;
 
         foreach ($materias_primas as $materia_prima) {
+
+            $materia_prima['versao_projeto'] = $versao_projeto;
 
             $materia_prima['quantidade'] = floatval(str_replace(',', '.', $materia_prima['quantidade']));
             $materia_prima['total'] = floatval(str_replace(['R$', ','], ['', '.'], $materia_prima['total']));
