@@ -138,8 +138,6 @@ function scriptsClientesFooter()
         '<script src="' . base_url('assets/js/clientes/formulario-desenvolvimento-projeto.js') . '"></script>',
         '<script src="' . base_url('assets/js/clientes/formulario-custo-produtivo.js') . '"></script>',
         '<script src="' . base_url('assets/js/clientes/formulario-cliente-cadastro-materia-prima.js') . '"></script>',
-        '<script src="' . base_url('assets/js/clientes/formulario-detalhes-desenvolvimento-projeto.js') . '"></script>',
-        // '<script src="' . base_url('assets/js/custo-produtivo/formulario-custo-produtivo.js') . '"></script>',
         '<script src="' . base_url('node_modules/jquery-mask-plugin/src/jquery.mask.js') . '"></script>',
         '<script src="' . base_url('assets/js/mascaras/mascaras-input.js') . '"></script>',
         '<script src="' . base_url('assets/js/helpers-js/validacoes.js') . '"></script>',

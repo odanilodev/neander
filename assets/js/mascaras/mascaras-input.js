@@ -16,21 +16,22 @@ $(function () {
     $('.mascara-peso').on('focusout', function () {
         let valor = $(this).val().replace('.', '').replace(',', '.');
         let valorNumerico = parseFloat(valor);
-
+    
         if (valor === '' || isNaN(valorNumerico)) {
             // Se o campo estiver vazio ou o valor não é numérico, deixa o campo vazio
             $(this).val('');
         } else if (valorNumerico > 1.000) {
-            // Se o valor exceder o máximo permitido, define como 1,0000
-            $(this).val('1,000');
+            // Se o valor exceder o máximo permitido, define como 1,000 g
+            $(this).val('1,000 g');
         } else {
-            // Formata o valor para quatro casas decimais
+            // Formata o valor para quatro casas decimais e adiciona "g" no final
             $(this).val(valorNumerico.toLocaleString('pt-BR', {
                 minimumFractionDigits: 3,
                 maximumFractionDigits: 3
-            }));
+            }) + ' g');
         }
     });
+    
 
 
     $('.mascara-custos').mask('000.000.000,000', {

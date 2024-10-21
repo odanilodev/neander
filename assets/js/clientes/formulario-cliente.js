@@ -141,6 +141,145 @@ $(document).on('click', '.abre_modal_niveis', function () {
   $('#modalNiveisProdutos').css('background-color', '#00000066');
 })
 
+const preencherModalComDados = (dados) => {
+  Object.keys(dados).forEach(campo => {
+    const seletor = `.modal-visualizar-${campo.toLowerCase().replace(/_/g, '-')}`;
 
+    if ($(seletor).length > 0) {
+      let valor = dados[campo];
+
+      switch (true) {
+        case campo === 'custo_sub_total_1':
+        case campo === 'custo_total':
+        case campo === 'total_materia_prima':
+        case campo.startsWith('lote_partida_'):
+          valor = formatarValorMoeda(valor);
+          break;
+
+        case campo === 'criado_em':
+        case campo === 'editado_em':
+          valor = formatarDatasComHora(valor);
+          break;
+
+        case campo === 'quantidade_geral_projeto':
+          valor = valor.replace('.', ',') + ' g';
+          break;
+
+        case campo === 'quantidade_manipulacao':
+        case campo === 'pcs_hora_envase':
+        case campo === 'pcs_hora_rotulagem':
+        case campo === 'quantidade_final':
+        case campo === 'custo_outros':
+        case campo === 'custo_perda':
+          valor = parseInt(valor);
+          break;
+
+        case campo.startsWith('custo_'):
+        case campo.startsWith('valor_'):
+          valor = formatarValorMoeda(valor);
+          break;
+      }
+
+      // Verifica se o campo usa select2 e dá trigger change
+      if ($(seletor).hasClass('select2-hidden-accessible')) {
+        $(seletor).addClass('inactive');
+        $(seletor).val(valor).trigger('change');
+      } else {
+        $(seletor).val(valor);
+      }
+
+      if (campo === 'porcentagem_total') {
+        if (valor > 100) {
+          $('.modal-visualizar-aviso-porcentagem').removeClass('d-none');
+          $('.modal-visualizar-porcentagem-total').addClass('invalido');
+        }
+      }
+    }
+  });
+}
+
+
+
+const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
+
+  $('#modalVisualizarDesenvolvimentoProjeto').modal('show');
+  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true);
+  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').addClass('text-1000');
+
+  $('#alerta-apenas-visualizacao').hide();
+  $('#alerta-apenas-visualizacao').removeClass('d-none').fadeIn(2000);
+
+  let nomeProjeto = $('.texto-titulo').html();
+
+  $('#modalVisualizarDesenvolvimentoProjetoLabel').html(nomeProjeto);
+
+  $.ajax({
+    type: 'post',
+    url: `${baseUrl}projetos/recebeProjetoClienteCodigo`,
+    data: {
+      codigoProjeto: codigoProjeto,
+      versaoProjeto: versaoProjeto
+    },
+    success: function (response) {
+
+      console.log(response)
+
+      $('.campos-duplicados').html('');
+      $('.btn-duplica-linha').show();
+
+      if (response.success) {
+
+
+        if (response.data.length < 2) {
+          $('.modal-desenvolver-select-materia-prima').val('').trigger('change');
+        }
+
+        // Atualiza os campos do modal com as informações do projeto
+        preencherModalComDados(response.data[0]);
+
+        // Matérias Primas
+        let numSelects = response.data.length - 1;
+        let selectsCriados = $('.modal-visualizar-select-materia-prima').length;
+
+        if (selectsCriados < numSelects) {
+          for (let i = selectsCriados; i < numSelects; i++) {
+            $('.btn-duplica-linha').last().trigger('click');
+          }
+
+          setTimeout(() => {
+            $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
+              setTimeout(() => {
+                $('.modal-visualizar-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
+                $('.modal-visualizar-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+                $('.modal-visualizar-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
+                $('.modal-visualizar-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
+                $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+              }, 100);
+            });
+          }, 500);
+        }
+
+        $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
+          $('.modal-visualizar-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
+          $('.modal-visualizar-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
+          $('.modal-visualizar-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
+          $('.modal-visualizar-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
+          $('.modal-visualizar-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
+
+        });
+
+        $('.input-sub-total').val(formatarValorMoeda(response.data[0].custo_sub_total_1));
+
+
+
+
+      } else {
+
+        avisoRetorno(response.title, response.message, response.type, '#');
+      }
+    }
+  });
+
+}
 
 

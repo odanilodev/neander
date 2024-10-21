@@ -44,7 +44,6 @@ const modalDesenvolverProjeto = () => {
 
 $(document).on('change', '#select_projeto_cliente', function () {
 
-
     if ($(this).val()) {
         $('#modalDesenvolverProjetoTitulo').html($(this).find('option:selected').text() + " | Versão: " + $(this).find('option:selected').data('versao-projeto') + " | Código: " + $(this).find('option:selected').val());
     } else {
@@ -73,6 +72,13 @@ $(document).on('change', '#select_projeto_cliente', function () {
 
     $('.btn-desenvolver-projeto').removeClass('d-none');
 
+    let custoClienteProduto = $(this).find('option:selected').data('custo-produto');
+    let custoClienteEmbalagem = $(this).find('option:selected').data('custo-embalagem');
+    let custoClienteRotulo = $(this).find('option:selected').data('custo-rotulo')
+
+    $('.custo-cliente-produto').val(formatarValorMoeda(custoClienteProduto));
+    $('.custo-cliente-embalagem').val(formatarValorMoeda(custoClienteEmbalagem));
+    $('.custo-cliente-rotulo').val(formatarValorMoeda(custoClienteRotulo));
 });
 
 $(document).on('input', '.modal-desenvolver-input-quantidade', function () {
@@ -361,6 +367,7 @@ const calculaQuantidade = () => {
     let quantidadeFormatada = quantidade % 1 === 0 ? quantidade.toString() : quantidade.toFixed(2).replace(/\.?0+$/, '');
 
     $('.input-quantidade').val(quantidadeFormatada);
+
 }
 
 $('.modal-desenvolver-custo-manipulacao-tempo').on('focusout', function () {
@@ -425,7 +432,6 @@ const exibeLotePartida = (quantidadeKg) => {
     }
 
 }
-
 
 //========================================= Envase + Rotulagem
 let valorEnvaseGlobal = 0;
@@ -867,6 +873,7 @@ const desenvolverProjeto = (idClienteRedirect) => {
             data: {
                 idProjeto: idProjeto,
                 codigoProjeto: codigoProjeto,
+                versaoProjeto: versaoProjeto,
                 inputsProjeto: inputsProjeto,
                 materiasPrimas: materiasPrimas
             },
@@ -905,80 +912,6 @@ const desenvolverProjeto = (idClienteRedirect) => {
 };
 
 ////////////////////////////////////
-// const editarProjetoDesenvolvido = () => {
 
-//     let codigoProjeto = $(this).val();
-
-//     if ($(this).val() != '') {
-
-//         $.ajax({
-//             type: 'post',
-//             url: `${baseUrl}projetos/recebeProjetoClienteCodigo`,
-//             data: {
-//                 codigoProjeto: codigoProjeto
-//             },
-//             success: function (response) {
-
-//                 $('.campos-duplicados').html('');
-//                 $('.btn-duplica-linha').show();
-
-//                 if (response.success) {
-
-//                     let dataFormatada = response.data[0].criado_em.split(' ');
-
-//                     if (response.data.length < 2) {
-//                         $('.modal-desenvolver-select-materia-prima').val('').trigger('change');
-//                     }
-
-//                     // Atualiza os campos do modal com as informações do projeto
-//                     $('.modal-desenvolver-input-data').val(formatarDatas(dataFormatada[0]));
-//                     $('.modal-desenvolver-input-producao').val('1,000 g');
-//                     $('.modal-desenvolver-input-nome-produto').val(response.data[0].nome_produto);
-//                     $('.modal-desenvolver-input-nome-cliente').val(response.data[0].CLIENTE_NOME_FANTASIA);
-//                     $('.modal-desenvolver-input-quantidade').val(response.data[0].quantidade_geral_projeto);
-//                     $('.modal-desenvolver-input-nivel-produto').val(response.data[0].nivel_produto);
-
-//                     // Matérias Primas
-//                     let numSelects = response.data.length - 1;
-//                     let selectsCriados = $('.modal-desenvolver-select-materia-prima').length;
-
-//                     if (selectsCriados < numSelects) {
-//                         for (let i = selectsCriados; i < numSelects; i++) {
-//                             $('.btn-duplica-linha').last().trigger('click');
-//                         }
-
-//                         setTimeout(() => {
-//                             $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
-//                                 setTimeout(() => {
-//                                     $('.modal-desenvolver-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
-//                                     $('.modal-desenvolver-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
-//                                     $('.modal-desenvolver-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
-//                                     $('.modal-desenvolver-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
-//                                     $('.modal-desenvolver-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
-//                                 }, 100);
-//                             });
-//                         }, 500);
-//                     }
-
-//                     $.each(response.data.slice(1), (selectIndex, materiaPrima) => {
-//                         $('.modal-desenvolver-select-materia-prima').eq(selectIndex).val(materiaPrima.id).trigger('change');
-//                         $('.modal-desenvolver-input-percentual').eq(selectIndex).val(formatarPercentual(materiaPrima.PERCENTUAL_MP_PROJETO));
-//                         $('.modal-desenvolver-input-quantidade-materia-prima').eq(selectIndex).val(materiaPrima.QUANTIDADE_MP_PROJETO);
-//                         $('.modal-desenvolver-input-valor-materia-prima').eq(selectIndex).val(materiaPrima.VALOR_MP_PROJETO);
-//                         $('.modal-desenvolver-input-total-materia-prima').eq(selectIndex).val(materiaPrima.TOTAL_MP_PROJETO);
-
-//                     });
-
-//                     $('.input-sub-total').val(formatarValorMoeda(response.data[0].custo_sub_total_1));
-
-
-//                 } else {
-
-//                     avisoRetorno(response.title, response.message, response.type, '#');
-//                 }
-//             }
-//         });
-//     }
-// }
 
 
