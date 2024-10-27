@@ -50,7 +50,7 @@
                                 </td>
 
                                 <td class="customer align-middle white-space-nowrap">
-                                    <a class="d-flex align-items-center text-900" href="#!">
+                                    <a class="d-flex align-items-center text-900" href="<?= base_url("usuarios/formulario/" . $v['id']) ?>">
                                         <div class="avatar avatar-m">
                                             <img class="rounded-circle" src="<?= $v['foto_perfil'] ? base_url_upload('usuarios/' . ($v['foto_perfil'])) : base_url('assets/img/icons/sem_foto.jpg') ?>">
                                         </div>
@@ -59,7 +59,7 @@
                                 </td>
 
                                 <td class="email align-middle white-space-nowrap">
-                                    <a class="fw-semi-bold"><?= $v['EMPRESA'] ?></a>
+                                    <span class="fw-bold text-1000"><?= $v['EMPRESA'] ?></span>
                                 </td>
 
                                 <td class="email align-middle white-space-nowrap">

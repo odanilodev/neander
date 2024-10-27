@@ -42,21 +42,10 @@ const cadastraUsuario = () => {
         }
     }
 
-    // Verifica se o select setor tá vazio
-    if (setor == null) {
 
-        $('.select-setor').addClass('select-validation-invalido');
-        $('.select-setor').removeClass('form-control');
-
-        permissao = false;
-
-    } else {
-        $('.select-setor').addClass('form-control');
-        $('.select-setor').removeClass('select-validation-invalido');
-    }
 
     // cadastra um usuario novo
-    if (id == "" && nome != "" && telefone != "" && email != "" && setor != null && idioma != null) {
+    if (id == "" && nome != "" && telefone != "" && email != "") {
 
         if (!validaEmail(email)) {
             permissao = false;

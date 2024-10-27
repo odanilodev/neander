@@ -17,10 +17,9 @@ class Usuarios_model extends CI_Model
         $this->db->join('ci_empresas' ,'ci_empresas.id = ci_usuarios.id_empresa', 'INNER');
         $this->db->order_by('ci_usuarios.nome', 'DESC');
         $this->db->where('ci_usuarios.status', 1);
+
         if($this->session->userdata('id_empresa') > 1){
             $this->db->where('ci_usuarios.id_empresa', $this->session->userdata('id_empresa'));
-        }else{
-            $this->db->where('ci_usuarios.id_setor', '0' );
         }
         
         $query = $this->db->get();
@@ -152,19 +151,19 @@ class Usuarios_model extends CI_Model
         return $this->db->affected_rows() > 0;
     }
     
-    public function verificaSetorUsuario($id)
-    {
-        $this->db->select('U.id_setor, GROUP_CONCAT(DISTINCT S.nome) as NOMES_SETORES');
-        $this->db->from('ci_usuarios U');
-        $this->db->where_in('U.id_setor', $id);
-        $this->db->where('U.id_empresa', $this->session->userdata('id_empresa'));
-        $this->db->join('ci_setores S', 'S.id = U.id_setor', 'left');
-        $this->db->group_by('U.id_setor');
+    // public function verificaSetorUsuario($id)
+    // {
+    //     $this->db->select('U.id_setor, GROUP_CONCAT(DISTINCT S.nome) as NOMES_SETORES');
+    //     $this->db->from('ci_usuarios U');
+    //     $this->db->where_in('U.id_setor', $id);
+    //     $this->db->where('U.id_empresa', $this->session->userdata('id_empresa'));
+    //     $this->db->join('ci_setores S', 'S.id = U.id_setor', 'left');
+    //     $this->db->group_by('U.id_setor');
 
-        $query = $this->db->get();
+    //     $query = $this->db->get();
 
-        $setorVinculado = $query->result_array();
+    //     $setorVinculado = $query->result_array();
 
-        return $setorVinculado;
-    }
+    //     return $setorVinculado;
+    // }
 }

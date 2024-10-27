@@ -144,12 +144,10 @@ class Usuarios extends CI_Controller
 			$senha_hash = $usuario['senha']; // O hash da senha armazenado no banco de dados.
 
 			if (password_verify($senhaAntiga, $senha_hash)) {
-				// A senha antiga está correta.
 				$response = array(
 					'success' => true
 				);
 			} else {
-				// A senha antiga está incorreta.
 				$response = array(
 					'success' => false
 				);

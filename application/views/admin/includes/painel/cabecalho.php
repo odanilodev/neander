@@ -221,12 +221,10 @@
                                 </div>
                                 <div class="overflow-auto scrollbar">
                                     <ul class="nav d-flex flex-column mb-2 pb-1">
-                                        <?php if ($this->session->userdata("id_setor") != 0) { ?>
                                             <li class="nav-item"><a class="nav-link px-3" href="<?= base_url('usuarios/formulario/' . $this->session->userdata("id_usuario")) ?>">
                                                     <span class="me-2 text-900" data-feather="user"></span><span>Perfil</span></a></li>
-                                            <li class="nav-item"><a class="nav-link px-3" href="https://api.whatsapp.com/send?l=pt_br&phone=5514997501274"> <span class="me-2 text-900" data-feather="help-circle"></span>Central de
+                                            <li class="nav-item"><a class="nav-link px-3" href="https://api.whatsapp.com/send?l=pt_br&phone=5514981190192"> <span class="me-2 text-900" data-feather="help-circle"></span>Central de
                                                     Ajuda</a></li>
-                                        <?php } ?>
                                         <!-- <li class="nav-item"><a class="nav-link px-3" href="<?= base_url('dashboard') ?>"><span class="me-2 text-900" data-feather="pie-chart"></span>Painel Principal</a></li> -->
                                         <li class="nav-item"><a class="nav-link px-3" href="<?= base_url('usuarios/formulario') ?>"><span class="me-2 text-900" data-feather="user-plus"></span>Criar outra
                                                 conta</a></li>
