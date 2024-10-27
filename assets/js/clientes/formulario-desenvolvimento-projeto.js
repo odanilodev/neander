@@ -19,6 +19,10 @@ $('#modalCadastroMateriaPrima').on('hidden.bs.modal', function () {
 
 const modalDesenvolverProjeto = () => {
 
+    $('.select2').select2({
+        dropdownParent: $('#modalDesenvolverProjeto'),
+        theme: 'bootstrap-5',
+    });
 
     $('.modal-desenvolver-input-fase').attr('disabled', true);
     $('.modal-desenvolver-input-percentual').attr('disabled', true);

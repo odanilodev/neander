@@ -94,7 +94,8 @@ const cadastraProjeto = () => {
                 dadosBriefing: dadosBriefing,
                 dadosCustos: dadosCustos,
                 idCliente: idCliente,
-                idProjeto:idProjeto
+                idProjeto: idProjeto,
+                codigoProjeto: $('.input-codigo-projeto').val()
             },
             beforeSend: function () {
                 $('.load-form').removeClass('d-none');
@@ -103,7 +104,7 @@ const cadastraProjeto = () => {
             },
             success: function (data) {
                 if (data.success) {
-                    avisoRetorno('Sucesso!', `${data.message}`, 'success', `${baseUrl}/clientes/detalhes/${data.idClienteCadastrado}`);
+                    avisoRetorno('Sucesso!', `${data.message}`, 'success', `${baseUrl}clientes/detalhes/${data.idClienteCadastrado}`);
                 } else {
                     avisoRetorno('Algo deu errado!', `${data.message}`, 'error', '#');
                 }
@@ -116,8 +117,6 @@ const cadastraProjeto = () => {
         avisoRetorno('Erro!', 'Preencha todos os campos obrigatórios.', 'error', '#');
     }
 }
-
-
 
 const inativaProjetoCliente = (idProjeto, idCliente) => {
 

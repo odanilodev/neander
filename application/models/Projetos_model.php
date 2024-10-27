@@ -64,32 +64,25 @@ class Projetos_model extends CI_Model
         return $query->row_array();
     }
 
-    public function recebeProjetoCliente($id_cliente, $status = null, $status_desenvolvido = null)
+    public function recebeProjetosCliente($id_cliente)
     {
-        $this->db->select('P.*, C.*, P.status as STATUS_PROJETO, P.id as ID_PROJETO, P.criado_em as DATA_PROJETO');
+        $this->db->select('P.*, C.*,P.codigo_projeto as CODIGO_PROJETO, P.status as STATUS_PROJETO, P.id as ID_PROJETO, P.criado_em as DATA_PROJETO, P.versao_projeto as VERSAO_PROJETO, P.desenvolvido');
         $this->db->from('ci_projetos P');
         $this->db->join('ci_clientes C', 'P.id_cliente = C.id');
         $this->db->where('P.id_cliente', $id_cliente);
-    
-        if (!is_null($status)) {
-            $this->db->where('P.status', $status);
-        }
-    
-        if (!is_null($status_desenvolvido)) {
-            $this->db->where('P.desenvolvido', $status_desenvolvido);
-        }
-    
+
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
         }
 
-        $this->db->order_by('P.status','desc');
-    
+        $this->db->order_by('P.codigo_projeto', 'desc');
+        $this->db->order_by('P.status', 'desc');
+
         $query = $this->db->get();
-    
+
         return $query->result_array();
     }
-    
+
 
     public function recebeDadosProjetoCliente($id_cliente)
     {
@@ -104,7 +97,7 @@ class Projetos_model extends CI_Model
         return $query->result_array();
     }
 
-    public function recebeProjetoClienteCodigo($codigo_projeto)
+    public function recebeProjetoClienteCodigo($codigo_projeto, $versao_projeto = null)
     {
         $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA, DP.*, P.criado_em');
 
@@ -112,6 +105,10 @@ class Projetos_model extends CI_Model
         $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = P.codigo_projeto', 'left');
 
         $this->db->where('P.codigo_projeto', $codigo_projeto);
+
+        if($versao_projeto){
+        $this->db->where('P.versao_projeto', $versao_projeto);
+        }
 
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('P.id_empresa', $this->session->userdata('id_empresa'));
@@ -137,6 +134,7 @@ class Projetos_model extends CI_Model
     public function insereProjeto($dados)
     {
         $dados['criado_em'] = date('Y-m-d H:i:s');
+        $dados['status'] = 1;
 
         $this->db->insert('ci_projetos', $dados);
 
@@ -154,30 +152,33 @@ class Projetos_model extends CI_Model
     public function editaProjeto($id_projeto, $dados = null, $status_desenvolvido = null)
     {
         $dados['editado_em'] = date('Y-m-d H:i:s');
-        
+
+        if (!empty($dados['codigo_projeto'])) {
+            $dados['codigo_projeto'] = $dados['codigo_projeto'];
+        }
+
         if (!is_null($status_desenvolvido)) {
             $dados['desenvolvido'] = $status_desenvolvido;
         }
-    
+
         $this->db->where('id', $id_projeto);
-    
+
         if ($this->session->userdata('id_empresa') > 1) {
             $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
         }
-    
+
         $this->db->update('ci_projetos', $dados);
-    
+
         if ($this->db->affected_rows() > 0) {
             $this->Log_model->insereLog($id_projeto);
-    
+
             $this->db->where('id', $id_projeto);
             $query = $this->db->get('ci_projetos');
             return $query->row_array();
         }
-    
+
         return false;
     }
-    
 
     public function inativaProjetoCliente($id_projeto)
     {

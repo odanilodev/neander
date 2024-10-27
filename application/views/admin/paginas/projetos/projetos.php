@@ -1,5 +1,4 @@
 <div class="content">
-
     <div class="pb-8">
         <div id="reports">
             <div class="row g-3 justify-content-between mb-2">
@@ -194,3 +193,4 @@
 
         </div>
     </div>
+</div>

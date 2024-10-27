@@ -238,7 +238,7 @@ $(function () {
 
   function insereCustoProducaoManipulacao(valorAtual) {
     $.ajax({
-      url: `${baseUrl}/custoProdutivo/insereCustoHoraManipulacao`,
+      url: `${baseUrl}custoProdutivo/insereCustoHoraManipulacao`,
       type: 'POST',
       data: {
         valorBase: valorAtual.toFixed(2).replace('.', '.')

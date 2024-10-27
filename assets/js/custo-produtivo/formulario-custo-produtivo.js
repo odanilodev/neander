@@ -13,7 +13,7 @@ $(function () {
   // Função para enviar dados ao servidor
   function enviarDadosParaServidor(idEquipamento, custoProducao, valorInput, tipo, valorBase) {
     $.ajax({
-      url: `${baseUrl}/custoProdutivo/insereCustoProdutivo`,
+      url: `${baseUrl}custoProdutivo/insereCustoProdutivo`,
       type: 'POST',
       data: {
         idEquipamento: idEquipamento,
@@ -195,7 +195,7 @@ $(function () {
 
   function insereCustoProducaoManipulacao(valorAtual) {
     $.ajax({
-      url: `${baseUrl}/custoProdutivo/insereCustoHoraManipulacao`,
+      url: `${baseUrl}custoProdutivo/insereCustoHoraManipulacao`,
       type: 'POST',
       data: {
         valorBase: valorAtual.toFixed(2).replace('.', '.')
