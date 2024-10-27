@@ -16,5 +16,5 @@ jobs:
       with:
         server: ftp.neandercosmeticos.com.br
         username: neander
-        password: ${{ secrets.ftp_pass }}
+        password: ${{ secrets.FTP_PASS }}
         server-dir: neander.com.br/sistema/
