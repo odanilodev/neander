@@ -6,7 +6,7 @@ $(function () {
         dropdownParent: $('#modalCadastroMateriaPrima'),
         theme: 'bootstrap-5'
     });
-    
+
 });
 
 const cadastraMateriaPrima = () => {
@@ -50,6 +50,9 @@ const cadastraMateriaPrima = () => {
                         dropdownParent: $('#modalDesenvolverProjeto'),
                         theme: 'bootstrap-5',
                     });
+                } else {
+                    $('#modalCadastroMateriaPrima').find('input, textarea').val('');
+                    $('.select-fornecedor').val('').trigger('change'); 
                 }
             },
             error: function (xhr, status, error) {

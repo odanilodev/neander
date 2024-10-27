@@ -24,6 +24,8 @@ const modalDesenvolverProjeto = () => {
         theme: 'bootstrap-5',
     });
 
+    $('.aviso-porcentagem').addClass('d-none');
+
     $('.modal-desenvolver-input-fase').attr('disabled', true);
     $('.modal-desenvolver-input-percentual').attr('disabled', true);
     $('.btn-duplica-linha').attr('disabled', true);

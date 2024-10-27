@@ -117,4 +117,3 @@
       </div> <!-- .card -->
     </div> <!-- .col-12 -->
   </div> <!-- .row.mb-9 -->
-</div> <!-- .content -->
