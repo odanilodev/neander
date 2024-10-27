@@ -122,18 +122,17 @@ function scriptsUsuarioFooter()
 function scriptsClientesHead()
 {
     return array(
-
         '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />',
-        '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />',
         '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />'
-
     );
 }
+
 
 function scriptsClientesFooter()
 {
     return array(
-
+        '<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>',
+        '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>',
         '<script src="' . base_url('assets/js/clientes/formulario-cliente.js') . '"></script>',
         '<script src="' . base_url('assets/js/clientes/formulario-desenvolvimento-projeto.js') . '"></script>',
         '<script src="' . base_url('assets/js/clientes/formulario-custo-produtivo.js') . '"></script>',
@@ -143,11 +142,10 @@ function scriptsClientesFooter()
         '<script src="' . base_url('assets/js/helpers-js/validacoes.js') . '"></script>',
         '<script src="' . base_url('assets/js/helpers-js/viacep-input.js') . '"></script>',
         '<script src="' . base_url('assets/js/helpers-js/formatar-data.js') . '"></script>',
-        '<script src="' . base_url('assets/js/helpers-js/formatar-valores.js') . '"></script>',
-        '<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>'
-
+        '<script src="' . base_url('assets/js/helpers-js/formatar-valores.js') . '"></script>'
     );
 }
+
 
 // Pagina de Fornecedores
 function scriptsFornecedoresHead()
