@@ -15,9 +15,11 @@ class Clientes_model extends CI_Model
    * 
    * @return array
    */
-  public function recebeClientes($cookie_filtro_clientes, $limit, $page, $count = null)
+  public function recebeClientes($cookie_filtro_clientes = null, $limit = null, $page = null, $count = null)
   {
-    $filtro = json_decode($cookie_filtro_clientes, true);
+    if (isset($cookie_filtro_clientes)) {
+      $filtro = json_decode($cookie_filtro_clientes, true);
+    }
 
     $this->db->select('C.*');
     $this->db->from('ci_clientes C');
@@ -33,12 +35,12 @@ class Clientes_model extends CI_Model
     }
 
     if (isset($filtro['nome_fantasia']) && !empty($filtro['nome_fantasia'])) {
-      $this->db->group_start(); 
+      $this->db->group_start();
       $this->db->like('C.nome_fantasia', $filtro['nome_fantasia']);
       $this->db->or_like('C.contato', $filtro['nome_fantasia']);
       $this->db->or_like('C.email', $filtro['nome_fantasia']);
       $this->db->group_end();
-  }
+    }
 
     $this->db->order_by('C.status, C.nome_fantasia', 'ASC');
 
