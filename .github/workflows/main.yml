@@ -15,6 +15,6 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ftp.neandercosmeticos.com.br
-        username: neander
+        username: neande46
         password: ${{ secrets.FTP_PASS }}
         server-dir: neander.com.br/sistema/
