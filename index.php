@@ -1,7 +1,5 @@
 <?php
 
-echo 'Teste deploy'; exit;
-
 /**
  * CodeIgniter
  *
