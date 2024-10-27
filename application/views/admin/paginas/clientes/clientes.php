@@ -13,54 +13,18 @@
                         </div>
 
                         <div class="d-flex mb-3">
+
                             <div class="search-box me-2">
                                 <form action="<?= base_url('clientes') ?>" method="POST" class="position-relative" data-bs-toggle="search" data-bs-display="static">
-                                    <input name="nome" value="<?= $cookie_filtro_clientes['nome'] ?? null ?>" class="form-control search-input search" type="search" placeholder="Buscar Clientes" aria-label="Search">
+                                    <input name="nome_fantasia" value="<?= $cookie_filtro_clientes['nome_fantasia'] ?? null ?>" class="form-control search-input search" type="search" placeholder="Buscar Clientes" aria-label="Search">
                                     <span class="fas fa-search search-box-icon"></span>
                                 </form>
                             </div>
 
-                            <button class="btn px-3 btn-phoenix-secondary filtros-clientes" type="button" data-bs-toggle="modal" data-bs-target="#reportsFilterModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">
+                            <button class="btn px-3 btn-phoenix-secondary filtros-clientes" type="button" data-bs-toggle="modal" data-bs-target="#reportsFilterModal">
                                 <span class="fa-solid fa-filter text-primary" data-fa-transform="down-3"></span>
                             </button>
 
-                            <div class="modal fade" id="reportsFilterModal" tabindex="-1" aria-hidden="true" style="display: none;">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border">
-                                        <form action="<?= base_url('clientes') ?>" method="POST" id="addEventForm" autocomplete="off">
-                                            <div class="modal-header border-200 p-4">
-                                                <h5 class="modal-title text-1000 fs-2 lh-sm">Filtrar</h5>
-                                                <button class="btn p-1 text-danger" type="button" data-bs-dismiss="modal" aria-label="Close">
-                                                    <span class="fas fa-times fs--1"></span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body pt-4 pb-2 px-4">
-
-                                                <div class="mb-3"><label class="fw-bold mb-2 text-1000">Status</label>
-                                                    <select name="status" class="form-select select2">
-                                                        <option value="all" selected>--</option>
-                                                        <option <?= ($cookie_filtro_clientes['status'] ?? null) == '1' ? 'selected' : '' ?> value="1">Ativo</option>
-                                                        <option <?= ($cookie_filtro_clientes['status'] ?? null) == '3' ? 'selected' : '' ?> value="3">Inativo</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="mb-3"><label class="fw-bold mb-2 text-1000" for="createDate">Cidades</label>
-                                                    <select name="cidade" class="form-select select2">
-                                                        <option value="all" selected>--</option>
-                                                        <?php foreach ($cidades as $v) { ?>
-                                                            <option <?= ($cookie_filtro_clientes['cidade'] ?? null) == $v['cidade'] ? 'selected' : '' ?> value="<?= $v['cidade'] ?>"><?= $v['cidade'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer d-flex justify-content-end align-items-center px-4 pb-4 border-0 pt-3">
-                                                <button class="btn btn-sm btn-primary px-9 fs--2 my-0" type="submit">Buscar clientes</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,5 +106,49 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+
+    <!-- Modal Filtros -->
+    <div class="modal fade" id="reportsFilterModal" tabindex="-1" aria-labelledby="reportsFilterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered">
+            <div class="modal-content">
+                <form action="<?= base_url('clientes') ?>" method="POST" id="addEventForm" autocomplete="off" style="display:contents;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportsFilterModalLabel">Filtrar Clientes</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="fw-bold mb-2 text-1000">Status</label>
+                            <select name="status" class="form-select select2">
+                                <option value="all" selected>--</option>
+                                <option <?= ($cookie_filtro_clientes['status'] ?? null) === '1' ? 'selected' : '' ?> value="1">Ativo</option>
+                                <option <?= ($cookie_filtro_clientes['status'] ?? null) === '0' ? 'selected' : '' ?> value="0">Inativo</option>
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="fw-bold mb-2 text-1000">Cidades</label>
+                            <select name="cidade" class="form-select select2" aria-label="Selecione uma Cidade">
+                                <option value="all" selected>--</option>
+                                <?php if (!empty($cidades)): ?>
+                                    <?php foreach ($cidades as $cidade): ?>
+                                        <option <?= ($cookie_filtro_clientes['cidade'] ?? null) == $cidade['cidade'] ? 'selected' : '' ?> value="<?= $cidade['cidade'] ?>"><?= $cidade['cidade'] ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
