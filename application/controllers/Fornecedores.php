@@ -151,7 +151,6 @@ class Fornecedores extends CI_Controller
       return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
 
-
     // Verificando se o fornecedor já existe
     $id = (int) $dados['id'];
     $fornecedor = $this->Fornecedores_model->recebeNomeFornecedor($dados['razao_social'], $id);
