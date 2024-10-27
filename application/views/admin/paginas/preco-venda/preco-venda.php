@@ -184,6 +184,8 @@
         <!-- Manipulado J.S. -->
     </div>
 
+
+    <!-- Modal condições de pagamento -->
     <div class="modal fade" id="condicoesModal" tabindex="-1" aria-labelledby="modalLabel" aria-label="hidden">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

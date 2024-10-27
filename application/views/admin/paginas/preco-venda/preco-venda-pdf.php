@@ -3,6 +3,7 @@
 
 <head>
     <style>
+        /* Estilos gerais para melhorar a legibilidade */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -62,7 +63,6 @@
             background-color: #f2f2f2;
         }
 
-        /* Alinhamento do cabeçalho */
         .header {
             text-align: center;
         }
@@ -105,8 +105,8 @@
         <!-- Informações de Cliente, Contato e Data -->
         <table>
             <tr>
-                <td><strong>Cliente:</strong> <?= htmlspecialchars($nome_fantasia) ?></td>
-                <td><strong>Contato:</strong> <?= htmlspecialchars($contato) ?></td>
+                <td><strong>Cliente:</strong> <?= htmlspecialchars($nome_fantasia ?? 'Não informado') ?></td>
+                <td><strong>Contato:</strong> <?= htmlspecialchars($contato ?? 'Não informado') ?></td>
                 <td><strong>Data:</strong> <?= date('d/m/Y') ?></td>
             </tr>
         </table>
@@ -134,31 +134,32 @@
 
                 foreach ($projetosClientes as $projetoCliente) :
                     $loteString = $projetoCliente['lote'];
-                    $loteFloat = floatval(preg_replace('/[^0-9.]/', '', $loteString));
+                    $loteFloat = ($loteString == 'Artesanal') ? floatval($projetoCliente['QTD_MANIPULACAO']) : floatval(preg_replace('/[^0-9.]/', '', $loteString));
                     $totalComImpostos = $projetoCliente['total_st'];
-
-                    // Adiciona o valor dos outros custos ao total geral
                     $outrosCustos = !empty($projetoCliente['outros']) ? $projetoCliente['outros'] : 0;
                     $totalGeral += $totalComImpostos + $outrosCustos;
+
+                    // Função utilitária para formatação de valores
+                    $formatarValor = fn($valor) => number_format($valor, 2, ',', '.');
                 ?>
                     <tr>
                         <td><?= $item++ ?></td>
                         <td><?= htmlspecialchars($projetoCliente['nome_produto']) ?></td>
                         <td><?= htmlspecialchars($loteFloat) ?></td>
-                        <td><?= number_format($projetoCliente['total_sem_imposto'] / $loteFloat, 2, ',', '.') ?></td>
-                        <td><?= number_format($projetoCliente['total_unit'] / $loteFloat, 2, ',', '.') ?></td>
-                        <td><?= number_format($projetoCliente['total_st'] / $loteFloat, 2, ',', '.') ?></td>
+                        <td><?= $loteFloat > 0 ? $formatarValor($projetoCliente['total_sem_imposto'] / $loteFloat) : 'N/A' ?></td>
+                        <td><?= $loteFloat > 0 ? $formatarValor($projetoCliente['total_unit'] / $loteFloat) : 'N/A' ?></td>
+                        <td><?= $loteFloat > 0 ? $formatarValor($projetoCliente['total_st'] / $loteFloat) : 'N/A' ?></td>
                         <?php if (!empty($projetoCliente['outros'])) : ?>
-                            <td><?= number_format($outrosCustos, 2, ',', '.') ?></td>
+                            <td><?= $formatarValor($outrosCustos) ?></td>
                         <?php endif ?>
-                        <td><?= number_format($totalComImpostos, 2, ',', '.') ?></td>
+                        <td><?= $formatarValor($totalComImpostos) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="7" style="text-align: right;"><strong>Total:</strong></td>
-                    <td><?= number_format($totalGeral, 2, ',', '.') ?></td>
+                    <td><?= $formatarValor($totalGeral) ?></td>
                 </tr>
             </tfoot>
         </table>
@@ -170,27 +171,25 @@
                 <td><strong>Condição de Pagamento:</strong> <?= $condicoesFornecimento['NOME_CONDICAO_PAGAMENTO'] ?? 'Nenhuma condição de pagamento selecionada.' ?></td>
             </tr>
             <tr>
-                <td><strong>Matéria-Prima:</strong> <?= $condicoesFornecimento['materia_prima'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                <td><strong>Matéria-Prima:</strong> <?= ($condicoesFornecimento['materia_prima'] ?? 1) == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
             </tr>
             <tr>
-                <td><strong>Embalagem:</strong> <?= $condicoesFornecimento['embalagem'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                <td><strong>Embalagem:</strong> <?= ($condicoesFornecimento['embalagem'] ?? 1) == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
             </tr>
             <tr>
-                <td><strong>Rótulo:</strong> <?= $condicoesFornecimento['rotulo'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+                <td><strong>Rótulo:</strong> <?= ($condicoesFornecimento['rotulo'] ?? 1) == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
+            </tr>
+            <tr>
+                <td><strong>Transporte:</strong> <?= ($condicoesFornecimento['transporte'] ?? 1) == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
             </tr>
             <tr>
                 <td><strong>Impostos:</strong> <?= $condicoesFornecimento['impostos'] ?? '' ?></td>
             </tr>
-            <tr>
-                <td><strong>Transporte:</strong> <?= $condicoesFornecimento['transporte'] == 0 ? 'Pago pela empresa' : 'Pago pelo Cliente' ?></td>
-            </tr>
         </table>
 
         <h4>Observações importantes:</h4>
-        <p><?= $condicoesFornecimento['observacoes'] ?? '' ?></p>
-
+        <p><?= $condicoesFornecimento['observacoes'] ?? 'Sem observações adicionais.' ?></p>
     </div>
 </body>
 
 </html>
-F

@@ -9,31 +9,46 @@ class PrecoVenda_model extends CI_Model
         $this->load->model('Log_model');
     }
 
-    public function recebePrecoVendaProjetosCliente($codigo_projeto,  $versao_projeto, $versao_preco_venda)
+    public function recebePrecoVendaProjetosCliente($codigo_projeto, $versao_projeto, $versao_preco_venda)
     {
-        $this->db->select('PVP.total_sem_imposto, PVP.total_unit, PVP.valor_st_estado, P.nome_produto, C.nome_fantasia, PVP.codigo_projeto, PVP.versao_projeto, PVP.lote, PVP.total_st, PVP.versao_preco_venda, PVP.outros');
+        $campos = [
+            'PVP.total_sem_imposto',
+            'PVP.total_unit',
+            'PVP.valor_st_estado',
+            'P.nome_produto',
+            'C.nome_fantasia',
+            'PVP.codigo_projeto',
+            'PVP.versao_projeto',
+            'PVP.lote',
+            'PVP.total_st',
+            'PVP.versao_preco_venda',
+            'PVP.outros',
+            'DP.quantidade_manipulacao as QTD_MANIPULACAO'
+        ];
+        $this->db->select($campos);
 
-        // Joins
+        $this->db->from('ci_preco_venda_projeto PVP');
         $this->db->join('ci_ncm_projeto NP', 'NP.codigo_projeto = PVP.codigo_projeto', 'left');
         $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = PVP.codigo_projeto', 'left');
         $this->db->join('ci_projetos P', 'P.codigo_projeto = PVP.codigo_projeto', 'left');
         $this->db->join('ci_clientes C', 'C.id = PVP.id_cliente', 'left');
 
-        // Filtros
-        $this->db->where('PVP.codigo_projeto', $codigo_projeto);
-        $this->db->where('PVP.versao_projeto', $versao_projeto);
-        $this->db->where('PVP.versao_preco_venda', $versao_preco_venda);
+        $this->db->where([
+            'PVP.codigo_projeto' => $codigo_projeto,
+            'PVP.versao_projeto' => $versao_projeto,
+            'PVP.versao_preco_venda' => $versao_preco_venda
+        ]);
 
-        // Verifica o id_empresa da sessão, se necessário
-        if ($this->session->userdata('id_empresa') > 1) {
-            $this->db->where('PVP.id_empresa', $this->session->userdata('id_empresa'));
+        $id_empresa = $this->session->userdata('id_empresa');
+        if ($id_empresa > 1) {
+            $this->db->where('PVP.id_empresa', $id_empresa);
         }
 
-        // Consulta
-        $consulta = $this->db->get('ci_preco_venda_projeto PVP');
+        $consulta = $this->db->get();
 
         return $consulta->result_array();
     }
+
 
     public function inserePrecoVenda($dados)
     {
