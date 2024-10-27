@@ -33,7 +33,8 @@ class GerarPdf
     $data['condicoesFornecimento']['NOME_CONDICAO_PAGAMENTO'] = $this->CI->CondicaoPagamento_model->recebeCondicaoPagamentoNome($dadosCondicoesFornecimento['id_condicao_pagamento']);
     
     $data['projetosClientes'] = $projetosCliente;
-
+    
+    
     $mpdf = new \Mpdf\Mpdf(['format' => 'A4', 'orientation' => 'P']);
 
     $footerHtml = '

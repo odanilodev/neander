@@ -157,9 +157,9 @@ class PrecoVenda extends CI_Controller
 
   public function inserePrecoVenda()
   {
+
     $id_cliente = $this->input->post('idCliente');
     $dados_precos_vendas = $this->input->post('dadosPrecoVenda');
-
 
     $this->db->trans_start();
 
@@ -167,6 +167,10 @@ class PrecoVenda extends CI_Controller
       $codigo_projeto = $dado_preco_venda['codigo_projeto'];
 
       $ultima_versao_preco_venda = $this->PrecoVenda_model->recebeUltimaVersaoPrecoVenda($codigo_projeto);
+
+      if (!$ultima_versao_preco_venda) {
+        $dado_preco_venda['versao_preco_venda'] = 0;
+      }
 
       $dado_preco_venda['versao_preco_venda'] = $ultima_versao_preco_venda + 1;
 
@@ -201,5 +205,4 @@ class PrecoVenda extends CI_Controller
 
     return $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
-  
 }

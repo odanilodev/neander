@@ -232,70 +232,6 @@ $(document).on('change', '.select_projetos_cliente', function () {
     }
 });
 
-
-// DESCARTADO APÓS MUDANÇA EM ESTRUTURA - GUARDAR PARA FUTUROS IMPREVISTOS
-// $(document).on('change', '.select_lote_projeto', function () {
-
-//     const loteProjeto = $(this).val();
-//     const $divLoteCliente = $(this).closest('.div_select_valor_lote');
-//     const codigoProjeto = $divLoteCliente.siblings('.div_selects_preco_venda').find('.select_projetos_cliente').val();
-//     const $divCamposPrecoVenda = $(this).closest('.row-selects-preco-venda').siblings('.container_campos_preco_venda');
-
-//     $.ajax({
-//         type: 'post',
-//         url: `${baseUrl}precoVenda/recebeDesenvolvimentoProjeto  `,
-//         data: {
-//             codigoProjeto: codigoProjeto,
-//             loteProjeto: loteProjeto
-//         },
-//         success: function (response) {
-//             if (response.success) {
-
-//                 // Preencher inputs com informações do banco de dados
-//                 const prefixo = `custo_lote_${loteProjeto}_`;
-
-//                 $divCamposPrecoVenda.find('.input_nome_produto').val(response.projeto.nome_produto);
-//                 $divCamposPrecoVenda.find('.input_ncm').val(response.projeto.codigo_ncm);
-//                 $divCamposPrecoVenda.find('.input_descricao_ncm').val(response.projeto.descricao_ncm);
-//                 $divCamposPrecoVenda.find('.input_lote_partida').val(response.projeto.lote_partida);
-//                 $divCamposPrecoVenda.find('.input_custo_produto').val(formatarValorMoeda(response.projeto[`${prefixo}produto`]));
-//                 $divCamposPrecoVenda.find('.input_custo_mao_de_obra').val(formatarValorMoeda(response.projeto[`${prefixo}mao_de_obra`]));
-//                 $divCamposPrecoVenda.find('.input_embalagem').val(formatarValorMoeda(response.projeto[`${prefixo}embalagem`]));
-//                 $divCamposPrecoVenda.find('.input_perda').val(formatarValorMoeda(response.projeto[`${prefixo}perda`]));
-
-//                 $divCamposPrecoVenda.find('.input_porcentagem_disabled').prop('disabled', false);
-
-//                 // Funções para atualizar os campos já preenchidos ao trocar de lote
-//                 if ($('.input_margem_porcentagem').val() != '') {
-//                     atualizarMargem($divCamposPrecoVenda);
-//                 }
-//                 if ($('.input_frete_porcentagem').val() != '') {
-//                     atualizarFrete($divCamposPrecoVenda);
-//                 }
-//                 if ($('.input_custo_financeiro_porcentagem').val() != '') {
-//                     atualizarCustoFinanceiro($divCamposPrecoVenda);
-//                 }
-
-//                 atualizarSubtotal($divCamposPrecoVenda);
-//                 atualizarTotalSemImposto($divCamposPrecoVenda);
-//                 atualizarTotalUnitario($divCamposPrecoVenda);
-//                 atualizarValorTotalSt($divCamposPrecoVenda);
-
-//             } else {
-//                 avisoRetorno(response.title, response.message, response.type, '#');
-//             }
-//         },
-//         error: function (xhr) {
-//             if (xhr.status === 403) {
-//                 avisoRetorno('Algo deu errado!', 'Você não tem permissão para esta ação.', 'error', '#');
-//             }
-//         }
-//     });
-
-// });
-
-// ======================================================
-
 $(document).on('click', '.btn_duplica_div', function () {
     duplicarCamposPrecoVenda();
     carregaSelect2('select2');
@@ -346,7 +282,7 @@ function duplicarCamposPrecoVenda() {
             </div>
             <div class="col-md-1 div_input_preco_venda ">
                 <label for="input_lote_partida" class="form-label">Lote Partida</label>
-                <input name="lote" type="text" disabled class="input-gravar-banco inputs-tipo-texto text-1000 form-control input_lote_partida" name="lote_partida">
+                <input name="lote" type="text" disabled class="input-gravar-banco inputs-tipo-texto text-1000 form-control input_lote_partida" name="lote">
             </div>
             <div class="col-md-2 div_input_preco_venda">
                 <label for="input_custo_produto" class="form-label">Custo do Produto</label>
@@ -371,7 +307,7 @@ function duplicarCamposPrecoVenda() {
             <div class="col-md-2 div_input_preco_venda ">
                 <label for="input_frete_porcentagem" class="form-label">Frete</label>
                 <div class="input-group">
-                    <input name="porcentagem_frete" type="text" disabled class="input-gravar-banco form-control input_frete_porcentagem input_porcentagem_disabled" name="input_frete_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
+                    <input name="porcentagem_frete" type="text" disabled class="input-gravar-banco form-control input_frete_porcentagem input_porcentagem_disabled" name="valor_frete" style="flex: 1 1 auto; max-width: 50px;">
                     <span class="input-group-text">%</span>
                     <input name="valor_frete" type="text" disabled class="input-gravar-banco form-control input_frete_calculado text-1000" name="input_frete_calculado">
                 </div>
@@ -394,7 +330,7 @@ function duplicarCamposPrecoVenda() {
             </div>
             <div class="col-md-2 div_input_preco_venda">
                 <label for="input_sub_total" class="form-label">Sub-Total</label>
-                <input name="sub_total" type="text" disabled class="input-gravar-banco form-control input_sub_total text-1000" name="input_sub_total">
+                <input name="sub_total" type="text" disabled class="input-gravar-banco form-control input_sub_total text-1000" name="sub_total">
             </div>
         </div>
 
@@ -434,7 +370,7 @@ function duplicarCamposPrecoVenda() {
             </div>
             <div class="col-md-2 div_input_preco_venda div_input_outros inactive">
                 <label for="input_outros" class="form-label">Outros</label>
-                <input disabled type="text" class="input-gravar-banco form-control text-1000 input_outros" name="input_outros">
+                <input disabled type="text" class="input-gravar-banco form-control text-1000 input_outros" name="outros">
             </div>
         </div>
 
@@ -516,10 +452,9 @@ function gravarPrecoVenda() {
             } else {
                 precoVenda[index][nameInput] = converterParaNumero($(this).val());
             }
-
         });
-
     });
+
 
     $.ajax({
         type: 'POST',
@@ -535,15 +470,9 @@ function gravarPrecoVenda() {
         success: function (response) {
             gravarCondicoesFornecimento();
 
-
             $('.btn-finalizar-preco-venda').removeClass('d-none');
             $('.load-form').addClass('d-none');
 
-            // avisoRetorno(response.title, response.message, response.type, '#');
-
-            // if (response.success) {
-            //     $('#condicoesModal').modal('show');
-            // }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error('Erro na requisição:', textStatus, errorThrown);
@@ -607,7 +536,6 @@ function gravarCondicoesFornecimento() {
 }
 
 function gerarPdfPrecoVenda() {
-
     let contatoCliente = $('#select_cliente option:selected').data('contato-cliente');
     let nomeCliente = $('#select_cliente option:selected').text();
 
