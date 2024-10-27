@@ -276,6 +276,7 @@
               <div class="spinner-border text-primary load-form d-none" role="status"></div>
               <input class="input-id-cliente" type="hidden" value="<?= $this->uri->segment(3) ?? '' ?>">
               <input class="input-id-projeto" type="hidden" value="<?= $this->uri->segment(4) ?? '' ?>">
+              <input class="input-codigo-projeto" type="hidden" value="<?=$projeto['codigo_projeto'] ?? ''?>">
             </div>
           </div>
         </div>

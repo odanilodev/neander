@@ -60,7 +60,7 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Matéria-Prima </label>
-                        <select class="form-control select2 modal-visualizar-select-materia-prima modal-visualizar-select-materia-prima-main">
+                        <select class="form-control select2 select2-visualizar  modal-visualizar-select-materia-prima modal-visualizar-select-materia-prima-main">
                           <?php foreach ($materiasPrimas as $materiaPrima) { ?>
                             <option value="<?= $materiaPrima['id'] ?>"><?= $materiaPrima['nome'] ?></option>
                           <?php } ?>
@@ -154,7 +154,7 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nivel Equipamento</label>
-                        <select required class=" form-control modal-visualizar-id-equipamento-manipulacao select2">
+                        <select required class=" form-control modal-visualizar-id-equipamento-manipulacao select2 select2-visualizar ">
                           <option value="" disabled selected>Equipamento Manipulação</option>
                           <?php foreach ($equipamentosManipulacao as $equipamentoManipulacao) : ?>
                             <option data-custo-hora="<?= $equipamentoManipulacao['valor'] ?>" value="<?= $equipamentoManipulacao['id']; ?>">
@@ -213,7 +213,7 @@
 
                       <div class="col-md-4 mb-2">
                         <label class="form-label" style="padding-left:0;">Nível Equipamento</label>
-                        <select class="modal-visualizar-id-equipamento-envase form-control select2">
+                        <select class="modal-visualizar-id-equipamento-envase form-control select2 select2-visualizar ">
                           <option value="" disabled selected>Equipamento Envase</option>
                           <?php foreach ($equipamentosEnvase as $equipamentoEnvase) : ?>
                             <option value="<?= $equipamentoEnvase['id']; ?>" data-pecas-hora-envase="<?= $equipamentoEnvase['pcs_hora'] ?>" data-valores-unit-total-envase="<?= $equipamentoEnvase['valor_mo'] ?>">
@@ -258,7 +258,7 @@
 
                     <div class="row">
                       <div class="col-md-4 mb-2">
-                        <select class="modal-visualizar-id-equipamento-rotulagem form-control select2">
+                        <select class="modal-visualizar-id-equipamento-rotulagem form-control select2 select2-visualizar ">
                           <option value="" disabled selected>Equipamento Rotulagem</option>
                           <?php foreach ($equipamentosRotulagem as $equipamentoRotulagem) : ?>
                             <option value="<?= $equipamentoRotulagem['id']; ?>" data-pecas-hora-rotulagem="<?= $equipamentoRotulagem['pcs_hora'] ?>" data-valores-unit-total-rotulagem="<?= $equipamentoRotulagem['valor_mo'] ?>">

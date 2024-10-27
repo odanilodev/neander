@@ -73,30 +73,29 @@ class Projetos extends CI_Controller
 	public function cadastraProjeto()
 	{
 		$id_projeto = $this->input->post('idProjeto');
-
 		$codigo_projeto = $this->input->post('codigoProjeto');
 
 		$dadosInformacoes = $this->input->post('dadosInformacoes');
 		$dadosBriefing = $this->input->post('dadosBriefing');
 		$dadosCustos = $this->input->post('dadosCustos');
 
-		$dadosInformacoes['nome_marca'] = ucfirst($dadosInformacoes['nome_marca']);
+		$dadosInformacoes['nome_marca'] = isset($dadosInformacoes['nome_marca']) ? ucfirst($dadosInformacoes['nome_marca']) : '';
 
-		if (!$id_projeto) {
-			$codigoProjeto = $this->session->userdata('id_empresa') . $this->session->userdata('id_usuario') . random_int(100, 999) . date('His');
-		} else {
-			$codigoProjeto = $codigo_projeto;
+		if (!$id_projeto && empty($codigo_projeto)) {
+			$codigo_projeto = $this->session->userdata('id_empresa') .
+				$this->session->userdata('id_usuario') .
+				random_int(100, 999) .
+				date('His');
 		}
 
 		$dados = array_merge(
-			array('codigo_projeto' => $codigoProjeto),
-			$dadosInformacoes,
-			$dadosBriefing,
-			$dadosCustos
+			array('codigo_projeto' => $codigo_projeto),
+			is_array($dadosInformacoes) ? $dadosInformacoes : [],
+			is_array($dadosBriefing) ? $dadosBriefing : [],
+			is_array($dadosCustos) ? $dadosCustos : []
 		);
 
 		$id_cliente = $this->input->post('idCliente');
-
 		$dados['id_empresa'] = $this->session->userdata('id_empresa');
 
 		if (!$id_projeto) {
@@ -104,7 +103,9 @@ class Projetos extends CI_Controller
 			$dados['id_cliente'] = $id_cliente;
 		}
 
-		$retorno = $id_projeto ? $this->Projetos_model->editaProjeto($id_projeto, $dados) : $this->Projetos_model->insereProjeto($dados);
+		$retorno = $id_projeto
+			? $this->Projetos_model->editaProjeto($id_projeto, $dados) // Se existe, edita
+			: $this->Projetos_model->insereProjeto($dados); // Se não existe, insere
 
 		if ($retorno) {
 			$response = array(
@@ -119,6 +120,7 @@ class Projetos extends CI_Controller
 			);
 		}
 
+		// Retorna a resposta em formato JSON
 		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 
@@ -156,7 +158,6 @@ class Projetos extends CI_Controller
 		// Obtendo o ID da matéria prima do formulário
 		$id = (int) $this->input->post('id');
 
-		// Deletando a matéria prima
 		$retorno = $this->Projetos_model->ativarProjetoCliente($id);
 
 		if ($retorno) {
@@ -180,14 +181,32 @@ class Projetos extends CI_Controller
 		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 
+	public function verificaAtividadeProjeto()
+	{
+		$codigo_projeto = $this->input->post('codigoProjeto');
+
+		$projeto = $this->Projetos_model->verificaStatusProjetoCliente($codigo_projeto, 1);
+
+		if ($projeto) {
+			$response = array(
+				'success' => true,
+				'title' => "Atenção!",
+				'message' => "Um projeto com o mesmo código já está ativo, deseja inativá-lo?",
+				'type' => "success"
+			);
+
+			return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+		}
+	}
+
 	public function recebeProjetoClienteCodigo()
 	{
 		$codigo_projeto = $this->input->post('codigoProjeto');
 		$versao_projeto = $this->input->post('versaoProjeto');
 
-		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto);
+		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto, $versao_projeto);
 		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto);
-
+		
 		$retorno = array_merge($retornoProjetoCliente, $retornoMateriasPrimas);
 
 		if (!empty($retorno)) {
@@ -217,7 +236,7 @@ class Projetos extends CI_Controller
 
 		if ($projeto) {
 			$novaVersao = $projeto['versao_projeto'] + 1;
-			
+
 			$projetoData = $projeto;
 			$projetoData['versao_projeto'] = $novaVersao;
 			$projetoData['desenvolvido'] = 0;

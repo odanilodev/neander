@@ -190,25 +190,41 @@ class Clientes extends CI_Controller
         $id = $this->uri->segment(3);
 
         $data['cliente'] = $this->Clientes_model->recebeCliente($id);
-        $data['projetos'] = $this->Projetos_model->recebeProjetoCliente($id);
 
-        $data['projetosAtivos'] = $this->Projetos_model->recebeProjetoCliente($id, 1);
+        $projetos = $this->Projetos_model->recebeProjetosCliente($id);
 
+        $data['projetos'] = $projetos;
+
+        // Agrupar e filtrar os projetos diretamente no controller
+        $projetosAgrupados = [];
+        $projetosAtivosNaoDesenvolvidos = [];
+
+        foreach ($projetos as $projeto) {
+            $codigoProjeto = $projeto['CODIGO_PROJETO'];
+        
+            if (!isset($projetosAgrupados[$codigoProjeto])) {
+                $projetosAgrupados[$codigoProjeto] = []; 
+            }
+        
+            $projetosAgrupados[$codigoProjeto][] = $projeto;
+        
+            if ($projeto['STATUS_PROJETO'] == 1 && $projeto['desenvolvido'] == 0) {
+                $projetosAtivosNaoDesenvolvidos[] = $projeto;
+            }
+        }
+        
+
+        $data['projetosAgrupados'] = $projetosAgrupados;
+
+        $data['projetosAtivosNaoDesenvolvidos'] = $projetosAtivosNaoDesenvolvidos;
+
+        // Carrega outras informações
         $data['fornecedores'] = $this->Fornecedores_model->recebeFornecedores();
-
         $data['materiasPrimas'] = $this->MateriasPrimas_model->recebeMateriasPrimas();
-
         $data['equipamentosRotulagem'] = $this->EquipamentosRotulagem_model->recebeEquipamentosRotulagem();
         $data['equipamentosManipulacao'] = $this->EquipamentosManipulacao_model->recebeEquipamentosManipulacao();
         $data['equipamentosEnvase'] = $this->EquipamentosEnvase_model->recebeEquipamentosEnvase();
-
         $data['custoHoraManipulacao'] = $this->EquipamentosManipulacao_model->recebeCustoHoraManipulacao();
-
-        // verifica se existe cliente
-        if (empty($data['cliente'])) {
-
-            redirect('clientes/index/all');
-        }
 
         $this->load->view('admin/includes/painel/cabecalho', $data);
         $this->load->view('admin/paginas/clientes/detalhes-cliente');
@@ -218,6 +234,7 @@ class Clientes extends CI_Controller
         $this->load->view('admin/paginas/clientes/modal-visualizar-desenvolvimento');
         $this->load->view('admin/includes/painel/rodape');
     }
+
 
     /**
      * Processa a exclusão de um Cliente.

@@ -1,7 +1,6 @@
   <!-- Modal desenvolver projeto -->
   <div class="modal fade" id="modalDesenvolverProjeto" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
-      <!-- style="padding-bottom:80px; Para modal caso nao esteja centralizado-->
+    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" style="padding-bottom:80px;">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalDesenvolverProjetoTitulo"></h5>
@@ -20,37 +19,30 @@
                     Para liberar os campos selecione um dos projetos deste cliente.
                   </div>
 
-                  <?php
-                  $projetosNaoDesenvolvidos = array_filter($projetosAtivos, function ($projeto) {
-                    return $projeto['desenvolvido'] == 0;
-                  });
-                  ?>
 
                   <div class="col-md-4 mb-3">
                     <label for="select_projeto_cliente" class="form-label">Selecione o Projeto</label>
                     <select id="select_projeto_cliente" class="form-select select2">
-                      <?php if (empty($projetosNaoDesenvolvidos)): ?>
-                        <option selected disabled value="">Nenhum projeto disponível.</option>
+                      <option selected disabled value="">Selecione o Projeto</option>
+                      <?php if (empty($projetosAtivosNaoDesenvolvidos)): ?>
+                        <option disabled>Nenhum projeto disponível.</option>
                       <?php else: ?>
-                        <option selected disabled value="">Selecione o Projeto</option>
-                        <?php foreach ($projetosNaoDesenvolvidos as $projetoAtivo): ?>
+                        <?php foreach ($projetosAtivosNaoDesenvolvidos as $projeto): ?>
                           <option
-                            data-versao-projeto="<?= $projetoAtivo['versao_projeto'] ?>"
-                            data-id-projeto="<?= $projetoAtivo['ID_PROJETO'] ?>"
-                            data-nome-produto="<?= $projetoAtivo['nome_produto'] ?>"
-                            data-nome-fantasia="<?= $projetoAtivo['nome_fantasia'] ?>"
-                            data-custo-produto="<?= $projetoAtivo['custo_cliente_produto'] ?>"
-                            data-custo-embalagem="<?= $projetoAtivo['custo_cliente_embalagens'] ?>"
-                            data-custo-rotulo="<?= $projetoAtivo['custo_cliente_rotulos'] ?>"
-                            value="<?= $projetoAtivo['codigo_projeto'] ?>">
-                            <?= $projetoAtivo['nome_produto'] ?>
+                            data-versao-projeto="<?= $projeto['VERSAO_PROJETO'] ?>"
+                            data-id-projeto="<?= $projeto['ID_PROJETO'] ?>"
+                            data-nome-produto="<?= $projeto['nome_produto'] ?>"
+                            data-nome-fantasia="<?= $projeto['nome_fantasia'] ?>"
+                            data-custo-produto="<?= $projeto['custo_cliente_produto'] ?>"
+                            data-custo-embalagem="<?= $projeto['custo_cliente_embalagens'] ?>"
+                            data-custo-rotulo="<?= $projeto['custo_cliente_rotulos'] ?>"
+                            value="<?= $projeto['codigo_projeto'] ?>">
+                            <?= $projeto['nome_produto'] ?>
                           </option>
                         <?php endforeach; ?>
                       <?php endif; ?>
                     </select>
                   </div>
-
-
 
                   <div class="container container-modal-desenvolver-projeto d-none">
 

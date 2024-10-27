@@ -146,8 +146,6 @@ $(document).on('change', '.select_projetos_cliente', function () {
             success: function (response) {
                 if (response.success) {
 
-                    console.log(response)
-
                     $('.btn_duplica_div').prop('disabled', false);
                     $('.btn-finalizar-preco-venda').prop('disabled', false);
                     $('#alerta-selecione-campos').fadeOut(1000);

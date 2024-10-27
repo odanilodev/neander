@@ -143,18 +143,16 @@ $(document).on('click', '.abre_modal_niveis', function () {
 
 //================================================
 
-const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
+const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto, nome) => {
 
   $('#modalVisualizarDesenvolvimentoProjeto').modal('show');
-  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').attr('disabled', true);
+  $('#modalVisualizarDesenvolvimentoProjeto').find(':input').not('.btn-close').attr('disabled', true);
   $('#modalVisualizarDesenvolvimentoProjeto').find(':input').addClass('text-1000');
 
   $('#alerta-apenas-visualizacao').hide();
   $('#alerta-apenas-visualizacao').removeClass('d-none').fadeIn(2000);
 
-  let nomeProjeto = $('.texto-titulo').html();
-
-  $('#modalVisualizarDesenvolvimentoProjetoLabel').html(nomeProjeto);
+  $('#modalVisualizarDesenvolvimentoProjetoLabel').html(nome);
 
   $.ajax({
     type: 'post',
@@ -207,7 +205,7 @@ const visualizarDesenvolvimentoProjeto = (codigoProjeto, versaoProjeto) => {
 
         });
 
-        $('.select2').attr('disabled', true);
+        $('.select2-visualizar').attr('disabled', true);
 
         $('.input-sub-total').val(formatarValorMoeda(response.data[0].custo_sub_total_1));
 
@@ -289,7 +287,7 @@ function duplicarLinhasVisualizar() {
   let novaLinha = $(`
       <div class="row mb-2">
           <div class="col-md-4">
-              <select name="id_materia_prima" class="form-control select2 modal-visualizar-select-materia-prima">
+              <select name="id_materia_prima" class="form-control select2 select2-visualizar modal-visualizar-select-materia-prima">
                   ${optionsMateriaPrima}
               </select>
           </div>
@@ -322,10 +320,9 @@ function duplicarLinhasVisualizar() {
 
 function reformularProjeto(projetoId, idCliente) {
 
- 
   Swal.fire({
     title: 'Você tem certeza?',
-    text: "Isso irá reformular o projeto!",
+    text: "Uma versão idêntica do projeto será criada, inativando a antiga.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -359,5 +356,6 @@ function reformularProjeto(projetoId, idCliente) {
   });
 }
 
+//================================================
 
 
