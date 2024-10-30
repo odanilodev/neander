@@ -18,7 +18,7 @@ class Admin extends CI_Controller
                 redirect('login/erro', 'refresh');
             }
         }
-        // FIM controle sessão
+        // FIM controle sessao
 	}
 
 	public function index()
