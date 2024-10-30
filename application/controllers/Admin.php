@@ -31,7 +31,7 @@ class Admin extends CI_Controller
 		add_scripts('footer', $scriptsPadraoFooter);
 
 		$this->load->view('admin/includes/painel/cabecalho');
-		$this->load->view('admin/paginas/info');
+		$this->load->view('admin/paginas/admin');
 		$this->load->view('admin/includes/painel/rodape');
 	}
 }
