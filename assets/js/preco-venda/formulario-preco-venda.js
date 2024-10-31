@@ -34,7 +34,7 @@ $(document).on('change', '#select_cliente', function () {
                     let projetosCliente = '<option value="" selected disabled>Selecione o Projeto</option>';
 
                     $(response.projeto).each(function (index, projeto) {
-                        projetosCliente += `<option data-versao-projeto="${projeto.versao_projeto}" value="${projeto.codigo_projeto}">${projeto.nome_produto}</option>`;
+                        projetosCliente += `<option data-versao-projeto="${projeto.versao_projeto}" value="${projeto.codigo_projeto}">${projeto.nome_produto} - VERSÃO ${projeto.VERSAO_PROJETO}</option>`;
                     });
 
                     $('.select_projetos_cliente').each(function () {
