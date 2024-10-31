@@ -132,6 +132,7 @@
   --phoenix-warning-rgb: 229, 120, 11;
   --phoenix-danger-rgb: 237, 32, 0;
   --phoenix-light-rgb: 239, 242, 246;
+  --phoenix-light-rgb-2: 179, 181, 184;
   --phoenix-dark-rgb: 20, 24, 36;
   --phoenix-primary-soft-rgb: 245, 248, 255;
   --phoenix-primary-100-rgb: 229, 237, 255;
@@ -11875,6 +11876,10 @@ textarea.form-control-lg {
 .bg-light {
   --phoenix-bg-opacity: 1;
   background-color: rgba(var(--phoenix-light-rgb), var(--phoenix-bg-opacity)) !important;
+}
+.bg-light-2 {
+  --phoenix-bg-opacity: 1;
+  background-color: rgba(var(--phoenix-light-rgb-2), var(--phoenix-bg-opacity)) !important;
 }
 
 .bg-dark {
