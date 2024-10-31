@@ -152,39 +152,52 @@ const inativaProjetoCliente = (idProjeto, idCliente) => {
     });
 }
 
-const ativarProjetoCliente = (id, idCliente) => {
-
-    Swal.fire({
-        title: 'Você tem certeza?',
-        text: "O projeto será reativado para este cliente.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sim, reativar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                type: 'post',
-                url: `${baseUrl}projetos/ativarProjetoCliente`,
-                data: {
-                    id: id
-                },
-                success: function (data) {
-                    let redirect = data.type != 'error' ? `${baseUrl}clientes/detalhes/${idCliente}` : '#';
-
-                    avisoRetorno(`${data.title}`, `${data.message}`, `${data.type}`, `${redirect}`);
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 403) {
-                        avisoRetorno('Algo deu errado!', `Você não tem permissão para esta ação..`, 'error', '#');
+const ativarProjetoCliente = (id, idCliente, codigoProjeto) => {
+    $.ajax({
+        type: 'post',
+        url: `${baseUrl}projetos/verificaAtividadeProjeto`,
+        data: { codigoProjeto: codigoProjeto },
+        success: function (data) {
+            if (data.confirm) {
+                // Pergunta se o usuário quer inativar o projeto existente
+                Swal.fire({
+                    title: data.title,
+                    text: data.message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, inativar o antigo',
+                    cancelButtonText: 'Não, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Chama a função para ativar o projeto, inativando o antigo
+                        ativaProjeto(id, idCliente);
                     }
-                }
-            });
+                });
+            } else {
+                // Se não houver conflito, ativa o projeto diretamente
+                ativaProjeto(id, idCliente);
+            }
         }
     });
-}
+};
+
+const ativaProjeto = (id, idCliente) => {
+    $.ajax({
+        type: 'post',
+        url: `${baseUrl}projetos/ativarProjetoCliente`,
+        data: { id: id },
+        success: function (data) {
+            let redirect = data.type !== 'error' ? `${baseUrl}clientes/detalhes/${idCliente}` : '#';
+            avisoRetorno(data.title, data.message, data.type, redirect);
+        },
+        error: function (xhr) {
+            if (xhr.status === 403) {
+                avisoRetorno('Algo deu errado!', 'Você não tem permissão para esta ação.', 'error', '#');
+            }
+        }
+    });
+};
+
 
 
 //===============================================

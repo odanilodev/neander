@@ -106,8 +106,8 @@ class Projetos_model extends CI_Model
 
         $this->db->where('P.codigo_projeto', $codigo_projeto);
 
-        if($versao_projeto){
-        $this->db->where('P.versao_projeto', $versao_projeto);
+        if ($versao_projeto) {
+            $this->db->where('P.versao_projeto', $versao_projeto);
         }
 
         if ($this->session->userdata('id_empresa') > 1) {
@@ -212,5 +212,19 @@ class Projetos_model extends CI_Model
         }
 
         return $this->db->affected_rows() > 0;
+    }
+
+    public function verificaProjetosAtivos($codigo_projeto, $status)
+    {
+        // Verifica se algum projeto está ativo
+        $this->db->where('codigo_projeto', $codigo_projeto);
+        $this->db->where('status', $status);
+        $this->db->where('id_empresa', $this->session->userdata('id_empresa'));
+
+        // Realiza a consulta
+        $query = $this->db->get('ci_projetos');
+
+        // Se encontrar uma linha, retorna true, senão false
+        return $query->num_rows() > 0;
     }
 }

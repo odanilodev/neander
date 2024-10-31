@@ -153,19 +153,49 @@ class Projetos extends CI_Controller
 		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 
+	public function verificaAtividadeProjeto()
+	{
+		$codigo_projeto = $this->input->post('codigoProjeto');
+	
+		// Verifica se já existe um projeto ativo com o código fornecido
+		$projeto = $this->Projetos_model->verificaProjetosAtivos($codigo_projeto, 1);
+	
+		if ($projeto) {
+			// Retorna a resposta solicitando confirmação
+			$response = array(
+				'success' => false,
+				'title' => "Atenção!",
+				'message' => "Um projeto com o mesmo código já está ativo, deseja inativá-lo?",
+				'type' => "warning",
+				'confirm' => true
+			);
+		} else {
+			// Retorna resposta de que não há projetos ativos e pode prosseguir
+			$response = array(
+				'success' => true,
+				'title' => "Nenhum conflito encontrado",
+				'message' => "Pode prosseguir com a ativação do projeto.",
+				'type' => "success"
+			);
+		}
+	
+		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+	
 	public function ativarProjetoCliente()
 	{
-		// Obtendo o ID da matéria prima do formulário
+		// Obtém o ID do projeto do formulário
 		$id = (int) $this->input->post('id');
-
+	
+		// Tenta ativar o projeto diretamente
 		$retorno = $this->Projetos_model->ativarProjetoCliente($id);
-
+	
 		if ($retorno) {
 			// Resposta de sucesso
 			$response = array(
 				'success' => true,
 				'title' => "Sucesso!",
-				'message' => "Projeto Ativado com sucesso!",
+				'message' => "Projeto ativado com sucesso!",
 				'type' => "success"
 			);
 		} else {
@@ -177,27 +207,10 @@ class Projetos extends CI_Controller
 				'type' => "error"
 			);
 		}
-
+	
 		return $this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
-
-	public function verificaAtividadeProjeto()
-	{
-		$codigo_projeto = $this->input->post('codigoProjeto');
-
-		$projeto = $this->Projetos_model->verificaStatusProjetoCliente($codigo_projeto, 1);
-
-		if ($projeto) {
-			$response = array(
-				'success' => true,
-				'title' => "Atenção!",
-				'message' => "Um projeto com o mesmo código já está ativo, deseja inativá-lo?",
-				'type' => "success"
-			);
-
-			return $this->output->set_content_type('application/json')->set_output(json_encode($response));
-		}
-	}
+	
 
 	public function recebeProjetoClienteCodigo()
 	{
@@ -206,7 +219,7 @@ class Projetos extends CI_Controller
 
 		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto, $versao_projeto);
 		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto);
-		
+
 		$retorno = array_merge($retornoProjetoCliente, $retornoMateriasPrimas);
 
 		if (!empty($retorno)) {
