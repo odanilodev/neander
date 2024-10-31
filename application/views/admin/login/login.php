@@ -84,7 +84,7 @@
 
                   <div class="text-center mb-7"><a class="d-flex flex-center text-decoration-none mb-4" href="<?= base_url('login') ?>">
                       <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block">
-                        <img class="logo" width="200" />
+                        <img class="logo" width="200"/>
                       </div>
                     </a>
                   </div>

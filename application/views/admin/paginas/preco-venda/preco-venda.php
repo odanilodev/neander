@@ -12,7 +12,7 @@
             <div class="div_selects_preco_venda col-md-3">
                 <label for="select_cliente" class="form-label">Cliente</label>
                 <select class="form-select select2" id="select_cliente" name="select_cliente">
-                    <option value="" selected disabled>Selecione o cliente</option>
+                    <option value='' selected disabled>Selecione o cliente</option>
                     <?php foreach ($clientes as $cliente) : ?>
                         <option data-contato-cliente="<?= $cliente['contato'] ?>" value="<?= $cliente['id'] ?>"><?= $cliente['nome_fantasia'] ?></option>
                     <?php endforeach ?>

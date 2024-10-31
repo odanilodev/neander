@@ -136,7 +136,7 @@
                   </div>
                   <div>
                     <p class="fw-bold mb-1">Exemplo info. projetos</p>
-                    <h4 class="fw-bolder text-nowrap">Exemplo</h4>
+                    <h4 class="fw-bolder text-nowrap">1000</h4>
                   </div>
                 </div>
               </div>
@@ -274,7 +274,7 @@
                                   </div>
                                   <div class="flex-1">
                                     <h5 class="text-1000">
-                                      <a class="cursor-pointer nome-projeto d-flex align-items-center" <?= $onclick ?> data-nome-projeto="<?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?>" title="Ver Detalhes" style="text-decoration:none; color:#fff;">
+                                      <a class="text-1000 cursor-pointer nome-projeto d-flex align-items-center" <?= $onclick ?> data-nome-projeto="<?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?>" title="Ver Detalhes" style="text-decoration:none;">
                                         <?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?>
                                         <?= $badgeDesenvolvido ?>
                                       </a>
@@ -304,7 +304,7 @@
                                       </a>
                                     </li>
                                     <li>
-                                      <a class="dropdown-item cursor-pointer <?=$reformularInactive?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
+                                      <a class="dropdown-item cursor-pointer <?= $reformularInactive ?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
                                         <span class="text-900 fas fa-user-edit"></span>
                                         <span class="text-900"> Reformular</span>
                                       </a>
@@ -397,7 +397,7 @@
                                       </a>
                                     </li>
                                     <li>
-                                      <a class="dropdown-item cursor-pointer <?=$reformularInactive?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
+                                      <a class="dropdown-item cursor-pointer <?= $reformularInactive ?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
                                         <span class="text-900 fas fa-user-edit"></span>
                                         <span class="text-900"> Reformular</span>
                                       </a>
