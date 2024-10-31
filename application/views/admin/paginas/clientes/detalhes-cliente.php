@@ -248,6 +248,11 @@
                             $inactive = 'inactive';
                           }
 
+                          $reformularInactive = '';
+                          if ($projeto['STATUS_PROJETO'] == 0) {
+                            $reformularInactive = 'inactive';
+                          }
+
                           if ($projeto['desenvolvido'] == 1) {
                             $nomeProduto = htmlspecialchars($projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto']);
                             $onclick = 'onclick="visualizarDesenvolvimentoProjeto(' . $projeto['CODIGO_PROJETO'] . ', ' . $projeto['versao_projeto'] . ', \'' . $nomeProduto . '\')"';
@@ -299,7 +304,7 @@
                                       </a>
                                     </li>
                                     <li>
-                                      <a class="dropdown-item cursor-pointer" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
+                                      <a class="dropdown-item cursor-pointer <?=$reformularInactive?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
                                         <span class="text-900 fas fa-user-edit"></span>
                                         <span class="text-900"> Reformular</span>
                                       </a>
@@ -325,7 +330,7 @@
                           }
                         }
                         if (!$temProjetosAtivos): ?>
-                          <p class="text-center text-success alert alert-success text-1000" style="font-weight:500;">Não há versões ativas.</p>
+                          <p class="text-center text-success alert alert-phoenix-success text-1000" style="font-weight:500;">Não há versões ativas.</p>
                         <?php endif; ?>
 
                         <!-- Projetos Inativos -->
@@ -392,7 +397,7 @@
                                       </a>
                                     </li>
                                     <li>
-                                      <a class="dropdown-item cursor-pointer" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
+                                      <a class="dropdown-item cursor-pointer <?=$reformularInactive?>" onclick="reformularProjeto(<?= $projeto['ID_PROJETO'] ?>, <?= $this->uri->segment(3) ?>)" title="Reformular Projeto">
                                         <span class="text-900 fas fa-user-edit"></span>
                                         <span class="text-900"> Reformular</span>
                                       </a>
@@ -418,7 +423,7 @@
                           }
                         }
                         if (!$temProjetosInativos): ?>
-                          <p class="text-center text-danger alert alert-secondary text-1000" style="font-weight:500;">Não há versões inativas.</p>
+                          <p class="text-center text-danger alert alert-phoenix-danger text-1000" style="font-weight:500;">Não há versões inativas.</p>
                         <?php endif; ?>
                       </div>
                     </div>

@@ -112,7 +112,7 @@ class PrecoVenda extends CI_Controller
     $contato_cliente = $this->input->post('contatoCliente');
     $dados_condicoes_fornecimento = $this->input->post('dadosCondicoesFornecimento');
 
-    $this->load->library('gerarPdf');
+    $this->load->library('GerarPdf');
 
     $pdfOutput = $this->gerarpdf->gerarPdfPrecoVenda($dados, $nome_cliente, $contato_cliente, $dados_condicoes_fornecimento);
 
