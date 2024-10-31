@@ -367,7 +367,7 @@
                                   </div>
                                   <div class="flex-1">
                                     <h5 class="text-1000">
-                                      <a class="<?= $cursor_pointer ?> nome_projeto d-flex align-items-center" <?= $onclick ?> title="Ver Detalhes" style="text-decoration:none; color:#fff;">
+                                      <a class="text-1000 <?= $cursor_pointer ?> nome_projeto d-flex align-items-center" <?= $onclick ?> title="Ver Detalhes" style="text-decoration:none; color:#fff;">
                                         <?= $projeto['nome_produto'] . ' | CÓD. ' . $projeto['codigo_projeto'] ?>
                                         <?= $badgeDesenvolvido ?>
                                       </a>
