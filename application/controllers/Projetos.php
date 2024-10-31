@@ -218,6 +218,7 @@ class Projetos extends CI_Controller
 		$versao_projeto = $this->input->post('versaoProjeto');
 
 		$retornoProjetoCliente = $this->Projetos_model->recebeProjetoClienteCodigo($codigo_projeto, $versao_projeto);
+		
 		$retornoMateriasPrimas = $this->Projetos_model->recebeMateriasPrimasPorCodigoProjeto($codigo_projeto, $versao_projeto);
 
 		$retorno = array_merge($retornoProjetoCliente, $retornoMateriasPrimas);

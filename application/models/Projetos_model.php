@@ -99,10 +99,11 @@ class Projetos_model extends CI_Model
 
     public function recebeProjetoClienteCodigo($codigo_projeto, $versao_projeto = null)
     {
-        $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA, DP.*, P.criado_em');
+        $this->db->select('P.*, C.nome_fantasia as CLIENTE_NOME_FANTASIA, DP.*');
 
+        // Usado AND para nao duplicar valores vindo de outras tabelas com versao_projeto!
+        $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = P.codigo_projeto AND DP.versao_projeto = P.versao_projeto', 'left');
         $this->db->join('ci_clientes C', 'P.id_cliente = C.id', 'left');
-        $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = P.codigo_projeto', 'left');
 
         $this->db->where('P.codigo_projeto', $codigo_projeto);
 
