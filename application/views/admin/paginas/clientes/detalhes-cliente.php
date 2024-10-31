@@ -103,7 +103,7 @@
                           <tr>
                             <td class="py-2">
                               <div class="d-flex align-items-center">
-                                <div class="d-flex bg-secondary rounded-circle flex-center me-3" style="width:24px; height:24px">
+                                <div class="d-flex bg-primary-100 rounded-circle flex-center me-3" style="width:24px; height:24px">
                                   <span class="text-success-600 dark__text-success-300" data-feather="calendar" style="width:16px; height:16px"></span>
                                 </div>
                                 <p class="fw-bold mb-0">Data de Cadastro</p>
