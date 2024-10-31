@@ -29,12 +29,12 @@ class PrecoVenda_model extends CI_Model
 
         $this->db->from('ci_preco_venda_projeto PVP');
         $this->db->join('ci_ncm_projeto NP', 'NP.codigo_projeto = PVP.codigo_projeto', 'left');
-        $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = PVP.codigo_projeto', 'left');
-        $this->db->join('ci_projetos P', 'P.codigo_projeto = PVP.codigo_projeto', 'left');
+        $this->db->join('ci_desenvolvimento_projeto DP', 'DP.codigo_projeto = PVP.codigo_projeto AND DP.versao_projeto = PVP.versao_projeto', 'left');
+        $this->db->join('ci_projetos P', 'P.codigo_projeto = PVP.codigo_projeto AND P.versao_projeto = PVP.versao_projeto', 'left');
         $this->db->join('ci_clientes C', 'C.id = PVP.id_cliente', 'left');
 
         $this->db->where([
-            'PVP.codigo_projeto' => $codigo_projeto,
+            'PVP.codigo_projeto' => $codigo_projeto ,
             'PVP.versao_projeto' => $versao_projeto,
             'PVP.versao_preco_venda' => $versao_preco_venda
         ]);

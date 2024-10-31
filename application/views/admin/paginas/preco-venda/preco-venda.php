@@ -66,7 +66,7 @@
                     <input type="text" disabled class="form-control input_descricao_ncm text-1000" name="input_descricao_ncm">
                 </div>
                 <div class="col-md-1 div_input_preco_venda">
-                    <label for="input_lote_partida" class="form-label">Lote Partida</label>
+                    <label for="input_lote_partida" class="form-label">Lote</label>
                     <input name="lote" type="text" disabled class="input-gravar-banco inputs-tipo-texto form-control input_lote_partida text-1000" name="lote_partida">
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
@@ -95,15 +95,15 @@
                     <label for="input_frete_porcentagem" class="form-label">Frete</label>
                     <div class="input-group">
                         <input name="porcentagem_frete" type="text" class="form-control input-gravar-banco input_frete_porcentagem input_porcentagem_disabled" name="input_frete_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
-                        <input name="valor_frete" type="text" disabled class="form-control input-gravar-banco input_frete_calculado text-1000" name="input_frete_calculado" style="flex: 1 1 auto; max-width: 100px;">
+                        <span class="input-group-text p-0">%</span>
+                        <input name="valor_frete" type="text" disabled class="form-control input-gravar-banco input_frete_calculado text-1000" name="input_frete_calculado" style="flex: 1 1 auto; max-width: 150px;">
                     </div>
                 </div>
                 <div class="col-md-2 div_input_preco_venda">
                     <label for="input_custo_financeiro_porcentagem" class="form-label">Custo Financeiro</label>
                     <div class="input-group">
                         <input name="porcentagem_custo_financeiro" type="text" class="form-control input-gravar-banco input_custo_financeiro_porcentagem input_porcentagem_disabled" name="input_custo_financeiro_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text p-0">%</span>
                         <input name="valor_custo_financeiro" type="text" disabled class="form-control input-gravar-banco input_custo_financeiro_calculado text-1000" name="input_custo_financeiro_calculado">
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                     <label for="input_margem_porcentagem" class="form-label">Margem (% - R$)</label>
                     <div class="input-group">
                         <input name="porcentagem_margem" type="text" class="input-gravar-banco form-control input_margem_porcentagem input_porcentagem_disabled" name="input_margem_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text p-0">%</span>
                         <input name="valor_margem" type="text" disabled class="input-gravar-banco form-control text-1000 input_margem_calculado">
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                     <label for="input_comissao_porcentagem" class="form-label">Comissão (%)</label>
                     <div class="input-group">
                         <input name="porcentagem_comissao" type="text" class="input-gravar-banco form-control input_comissao_porcentagem input_porcentagem_disabled" name="comissao_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text p-0">%</span>
                         <input name="valor_comissao" type="text" disabled class="input-gravar-banco form-control input_comissao_calculada text-1000" name="input_comissao_calculada">
                     </div>
                 </div>
@@ -139,7 +139,7 @@
                     <label for="input_imposto_porcentagem" class="form-label">Imposto (%)</label>
                     <div class="input-group">
                         <input name="porcentagem_imposto" type="text" class="input-gravar-banco form-control input_imposto_porcentagem input_porcentagem_disabled" name="input_imposto_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text p-0">%</span>
                         <input name="valor_imposto" type="text" disabled class="input-gravar-banco text-1000 form-control input_imposto_calculado" name="input_imposto_calculado">
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                     <label for="input_st_estado_porcentagem" class="form-label">ST do Estado (%)</label>
                     <div class="input-group">
                         <input name="porcentagem_st_estado" type="text" class="input-gravar-banco input_porcentagem_disabled form-control input_st_estado_porcentagem" name="input_st_estado_porcentagem" style="flex: 1 1 auto; max-width: 50px;">
-                        <span class="input-group-text">%</span>
+                        <span class="input-group-text p-0">%</span>
                         <input name="valor_st_estado" type="text" disabled class="input-gravar-banco text-1000 form-control input_st_estado_calculado" name="input_st_estado_calculado">
                     </div>
                 </div>

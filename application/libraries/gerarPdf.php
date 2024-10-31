@@ -34,7 +34,6 @@ class GerarPdf
     
     $data['projetosClientes'] = $projetosCliente;
     
-    
     $mpdf = new \Mpdf\Mpdf(['format' => 'A4', 'orientation' => 'P']);
 
     $footerHtml = '
